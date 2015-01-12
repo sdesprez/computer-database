@@ -55,6 +55,7 @@ public enum ComputerDAO {
 				if (discontinued != null) {
 					computer.setDiscontinuedDate(discontinued);
 				}
+				computer.setCompanyId(results.getLong("company_Id"));
 				computers.add(computer);
 			}
 			return computers;
@@ -89,6 +90,7 @@ public enum ComputerDAO {
 				if (discontinued != null) {
 					computer.setDiscontinuedDate(discontinued);
 				}
+				computer.setCompanyId(results.getLong("company_Id"));
 			}
 			return computer;
 		} finally {
@@ -124,6 +126,7 @@ public enum ComputerDAO {
 				if (discontinued != null) {
 					computer.setDiscontinuedDate(discontinued);
 				}
+				computer.setCompanyId(results.getLong("company_Id"));
 				computers.add(computer);
 			}
 			return computers;
@@ -139,13 +142,14 @@ public enum ComputerDAO {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		String insertSQL = "INSERT INTO computer"
-				+ "(name, introduced, discontinued) VALUES" + "(?,?,?)";
+				+ "(name, introduced, discontinued, company_id) VALUES" + "(?,?,?,?)";
 		try {
 			conn = getConnection();
 			stmt = conn.prepareStatement(insertSQL);
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, computer.getIntroducedTimestamp());
 			stmt.setTimestamp(3, computer.getDiscontinuedTimestamp());
+			stmt.setLong(4, computer.getCompanyId());
 			stmt.executeUpdate();
 		} finally {
 
@@ -166,11 +170,12 @@ public enum ComputerDAO {
 			conn = getConnection();
 			conn.setAutoCommit(false);
 			stmt = conn
-					.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ? WHERE id = ?");
+					.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?");
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, computer.getIntroducedTimestamp());
 			stmt.setTimestamp(3, computer.getDiscontinuedTimestamp());
-			stmt.setLong(4, computer.getId());
+			stmt.setLong(4, computer.getCompanyId());
+			stmt.setLong(5, computer.getId());
 			stmt.executeUpdate();
 			conn.commit();
 		} catch (SQLException e) {

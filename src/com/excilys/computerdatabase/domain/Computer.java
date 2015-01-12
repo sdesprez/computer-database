@@ -9,17 +9,19 @@ public class Computer {
 	protected String name;
 	protected LocalDate introducedDate;
 	protected LocalDate discontinuedDate;
-
+	protected Long companyId;
+	
 	public Computer() {
 
 	}
 
 	public Computer(Long id, String name, LocalDate introducedDate,
-			LocalDate discontinuedDate, Company company) {
+			LocalDate discontinuedDate, Long companyId) {
 		this.id = id;
 		setName(name);
 		this.introducedDate = introducedDate;
 		this.discontinuedDate = discontinuedDate;
+		this.companyId = companyId;
 	}
 
 	public Long getId() {
@@ -79,6 +81,14 @@ public class Computer {
 
 	}
 
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
+
 	public Timestamp getIntroducedTimestamp() {
 		if (introducedDate != null) {
 			return Timestamp.valueOf(introducedDate.atStartOfDay());
@@ -129,9 +139,10 @@ public class Computer {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer("Computer [id=").append(id)
-				.append(", name=").append(name).append(", introducedDate=")
-				.append(introducedDate).append(", discontinuedDate=")
-				.append(discontinuedDate).append("]");
+				.append(", name=").append(name)
+				.append(", introducedDate=").append(introducedDate)
+				.append(", discontinuedDate=").append(discontinuedDate)
+				.append(", company_Id=").append(companyId).append("]");
 		return buffer.toString();
 	}
 
