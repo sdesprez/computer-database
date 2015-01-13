@@ -183,8 +183,7 @@ public enum ComputerDAO {
 			conn = getConnection();
 			
 			//Create the query
-			String insertSQL = "INSERT INTO computer"
-						+ "(name, introduced, discontinued, company_id) VALUES" + "(?,?,?,?)";
+			String insertSQL = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 			PreparedStatement stmt = conn.prepareStatement(insertSQL);
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, computer.getIntroducedTimestamp());
@@ -305,7 +304,6 @@ public enum ComputerDAO {
 			
 			//Create the counting query
 			String countQuery = "SELECT Count(id) as total FROM computer";
-			String query = SELECT_QUERY + " limit ? offset ? ;";
 			Statement countStmt = conn.createStatement();
 			
 			//Execute the counting query
@@ -316,6 +314,7 @@ public enum ComputerDAO {
 			page.setNbResults(countResult.getInt("total"));
 
 			//Create the SELECT query
+			String query = SELECT_QUERY + " limit ? offset ? ;";
 			PreparedStatement stmt = conn.prepareStatement(query);
 			stmt.setInt(1, page.getNbResultsPerPage());
 			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
