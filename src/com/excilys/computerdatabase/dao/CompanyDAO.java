@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -26,6 +29,7 @@ public enum CompanyDAO {
 	INSTANCE;
 
 	private ConnectionManager cm = ConnectionManager.getInstance();
+	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.CompanyDAO");
 	
 	/**
 	 * Return the instance of the CompanyDAO
@@ -62,6 +66,7 @@ public enum CompanyDAO {
 			}
 			return companies;
 		} catch (SQLException e) {
+			logger.error("SQLError in getAll()");
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -74,7 +79,7 @@ public enum CompanyDAO {
 	 * @param id : id of the company in the database
 	 * @return the company that was found or null if there is no company for this id
 	 */
-	public Company getCompany(long id) {
+	public Company getById(long id) {
 		Connection conn = null;
 		Company company = null;
 		try {
@@ -89,12 +94,11 @@ public enum CompanyDAO {
 			ResultSet results = stmt.executeQuery(query);
 			//Create a company if there is a result
 			if (results.next()) {
-				company = new Company();
-				company.setId(results.getLong("id"));
-				company.setName(results.getString("name"));
+				company = createCompany(results);
 			}
 			return company;
 		} catch(SQLException e) {
+			logger.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -110,7 +114,6 @@ public enum CompanyDAO {
 	public Page<Company> getPagedList(Page<Company> page) {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
-		Company company;
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
@@ -133,19 +136,28 @@ public enum CompanyDAO {
 			ResultSet results = stmt.executeQuery();
 			//Create the computers with the results
 			while (results.next()) {
-				company = new Company();
-				company.setId(results.getLong("id"));
-				company.setName(results.getString("name"));
-				companies.add(company);
+				companies.add(createCompany(results));
 			}
 			page.setList(companies);
 			return page;
 			
 		} catch (SQLException e) {
+			logger.error("SQLError in getCompany() with " + page);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
 			cm.close(conn);
 		}
+	}
+	
+	
+	/**
+	 * Create a computer based on the columns of a row of a ResultSet
+	 * @param rs : ResultSet on a row containing a computer
+	 * @return the computer contained in the row
+	 * @throws SQLException 
+	 */
+	private Company createCompany(ResultSet rs) throws SQLException {
+		return Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build();
 	}
 }

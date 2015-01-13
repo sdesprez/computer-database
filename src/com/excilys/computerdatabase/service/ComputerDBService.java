@@ -48,8 +48,8 @@ public enum ComputerDBService {
 	 * @param id : id of the computer in the database
 	 * @return the computer that was found or null if there is no computer for this id
 	 */
-	public Computer getComputer(long id) {
-		return computerDAO.getComputer(id);
+	public Computer getById(long id) {
+		return computerDAO.getById(id);
 	}
 
 	/**

@@ -22,14 +22,15 @@ public class Computer {
 	 */
 	protected LocalDate introducedDate;
 	/**
-	 * Date of discontinuation of the computer (optional)
+	 * Discontinued date of the computer (optional)
 	 */
 	protected LocalDate discontinuedDate;
+	/**
+	 * Company of the computer
+	 */
 	protected Company company;
 	
-	public Computer() {
-
-	}
+	public Computer() { }
 
 	public Computer(Long id, String name, LocalDate introducedDate,
 			LocalDate discontinuedDate, Company company) {
@@ -52,10 +53,6 @@ public class Computer {
 		return name;
 	}
 
-	/**
-	 * Check if the name is null or is empty before setting the name
-	 * @param name
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -127,4 +124,44 @@ public class Computer {
 		return buffer.toString();
 	}
 
+	public static class Builder {
+		private Computer computer;
+		
+		private Builder() {
+			computer = new Computer();
+		}
+		
+		public Builder id(long id) {
+			computer.id = id;
+			return this;
+		}
+		
+		public Builder name(String name) {
+			computer.name = name;
+			return this;
+		}
+		
+		public Builder introducedDate(LocalDate introducedDate) {
+			computer.introducedDate = introducedDate;
+			return this;
+		}
+		
+		public Builder discontinuedDate(LocalDate discontinuedDate) {
+			computer.discontinuedDate = discontinuedDate;
+			return this;
+		}
+		
+		public Builder company(Company company) {
+			computer.company = company;
+			return this;
+		}
+		
+		public Computer build() {
+			return computer;
+		}
+	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
 }

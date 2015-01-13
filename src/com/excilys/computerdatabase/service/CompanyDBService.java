@@ -45,8 +45,8 @@ public enum CompanyDBService {
 	 * @param id : id of the company in the database
 	 * @return the company that was found or null if there is no company for this id
 	 */
-	public Company getCompany(long id) {
-		return companyDAO.getCompany(id);
+	public Company getById(long id) {
+		return companyDAO.getById(id);
 	}
 	
 	/**

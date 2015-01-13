@@ -10,6 +10,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -29,8 +32,11 @@ public enum ComputerDAO {
 	INSTANCE;
 
 	private ConnectionManager cm = ConnectionManager.getInstance();
+	/**
+	 * Base Query for all the Select queries
+	 */
 	public static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company FROM computer c LEFT JOIN company ON company.id=c.company_id";
-	
+	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.computerDAO");
 	
 	/**
 	 * Return the instance of the ComputerDAO
@@ -62,6 +68,7 @@ public enum ComputerDAO {
 			}
 			return computers;
 		} catch (SQLException e) {
+			logger.error("SQLError in getAll()");
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -74,7 +81,7 @@ public enum ComputerDAO {
 	 * @param id : id of the computer in the database
 	 * @return the computer that was found or null if there is no computer for this id
 	 */
-	public Computer getComputer(long id) {
+	public Computer getById(long id) {
 		Connection conn = null;
 		Computer computer = null;
 		try {
@@ -93,6 +100,7 @@ public enum ComputerDAO {
 			}
 			return computer;
 		} catch (SQLException e) {
+			logger.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -125,6 +133,7 @@ public enum ComputerDAO {
 			}
 			return computers;
 		} catch (SQLException e) {
+			logger.error("SQLError in getByCompanyId() with company_id = " + id);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -169,6 +178,7 @@ public enum ComputerDAO {
 			//Execute the query
 			stmt.executeUpdate();
 		} catch (SQLException e) {
+			logger.error("SQLError in create() with " + computer);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -217,13 +227,16 @@ public enum ComputerDAO {
 			//Commit the query
 			conn.commit();
 		} catch (SQLException e) {
+			logger.error("SQLError in update() with "+computer);
 			if (conn != null) {
 				try {
 					conn.rollback();
 				} catch (SQLException e1) {
+					logger.error("SQLError in update() while doing rollback");
 					throw new PersistenceException();
 				}
 			}
+			
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -253,10 +266,12 @@ public enum ComputerDAO {
 			//Commit the query
 			conn.commit();
 		} catch (SQLException e) {
+			logger.error("SQLError in delete() with id = "+id);
 			if (conn != null) {
 				try {
 					conn.rollback();
 				} catch (SQLException e1) {
+					logger.error("SQLError in delete() while doing rollback");
 					throw new PersistenceException();
 				}
 			}
@@ -306,6 +321,7 @@ public enum ComputerDAO {
 			return page;
 			
 		} catch (SQLException e) {
+			logger.error("SQLError in getCompany() with " + page);
 			throw new PersistenceException();
 		} finally {
 			//Close the connection
@@ -320,29 +336,20 @@ public enum ComputerDAO {
 	 * @throws SQLException 
 	 */
 	private Computer createComputer(ResultSet rs) throws SQLException {
-		Computer computer = new Computer();
-		Timestamp introduced;
-		Timestamp discontinued;
-		Company company = null;
-		computer.setId(rs.getLong("id"));
-		computer.setName(rs.getString("name"));
-		introduced = rs.getTimestamp("introduced");
-		discontinued = rs.getTimestamp("discontinued");
+		Computer.Builder builder = Computer.builder().id(rs.getLong("id")).name(rs.getString("name"));
+		Timestamp introduced = rs.getTimestamp("introduced");
+		Timestamp discontinued = rs.getTimestamp("discontinued");
 		if (introduced != null) {
-			computer.setIntroducedDate(introduced.toLocalDateTime().toLocalDate());
+			builder.introducedDate(introduced.toLocalDateTime().toLocalDate());
 		}
 		if (discontinued != null) {
-			computer.setDiscontinuedDate(discontinued.toLocalDateTime().toLocalDate());
+			builder.discontinuedDate(discontinued.toLocalDateTime().toLocalDate());
 		}
 		Long companyId= rs.getLong("company_Id");
 		if (companyId != null) {
-			company = new Company();
-			company.setId(companyId);
-			company.setName(rs.getString("company"));
-			
+			builder.company(Company.builder().id(companyId).name(rs.getString("company")).build());
 		}
-		computer.setCompany(company);
 		
-		return computer;
+		return builder.build();
 	}
 }

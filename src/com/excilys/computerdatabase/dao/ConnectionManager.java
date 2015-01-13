@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 public enum ConnectionManager {
@@ -26,14 +29,13 @@ public enum ConnectionManager {
 	 * Password for the database connection
 	 */
 	private static final String PASSWORD = "qwerty1234";
-	/**
-	 * Base Query for all the Select queries
-	 */
+	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.ConnectionManager");
 	
-	static {
+	private ConnectionManager(){
 		try {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {
+			logger.error("MySQL JDBC driver not found");
 			throw new PersistenceException("Failed to load " + COM_MYSQL_JDBC_DRIVER);
 		}
 	}
@@ -46,6 +48,7 @@ public enum ConnectionManager {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {
+			logger.error("Couldn't connect to the database");
 			throw new PersistenceException();
 		}
 	}
@@ -55,6 +58,7 @@ public enum ConnectionManager {
 			try {
 				conn.close();
 			} catch (SQLException e) {
+				logger.warn("Couldn't close the connection to the database");
 				throw new PersistenceException();
 			}
 		}

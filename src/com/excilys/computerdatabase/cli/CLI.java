@@ -36,7 +36,7 @@ public class CLI {
 	 * Main menu of the CLI
 	 */
 	public void mainMenu() {
-		//Instanciation of the scanner
+		//Instantiation of the scanner
 		sc = new Scanner(System.in);
 		
 		//Show the menu and ask the user for the function he wish to use as long as he wish to continue.
@@ -182,7 +182,7 @@ public class CLI {
 		System.out.println("Enter the computer id");
 		
 		//Get the computer corresponding to the id
-		Computer computer = computerDBService.getComputer(inputLong());
+		Computer computer = computerDBService.getById(inputLong());
 		//Show the detail of the computer
 		if (computer != null) {
 			System.out.println("Name : " + computer.getName());
@@ -198,20 +198,20 @@ public class CLI {
 	 * Interface for creating a new computer
 	 */
 	public void createComputer() {
-		Computer computer = new Computer();
+		Computer.Builder builder = Computer.builder();
 		Company company = null;
 		
 		//Get the name of the computer, it can't be null or empty
 		System.out.println("Enter computer name");
-		computer.setName(inputName());
+		builder.name(inputName());
 
 		//Get the date of introduction. If the user enter nothing, the date is null
 		System.out.println("Enter introduction date (yyyy-mm-dd) or nothing if you don't know");
-		computer.setIntroducedDate(inputDate());
-
+		builder.introducedDate(inputDate());
+		
 		//Get the date of discontinuation. If the user enter nothing, the date is null
 		System.out.println("Enter discontinued date (yyyy-mm-dd) or nothing if you don't know");
-		computer.setDiscontinuedDate(inputDate());
+		builder.discontinuedDate(inputDate());
 
 		//Get the id of the company. If it's 0, then company = null
 		companyLabel : while (company == null) {
@@ -220,15 +220,15 @@ public class CLI {
 			if (id == 0) {
 				break companyLabel;
 			}
-			company = companyDBService.getCompany(id);
+			company = companyDBService.getById(id);
 			if (company == null) {
 				System.out.println("This id doesn't correspond to any company in the database.");
 			}
 		}
-		computer.setCompany(company);
+		builder.company(company);
 		
 		//Add the computer to the database
-		computerDBService.create(computer);
+		computerDBService.create(builder.build());
 		System.out.println("The computer was added to the database");
 		
 	}
@@ -239,7 +239,7 @@ public class CLI {
 	public void updateComputer() {
 		System.out.println("Enter the id of the computer you wish to update");
 		//Get the computer to update from the database
-		Computer computer = computerDBService.getComputer(inputLong());
+		Computer computer = computerDBService.getById(inputLong());
 		Company company = null;
 		if (computer != null) {
 			//Change the name if the user wants
@@ -271,10 +271,16 @@ public class CLI {
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new company id (0 if you don't have one)");
-				Long id = inputLong();
-				if (id != 0) {
-					company = new Company();
-					company.setId(id);
+				companyLabel : while (company == null) {
+					System.out.println("Enter company id (0 if you don't have one)");
+					Long id = inputLong();
+					if (id == 0) {
+						break companyLabel;
+					}
+					company = companyDBService.getById(id);
+					if (company == null) {
+						System.out.println("This id doesn't correspond to any company in the database.");
+					}
 				}
 				computer.setCompany(company);
 			}
@@ -349,20 +355,13 @@ public class CLI {
 	 * @return long : a valid long
 	 */
 	private long inputLong() {
-		long id = 0;
 		//Get the input
 		String stringId = sc.nextLine();
-		boolean b = true;
 		//Check the input and ask a new one as long as the input isn't a long
-		do {
-			try {
-				id = Long.parseLong(stringId);
-				b = false;
-			} catch (NumberFormatException e) {
-				System.out.println("Input is not a Long, enter a new input :");
-				stringId = sc.nextLine();
-			}
-		} while(b);
-		return id;
+		while (!stringId.matches("^-?\\d{1,19}$")){
+			System.out.println("Input is not a Long, enter a new input :");
+			stringId = sc.nextLine();
+		}
+		return Long.valueOf(stringId);
 	}
 }
