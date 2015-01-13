@@ -142,7 +142,7 @@ public enum CompanyDAO {
 	 * @throws ClassNotFoundException : the jdbc driver was not found
 	 * @throws SQLException
 	 */
-	public Page getPagedList(Page page) throws ClassNotFoundException, SQLException {
+	public Page<Company> getPagedList(Page<Company> page) throws ClassNotFoundException, SQLException {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
 		Company company;

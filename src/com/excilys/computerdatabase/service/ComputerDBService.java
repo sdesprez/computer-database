@@ -108,7 +108,7 @@ public enum ComputerDBService {
 	 * @throws ClassNotFoundException : the jdbc driver was not found
 	 * @throws SQLException
 	 */
-	public Page getPagedList(Page page) throws ClassNotFoundException, SQLException {
+	public Page<Computer> getPagedList(Page<Computer> page) throws ClassNotFoundException, SQLException {
 		return computerDAO.getPagedList(page);
 	}
 }

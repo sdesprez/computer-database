@@ -295,7 +295,7 @@ public enum ComputerDAO {
 	 * @throws ClassNotFoundException : the jdbc driver was not found
 	 * @throws SQLException
 	 */
-	public Page getPagedList(Page page) throws ClassNotFoundException, SQLException {
+	public Page<Computer> getPagedList(Page<Computer> page) throws ClassNotFoundException, SQLException {
 		Connection conn = null;
 		List<Computer> computers = new ArrayList<Computer>();
 		try {

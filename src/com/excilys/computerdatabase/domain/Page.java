@@ -6,7 +6,7 @@ import java.util.List;
  * Class representing a Page of results from an SQL request
  * @author Sylvain DESPREZ
  */
-public class Page {
+public class Page<T> {
 
 	/**
 	 * Number of the page (1 by default)
@@ -15,7 +15,7 @@ public class Page {
 	/**
 	 * List of elements of the page
 	 */
-	private List<?> list;
+	private List<T> list;
 	/**
 	 * Max number of elements the page can have
 	 */
@@ -30,7 +30,7 @@ public class Page {
 		nbResultsPerPage = 20;
 	}
 
-	public Page(int pageNumber, List<?> list,
+	public Page(int pageNumber, List<T> list,
 			int nbResultsPerPage, int nbResults) {
 		this.pageNumber = pageNumber;
 		this.list = list;
@@ -46,11 +46,11 @@ public class Page {
 		this.pageNumber = pageNumber;
 	}
 
-	public List<?> getList() {
+	public List<T> getList() {
 		return list;
 	}
 
-	public void setList(List<?> list) {
+	public void setList(List<T> list) {
 		this.list = list;
 	}
 
@@ -75,7 +75,7 @@ public class Page {
 	 * @return true if there is a next page
 	 */
 	public boolean nextPage() {
-		//Check if there is a next page befor incrementing
+		//Check if there is a next page before incrementing
 		if (pageNumber * nbResultsPerPage < nbResults) {
 			pageNumber++;
 			return true;

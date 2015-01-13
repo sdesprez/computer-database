@@ -62,7 +62,7 @@ public enum CompanyDBService {
 	 * @throws ClassNotFoundException : the jdbc driver was not found
 	 * @throws SQLException
 	 */
-	public Page getPagedList(Page page) throws ClassNotFoundException, SQLException {
+	public Page<Company> getPagedList(Page<Company> page) throws ClassNotFoundException, SQLException {
 		return companyDAO.getPagedList(page);
 	}
 }

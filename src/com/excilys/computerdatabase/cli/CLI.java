@@ -95,7 +95,7 @@ public class CLI {
 	 */
 	public void listComputers() throws ClassNotFoundException, SQLException {
 		//Create a Page
-		Page page = new Page();
+		Page<Computer> page = new Page<Computer>();
 		
 		//Get the first Page of computers from the database
 		page = computerDBService.getPagedList(page);
@@ -142,7 +142,7 @@ public class CLI {
 	 */
 	public void listCompanies() throws ClassNotFoundException, SQLException {
 		//Create a Page
-		Page page = new Page();
+		Page<Company> page = new Page<Company>();
 		
 		//Get the first Page of companies from the database
 		page = companyDBService.getPagedList(page);
