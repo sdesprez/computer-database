@@ -1,6 +1,6 @@
 package com.excilys.computerdatabase.cli;
 
-import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -34,10 +34,8 @@ public class CLI {
 	
 	/**
 	 * Main menu of the CLI
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void mainMenu() throws ClassNotFoundException, SQLException {
+	public void mainMenu() {
 		//Instanciation of the scanner
 		sc = new Scanner(System.in);
 		
@@ -90,10 +88,8 @@ public class CLI {
 	/**
 	 * List the computers of the database by pages of 20 computers
 	 * You can navigate to the next page or the previous page
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void listComputers() throws ClassNotFoundException, SQLException {
+	public void listComputers() {
 		//Create a Page
 		Page<Computer> page = new Page<Computer>();
 		
@@ -137,10 +133,8 @@ public class CLI {
 	/**
 	 * List the companies of the database by pages of 20 computers
 	 * You can navigate to the next page or the previous page
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void listCompanies() throws ClassNotFoundException, SQLException {
+	public void listCompanies() {
 		//Create a Page
 		Page<Company> page = new Page<Company>();
 		
@@ -183,10 +177,8 @@ public class CLI {
 	
 	/**
 	 * Show the detail of a computer
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void computerDetails() throws ClassNotFoundException, SQLException {
+	public void computerDetails() {
 		System.out.println("Enter the computer id");
 		
 		//Get the computer corresponding to the id
@@ -204,10 +196,8 @@ public class CLI {
 
 	/**
 	 * Interface for creating a new computer
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void createComputer() throws ClassNotFoundException, SQLException {
+	public void createComputer() {
 		Computer computer = new Computer();
 		Company company = null;
 		
@@ -245,10 +235,8 @@ public class CLI {
 
 	/**
 	 * Interface for updating an existing computer
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void updateComputer() throws ClassNotFoundException, SQLException {
+	public void updateComputer() {
 		System.out.println("Enter the id of the computer you wish to update");
 		//Get the computer to update from the database
 		Computer computer = computerDBService.getComputer(inputLong());
@@ -301,10 +289,8 @@ public class CLI {
 	
 	/**
 	 * Interface for deleting a computer
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	public void deleteComputer() throws ClassNotFoundException, SQLException {
+	public void deleteComputer() {
 		Long id;
 		System.out.println("Enter the id of the computer you wish to delete");
 		id = inputLong();

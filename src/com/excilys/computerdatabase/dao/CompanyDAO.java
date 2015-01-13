@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +10,7 @@ import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 /**
  * Data Access Object for the Computer
@@ -25,23 +25,7 @@ public enum CompanyDAO {
 	 */
 	INSTANCE;
 
-	/**
-	 * Name of the jdbc driver
-	 */
-	private static final String COM_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	/**
-	 * Url of the database
-	 */
-	private static final String URL = "jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	/**
-	 * Username for the database connection
-	 */
-	private static final String USER = "admincdb";
-	/**
-	 * Password for the database connection
-	 */
-	private static final String PASSWORD = "qwerty1234";
-
+	private ConnectionManager cm = ConnectionManager.getInstance();
 	
 	/**
 	 * Return the instance of the CompanyDAO
@@ -52,30 +36,16 @@ public enum CompanyDAO {
 	}
 
 	/**
-	 * Connect to the database
-	 * @return A connection to the database
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException
-	 */
-	private Connection getConnection() throws ClassNotFoundException,
-			SQLException {
-		Class.forName(COM_MYSQL_JDBC_DRIVER);
-		return DriverManager.getConnection(URL, USER, PASSWORD);
-	}
-
-	/**
 	 * Get the List of all the companies in the database
 	 * @return List of all the companies in the database
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException 
 	 */
-	public List<Company> getAll() throws ClassNotFoundException, SQLException {
+	public List<Company> getAll() {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
 		Company company;
 		try {
 			//Get the connection
-			conn = getConnection();
+			conn = cm.getConnection();
 			
 			//Create the query
 			String query = "SELECT * FROM company;";
@@ -91,11 +61,11 @@ public enum CompanyDAO {
 				companies.add(company);
 			}
 			return companies;
+		} catch (SQLException e) {
+			throw new PersistenceException();
 		} finally {
 			//Close the connection
-			if (conn != null) {
-				conn.close();
-			}
+			cm.close(conn);
 		}
 	}
 
@@ -103,16 +73,13 @@ public enum CompanyDAO {
 	 * Get the company in the database corresponding to the id in parameter
 	 * @param id : id of the company in the database
 	 * @return the company that was found or null if there is no company for this id
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException
 	 */
-	public Company getCompany(long id) throws ClassNotFoundException,
-			SQLException {
+	public Company getCompany(long id) {
 		Connection conn = null;
 		Company company = null;
 		try {
 			//Get a connection to the database
-			conn = getConnection();
+			conn = cm.getConnection();
 			
 			//Create the query
 			String query = "SELECT * FROM company WHERE company.id=" + id + ";";
@@ -127,11 +94,11 @@ public enum CompanyDAO {
 				company.setName(results.getString("name"));
 			}
 			return company;
+		} catch(SQLException e) {
+			throw new PersistenceException();
 		} finally {
 			//Close the connection
-			if (conn != null) {
-				conn.close();
-			}
+			cm.close(conn);
 		}
 	}
 	
@@ -139,19 +106,17 @@ public enum CompanyDAO {
 	 * Get a Page of companies in the database.
 	 * @param Page : A page containing the pageNumber and the max number of results
 	 * @return A Page containing the list of companies 
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException
 	 */
-	public Page<Company> getPagedList(Page<Company> page) throws ClassNotFoundException, SQLException {
+	public Page<Company> getPagedList(Page<Company> page) {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
 		Company company;
 		try {
 			//Get a connection to the database
-			conn = getConnection();
+			conn = cm.getConnection();
 			
 			//Create the counting query
-			String countQuery = "SELECT Count(id) as total FROM company";
+			String countQuery = "SELECT COUNT(id) AS total FROM company";
 			Statement countStmt = conn.createStatement();
 			//Execute the counting query
 			ResultSet countResult = countStmt.executeQuery(countQuery);
@@ -160,7 +125,7 @@ public enum CompanyDAO {
 			page.setNbResults(countResult.getInt("total"));
 			
 			//Create the SELECT query
-			String query = "SELECT * FROM company limit ? offset ?;";
+			String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
 			PreparedStatement stmt = conn.prepareStatement(query);
 			stmt.setInt(1, page.getNbResultsPerPage());
 			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
@@ -176,11 +141,11 @@ public enum CompanyDAO {
 			page.setList(companies);
 			return page;
 			
+		} catch (SQLException e) {
+			throw new PersistenceException();
 		} finally {
 			//Close the connection
-			if (conn != null) {
-				conn.close();
-			}
+			cm.close(conn);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.domain;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 
 /**
@@ -58,13 +57,6 @@ public class Computer {
 	 * @param name
 	 */
 	public void setName(String name) {
-		if (name == null) {
-			throw new RuntimeException("Name cannot be null");
-		}
-		name = name.trim();
-		if (name.isEmpty()) {
-			throw new RuntimeException("Name cannot be empty");
-		}
 		this.name = name;
 	}
 
@@ -76,38 +68,12 @@ public class Computer {
 		this.introducedDate = introducedDate;
 	}
 
-	/**
-	 * Set the introducedDate of a computer using a Timestamp.
-	 * @param introducedDate : the value of the introducedDate as a Timestamp 
-	 */
-	public void setIntroducedDate(Timestamp introducedDate) {
-		if (discontinuedDate != null) {
-			this.introducedDate = introducedDate.toLocalDateTime().toLocalDate();
-		} else {
-			this.introducedDate = null;
-		}
-	}
-
 	public LocalDate getDiscontinuedDate() {
 		return discontinuedDate;
 	}
 
-	/**
-	 * Set the discontinuedDate of a computer using a Timestamp.
-	 * @param discontinuedDate : the value of the discontinuedDate as a Timestamp 
-	 */
 	public void setDiscontinuedDate(LocalDate discontinuedDate) {
 		this.discontinuedDate = discontinuedDate;
-	}
-
-	public void setDiscontinuedDate(Timestamp discontinuedDate) {
-		if (discontinuedDate != null) {
-			this.discontinuedDate = discontinuedDate.toLocalDateTime()
-					.toLocalDate();
-		} else {
-			this.introducedDate = null;
-		}
-
 	}
 
 	public Company getCompany() {
@@ -116,27 +82,6 @@ public class Computer {
 
 	public void setCompany(Company company) {
 		this.company = company;
-	}
-
-	/**
-	 * @return Timestamp : the value of the introducedDate as a Timestamp 
-	 */
-	public Timestamp getIntroducedTimestamp() {
-		if (introducedDate != null) {
-			return Timestamp.valueOf(introducedDate.atStartOfDay());
-		}
-		return null;
-	}
-
-	
-	/**
-	 * @return Timestamp : the value of the discontinued as a Timestamp 
-	 */
-	public Timestamp getDiscontinuedTimestamp() {
-		if (discontinuedDate != null) {
-			return Timestamp.valueOf(discontinuedDate.atStartOfDay());
-		}
-		return null;
 	}
 
 	@Override

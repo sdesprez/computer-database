@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
@@ -36,10 +35,8 @@ public enum CompanyDBService {
 	/**
 	 * Get the List of all the companies in the database
 	 * @return List of all the companies in the database
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException 
 	 */
-	public List<Company> getAll() throws ClassNotFoundException, SQLException {
+	public List<Company> getAll() {
 		return companyDAO.getAll();
 	}
 
@@ -47,11 +44,8 @@ public enum CompanyDBService {
 	 * Get the company in the database corresponding to the id in parameter
 	 * @param id : id of the company in the database
 	 * @return the company that was found or null if there is no company for this id
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException
 	 */
-	public Company getCompany(long id) throws ClassNotFoundException,
-			SQLException {
+	public Company getCompany(long id) {
 		return companyDAO.getCompany(id);
 	}
 	
@@ -59,10 +53,8 @@ public enum CompanyDBService {
 	 * Get a Page of companies in the database.
 	 * @param Page : A page containing the pageNumber and the max number of results
 	 * @return A Page containing the list of companies 
-	 * @throws ClassNotFoundException : the jdbc driver was not found
-	 * @throws SQLException
 	 */
-	public Page<Company> getPagedList(Page<Company> page) throws ClassNotFoundException, SQLException {
+	public Page<Company> getPagedList(Page<Company> page) {
 		return companyDAO.getPagedList(page);
 	}
 }
