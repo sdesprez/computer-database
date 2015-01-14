@@ -31,6 +31,9 @@ public enum CompanyDAO implements CompanyDAOI {
 	private ConnectionManager cm = ConnectionManager.getInstance();
 	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.CompanyDAO");
 	
+	private static final String SELECT_QUERY = "SELECT * FROM company";
+	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";
+	
 	/**
 	 * Return the instance of the CompanyDAO
 	 * @return Instance of the CompanyDAO
@@ -51,12 +54,9 @@ public enum CompanyDAO implements CompanyDAOI {
 			//Get the connection
 			conn = cm.getConnection();
 			
-			//Create the query
-			String query = "SELECT * FROM company;";
+			//Create & execute the query
 			Statement stmt = conn.createStatement();
-			
-			//Execute the query
-			ResultSet results = stmt.executeQuery(query);
+			ResultSet results = stmt.executeQuery(SELECT_QUERY);
 			//Create companies with the results
 			while (results.next()) {
 				company = new Company();
@@ -85,12 +85,9 @@ public enum CompanyDAO implements CompanyDAOI {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
-			//Create the query
-			String query = "SELECT * FROM company WHERE company.id=" + id + ";";
+			//Create & execute the query
 			Statement stmt = conn.createStatement();
-			
-			//Execute the query
-			ResultSet results = stmt.executeQuery(query);
+			ResultSet results = stmt.executeQuery(SELECT_QUERY + " WHERE company.id=" + id + ";");
 			//Create a company if there is a result
 			if (results.next()) {
 				company = createCompany(results);
@@ -116,18 +113,15 @@ public enum CompanyDAO implements CompanyDAOI {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
-			//Create the counting query
-			String countQuery = "SELECT COUNT(id) AS total FROM company";
+			//Create & execute the counting query
 			Statement countStmt = conn.createStatement();
-			//Execute the counting query
-			ResultSet countResult = countStmt.executeQuery(countQuery);
+			ResultSet countResult = countStmt.executeQuery(COUNT_QUERY);
 			//Set the number of results of the page with the result
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
 			
 			//Create the SELECT query
-			String query = "SELECT * FROM company LIMIT ? OFFSET ?;";
-			PreparedStatement stmt = conn.prepareStatement(query);
+			PreparedStatement stmt = conn.prepareStatement(SELECT_QUERY + " LIMIT ? OFFSET ?;");
 			stmt.setInt(1, page.getNbResultsPerPage());
 			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 			//Execute the SELECT query

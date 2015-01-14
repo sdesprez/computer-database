@@ -32,10 +32,15 @@ public enum ComputerDAO implements ComputerDAOI {
 	INSTANCE;
 
 	private ConnectionManager cm = ConnectionManager.getInstance();
+	
 	/**
 	 * Base Query for all the Select queries
 	 */
-	public static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company FROM computer c LEFT JOIN company ON company.id=c.company_id";
+	private static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company FROM computer c LEFT JOIN company ON company.id=c.company_id";
+	private static final String INSERT_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
+	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
+	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
+	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM computer";
 	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.computerDAO");
 	
 	/**
@@ -151,8 +156,7 @@ public enum ComputerDAO implements ComputerDAOI {
 			conn = cm.getConnection();
 			
 			//Create the query
-			String insertSQL = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
-			PreparedStatement stmt = conn.prepareStatement(insertSQL);
+			PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY);
 			stmt.setString(1, computer.getName());
 			LocalDate introduced = computer.getIntroducedDate();
 			LocalDate discontinued = computer.getDiscontinuedDate();
@@ -197,8 +201,7 @@ public enum ComputerDAO implements ComputerDAOI {
 			conn.setAutoCommit(false);
 			
 			//Create the query
-			PreparedStatement stmt = conn
-					.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?");
+			PreparedStatement stmt = conn.prepareStatement(UPDATE_QUERY);
 			stmt.setString(1, computer.getName());
 			LocalDate introduced = computer.getIntroducedDate();
 			LocalDate discontinued = computer.getDiscontinuedDate();
@@ -255,7 +258,7 @@ public enum ComputerDAO implements ComputerDAOI {
 			conn.setAutoCommit(false);
 			
 			//Create the query
-			stmt = conn.prepareStatement("DELETE computer FROM computer WHERE id = ?");
+			stmt = conn.prepareStatement(DELETE_QUERY);
 			stmt.setLong(1, id);
 			
 			//Execute the query
@@ -291,13 +294,10 @@ public enum ComputerDAO implements ComputerDAOI {
 			//Get a connection
 			conn = cm.getConnection();
 			
-			//Create the counting query
-			String countQuery = "SELECT COUNT(id) AS total FROM computer";
-			Statement countStmt = conn.createStatement();
-			
 			//Execute the counting query
 			ResultSet countResult;
-			countResult = countStmt.executeQuery(countQuery);
+			Statement countStmt = conn.createStatement();
+			countResult = countStmt.executeQuery(COUNT_QUERY);
 			//Set the number of results of the page with the result
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
