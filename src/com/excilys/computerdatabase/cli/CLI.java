@@ -3,14 +3,15 @@ package com.excilys.computerdatabase.cli;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.CompanyDBService;
-import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.service.CompanyDBServiceI;
+import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.impl.CompanyDBService;
+import com.excilys.computerdatabase.service.impl.ComputerDBService;
 import com.excilys.computerdatabase.utils.Validator;
 
 /**
@@ -27,11 +28,11 @@ public class CLI {
 	/**
 	 * Instance of ComputerDBService for the access to the database
 	 */
-	private static ComputerDBService computerDBService = ComputerDBService.getInstance();
+	private static ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
 	/**
 	 * Instance of CompanyDBService for the access to the database
 	 */
-	private static CompanyDBService companyDBService = CompanyDBService.getInstance();
+	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();
 
 	
 	/**
@@ -333,7 +334,7 @@ public class CLI {
 	private LocalDate inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
-		while ( !Validator.validateDate(date)) {
+		while (!Validator.validateDate(date)) {
 			System.out.println("Incorrect date format");
 			System.out.println("Enter introduction date (dd/MM/yyyy) or nothing if you don't know");
 			date = sc.nextLine();
@@ -350,7 +351,7 @@ public class CLI {
 		//Get the input
 		String stringLong = sc.nextLine();
 		//Check the input and ask a new one as long as the input isn't a long
-		while (!Validator.validateLong(stringLong)){
+		while (!Validator.validateLong(stringLong)) {
 			System.out.println("Input is not a Long, enter a new input :");
 			stringLong = sc.nextLine();
 		}

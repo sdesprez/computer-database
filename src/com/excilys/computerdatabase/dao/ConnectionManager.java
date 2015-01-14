@@ -31,7 +31,7 @@ public enum ConnectionManager {
 	private static final String PASSWORD = "qwerty1234";
 	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.ConnectionManager");
 	
-	private ConnectionManager(){
+	private ConnectionManager() {
 		try {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {
@@ -44,7 +44,7 @@ public enum ConnectionManager {
 		return INSTANCE;
 	}
 	
-	public Connection getConnection(){
+	public Connection getConnection() {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (SQLException e) {

@@ -1,10 +1,12 @@
-package com.excilys.computerdatabase.service;
+package com.excilys.computerdatabase.service.impl;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.dao.CompanyDAO;
+import com.excilys.computerdatabase.dao.CompanyDAOI;
+import com.excilys.computerdatabase.dao.impl.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.service.CompanyDBServiceI;
 
 /**
  * Database Service for the Company
@@ -12,7 +14,7 @@ import com.excilys.computerdatabase.domain.Page;
  * @author Sylvain DESPREZ
  *
  */
-public enum CompanyDBService {
+public enum CompanyDBService implements CompanyDBServiceI {
 
 	/**
 	 * Instance of CompanyDBService
@@ -20,9 +22,9 @@ public enum CompanyDBService {
 	INSTANCE;
 
 	/**
-	 * Instance of the CompanyDAO
+	 * Instance of the CompanyDAOI
 	 */
-	private CompanyDAO companyDAO = CompanyDAO.getInstance();
+	private CompanyDAOI companyDAO = CompanyDAO.getInstance();
 
 	/**
 	 * Return the instance of the CompanyDBService
@@ -33,27 +35,25 @@ public enum CompanyDBService {
 	}
 
 	/**
-	 * Get the List of all the companies in the database
-	 * @return List of all the companies in the database
+	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Company> getAll() {
 		return companyDAO.getAll();
 	}
 
 	/**
-	 * Get the company in the database corresponding to the id in parameter
-	 * @param id : id of the company in the database
-	 * @return the company that was found or null if there is no company for this id
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Company getById(long id) {
 		return companyDAO.getById(id);
 	}
 	
 	/**
-	 * Get a Page of companies in the database.
-	 * @param Page : A page containing the pageNumber and the max number of results
-	 * @return A Page containing the list of companies 
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Page<Company> getPagedList(Page<Company> page) {
 		return companyDAO.getPagedList(page);
 	}

@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dao;
+package com.excilys.computerdatabase.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.dao.CompanyDAOI;
+import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -21,7 +23,7 @@ import com.excilys.computerdatabase.exceptions.PersistenceException;
  * @author Sylvain DESPREZ
  *
  */
-public enum CompanyDAO {
+public enum CompanyDAO implements CompanyDAOI {
 
 	/**
 	 * Instance of ComputerDAO
@@ -40,9 +42,9 @@ public enum CompanyDAO {
 	}
 
 	/**
-	 * Get the List of all the companies in the database
-	 * @return List of all the companies in the database
+	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Company> getAll() {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
@@ -75,10 +77,9 @@ public enum CompanyDAO {
 	}
 
 	/**
-	 * Get the company in the database corresponding to the id in parameter
-	 * @param id : id of the company in the database
-	 * @return the company that was found or null if there is no company for this id
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Company getById(long id) {
 		Connection conn = null;
 		Company company = null;
@@ -97,7 +98,7 @@ public enum CompanyDAO {
 				company = createCompany(results);
 			}
 			return company;
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			logger.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException();
 		} finally {
@@ -107,10 +108,9 @@ public enum CompanyDAO {
 	}
 	
 	/**
-	 * Get a Page of companies in the database.
-	 * @param Page : A page containing the pageNumber and the max number of results
-	 * @return A Page containing the list of companies 
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Page<Company> getPagedList(Page<Company> page) {
 		Connection conn = null;
 		List<Company> companies = new ArrayList<Company>();
@@ -157,7 +157,7 @@ public enum CompanyDAO {
 	 * @return the computer contained in the row
 	 * @throws SQLException 
 	 */
-	private Company createCompany(ResultSet rs) throws SQLException {
+	private static Company createCompany(ResultSet rs) throws SQLException {
 		return Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build();
 	}
 }

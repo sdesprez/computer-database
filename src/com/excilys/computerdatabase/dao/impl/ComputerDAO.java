@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dao;
+package com.excilys.computerdatabase.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +13,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -24,7 +26,7 @@ import com.excilys.computerdatabase.exceptions.PersistenceException;
  * @author Sylvain DESPREZ
  *
  */
-public enum ComputerDAO {
+public enum ComputerDAO implements ComputerDAOI {
 
 	/**
 	 * Instance of ComputerDAO
@@ -48,9 +50,9 @@ public enum ComputerDAO {
 
 
 	/**
-	 * Get the List of all the computers in the database
-	 * @return List of all the computers in the database
+	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Computer> getAll() {
 		Connection conn = null;
 		List<Computer> computers = new ArrayList<Computer>();
@@ -77,10 +79,9 @@ public enum ComputerDAO {
 	}
 	
 	/**
-	 * Get the computer in the database corresponding to the id in parameter
-	 * @param id : id of the computer in the database
-	 * @return the computer that was found or null if there is no computer for this id
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Computer getById(long id) {
 		Connection conn = null;
 		Computer computer = null;
@@ -109,10 +110,9 @@ public enum ComputerDAO {
 	}
 
 	/**
-	 * Get the list of computers corresponding to the id of a company
-	 * @param id : id of the company in the database
-	 * @return the list of computers
+	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Computer> getByCompanyId(long id) {
 		Connection conn = null;
 		List<Computer> computers = new ArrayList<Computer>();
@@ -142,9 +142,9 @@ public enum ComputerDAO {
 	}
 
 	/**
-	 * Create a new computer in the database
-	 * @param computer : computer to add in the database
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void create(Computer computer) {
 		Connection conn = null;
 		Company company = computer.getCompany();
@@ -187,9 +187,9 @@ public enum ComputerDAO {
 	}
 
 	/**
-	 * Update a computer of the database
-	 * @param computer : computer to update in the database
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void update(Computer computer) {
 		Connection conn = null;
 		Company company = computer.getCompany();
@@ -227,7 +227,7 @@ public enum ComputerDAO {
 			//Commit the query
 			conn.commit();
 		} catch (SQLException e) {
-			logger.error("SQLError in update() with "+computer);
+			logger.error("SQLError in update() with " + computer);
 			if (conn != null) {
 				try {
 					conn.rollback();
@@ -245,9 +245,9 @@ public enum ComputerDAO {
 	}
 
 	/**
-	 * Delete a computer in the database
-	 * @param id : id of the computer to delete
+	 * {@inheritDoc}
 	 */
+	@Override
 	public void delete(Long id) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -266,7 +266,7 @@ public enum ComputerDAO {
 			//Commit the query
 			conn.commit();
 		} catch (SQLException e) {
-			logger.error("SQLError in delete() with id = "+id);
+			logger.error("SQLError in delete() with id = " + id);
 			if (conn != null) {
 				try {
 					conn.rollback();
@@ -283,10 +283,9 @@ public enum ComputerDAO {
 	}
 	
 	/**
-	 * Get a Page of computers in the database.
-	 * @param Page : A page containing the pageNumber and the max number of results
-	 * @return A Page containing the list of computers 
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Page<Computer> getPagedList(Page<Computer> page) {
 		Connection conn = null;
 		List<Computer> computers = new ArrayList<Computer>();
@@ -335,7 +334,7 @@ public enum ComputerDAO {
 	 * @return the computer contained in the row
 	 * @throws SQLException 
 	 */
-	private Computer createComputer(ResultSet rs) throws SQLException {
+	private static Computer createComputer(ResultSet rs) throws SQLException {
 		Computer.Builder builder = Computer.builder().id(rs.getLong("id")).name(rs.getString("name"));
 		Timestamp introduced = rs.getTimestamp("introduced");
 		Timestamp discontinued = rs.getTimestamp("discontinued");
@@ -345,7 +344,7 @@ public enum ComputerDAO {
 		if (discontinued != null) {
 			builder.discontinuedDate(discontinued.toLocalDateTime().toLocalDate());
 		}
-		Long companyId= rs.getLong("company_Id");
+		Long companyId = rs.getLong("company_Id");
 		if (companyId != null) {
 			builder.company(Company.builder().id(companyId).name(rs.getString("company")).build());
 		}
