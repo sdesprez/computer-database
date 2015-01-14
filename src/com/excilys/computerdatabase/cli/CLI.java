@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.cli;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.utils.Validator;
 
 /**
  * Command Line Interface
@@ -206,11 +208,11 @@ public class CLI {
 		builder.name(inputName());
 
 		//Get the date of introduction. If the user enter nothing, the date is null
-		System.out.println("Enter introduction date (yyyy-mm-dd) or nothing if you don't know");
+		System.out.println("Enter introduction date (dd/MM/yyyy) or nothing if you don't know");
 		builder.introducedDate(inputDate());
 		
 		//Get the date of discontinuation. If the user enter nothing, the date is null
-		System.out.println("Enter discontinued date (yyyy-mm-dd) or nothing if you don't know");
+		System.out.println("Enter discontinued date (dd/MM/yyyy) or nothing if you don't know");
 		builder.discontinuedDate(inputDate());
 
 		//Get the id of the company. If it's 0, then company = null
@@ -254,7 +256,7 @@ public class CLI {
 			System.out.println("Current introduced date : " + computer.getIntroducedDate());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
-				System.out.println("Enter the new introduced Date");
+				System.out.println("Enter the new introduced Date (dd/MM/yyyy)");
 				computer.setIntroducedDate(inputDate());
 			}
 			
@@ -262,7 +264,7 @@ public class CLI {
 			System.out.println("Current discontinued date : " + computer.getDiscontinuedDate());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
-				System.out.println("Enter the new dicontinued date");
+				System.out.println("Enter the new dicontinued date (dd/MM/yyyy)");
 				computer.setDiscontinuedDate(inputDate());
 			}
 			
@@ -329,24 +331,14 @@ public class CLI {
 	 * @return LocalDate : a valid LocalDate 
 	 */
 	private LocalDate inputDate() {
-		String iDate = null;
-		//Get the input
-		iDate = sc.nextLine();
-		LocalDate date = null;
+		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
-		while (iDate != null && !iDate.trim().isEmpty()) {
-			try {
-				//If the parse works, return the date
-				date = LocalDate.parse(iDate);
-				return date;
-			//If the parse fails, ask a new input
-			} catch (DateTimeParseException e) {
-				System.out.println("Wrong date format");
-				System.out.println("Enter introduction date (yyyy-mm-dd) or nothing if you don't know");
-				iDate = sc.nextLine();
-			}
+		while ( !Validator.validateDate(date)) {
+			System.out.println("Incorrect date format");
+			System.out.println("Enter introduction date (dd/MM/yyyy) or nothing if you don't know");
+			date = sc.nextLine();
 		}
-		return null;
+		return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 	
 	/**
@@ -356,12 +348,12 @@ public class CLI {
 	 */
 	private long inputLong() {
 		//Get the input
-		String stringId = sc.nextLine();
+		String stringLong = sc.nextLine();
 		//Check the input and ask a new one as long as the input isn't a long
-		while (!stringId.matches("^-?\\d{1,19}$")){
+		while (!Validator.validateLong(stringLong)){
 			System.out.println("Input is not a Long, enter a new input :");
-			stringId = sc.nextLine();
+			stringLong = sc.nextLine();
 		}
-		return Long.valueOf(stringId);
+		return Long.valueOf(stringLong);
 	}
 }
