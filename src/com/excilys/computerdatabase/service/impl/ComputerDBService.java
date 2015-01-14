@@ -12,8 +12,6 @@ import com.excilys.computerdatabase.service.ComputerDBServiceI;
 /**
  * Database Service for the Computer
  * Singleton
- * @author Sylvain DESPREZ
- *
  */
 public enum ComputerDBService implements ComputerDBServiceI {
 

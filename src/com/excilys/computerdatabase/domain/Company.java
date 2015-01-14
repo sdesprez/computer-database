@@ -2,8 +2,6 @@ package com.excilys.computerdatabase.domain;
 
 /**
  * Class representing a company.
- * @author Sylvain DESPREZ
- *
  */
 public class Company {
 

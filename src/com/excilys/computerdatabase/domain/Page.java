@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * Class representing a Page of results from an SQL request
- * @author Sylvain DESPREZ
  */
 public class Page<T> {
 

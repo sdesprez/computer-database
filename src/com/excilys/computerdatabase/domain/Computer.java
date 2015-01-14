@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 /**
  * Class representing a computer.
- * @author Sylvain DESPREZ
- *
  */
 public class Computer {
 

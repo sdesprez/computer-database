@@ -23,8 +23,6 @@ import com.excilys.computerdatabase.exceptions.PersistenceException;
 /**
  * Data Access Object for the Computer
  * Singleton
- * @author Sylvain DESPREZ
- *
  */
 public enum ComputerDAO implements ComputerDAOI {
 

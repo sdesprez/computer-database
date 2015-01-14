@@ -16,8 +16,6 @@ import com.excilys.computerdatabase.utils.Validator;
 
 /**
  * Command Line Interface
- * @author Sylvain DESPREZ
- * 
  */
 public class CLI {
 

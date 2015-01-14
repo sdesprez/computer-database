@@ -1,10 +1,10 @@
 package com.excilys.computerdatabase.exceptions;
 
+/**
+ * RuntimeException for the exceptions of the Persistence layer
+ */
 public class PersistenceException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public PersistenceException() {

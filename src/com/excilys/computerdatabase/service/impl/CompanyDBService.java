@@ -11,8 +11,6 @@ import com.excilys.computerdatabase.service.CompanyDBServiceI;
 /**
  * Database Service for the Company
  * Singleton
- * @author Sylvain DESPREZ
- *
  */
 public enum CompanyDBService implements CompanyDBServiceI {
 

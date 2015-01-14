@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 
+/**
+ * Manage the connection to the MySQL database
+ */
 public enum ConnectionManager {
 
 	INSTANCE;
@@ -31,6 +34,10 @@ public enum ConnectionManager {
 	private static final String PASSWORD = "qwerty1234";
 	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.ConnectionManager");
 	
+	/**
+	 * Constructor.
+	 * Load the MySQL JDBC Driver
+	 */
 	private ConnectionManager() {
 		try {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
@@ -40,10 +47,17 @@ public enum ConnectionManager {
 		}
 	}
 	
+	
+	/**
+	 * @return the Instance of ConnectionManager
+	 */
 	public static ConnectionManager getInstance() {
 		return INSTANCE;
 	}
 	
+	/**
+	 * @return A connection to the database
+	 */
 	public Connection getConnection() {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -53,6 +67,10 @@ public enum ConnectionManager {
 		}
 	}
 	
+	/**
+	 * Close the connection
+	 * @param conn
+	 */
 	public void close(Connection conn) {
 		if (conn != null) {
 			try {
