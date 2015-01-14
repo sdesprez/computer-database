@@ -94,4 +94,40 @@ public class Page<T> {
 		}
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((list == null) ? 0 : list.hashCode());
+		result = prime * result + nbResults;
+		result = prime * result + nbResultsPerPage;
+		result = prime * result + pageNumber;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Page other = (Page) obj;
+		if (list == null) {
+			if (other.list != null)
+				return false;
+		} else if (!list.equals(other.list))
+			return false;
+		if (nbResults != other.nbResults)
+			return false;
+		if (nbResultsPerPage != other.nbResultsPerPage)
+			return false;
+		if (pageNumber != other.pageNumber)
+			return false;
+		return true;
+	}
+	
+	
 }
