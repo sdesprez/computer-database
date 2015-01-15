@@ -114,7 +114,8 @@ public class Page<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Page other = (Page) obj;
+		@SuppressWarnings("unchecked")
+		Page<T> other = (Page<T>) obj;
 		if (list == null) {
 			if (other.list != null)
 				return false;

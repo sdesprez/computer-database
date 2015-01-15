@@ -36,6 +36,8 @@ public class CompanyDAOTest {
 		
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
+		
+		cm.close(connection);
 	}
 	
 	@Test
