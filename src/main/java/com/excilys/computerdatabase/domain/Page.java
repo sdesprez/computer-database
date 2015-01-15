@@ -24,17 +24,18 @@ public class Page<T> {
 	 */
 	private int nbResults;
 
+	private int nbPages;
+	
 	public Page() { 
-		pageNumber = 1;
-		nbResultsPerPage = 20;
 	}
 
 	public Page(int pageNumber, List<T> list,
-			int nbResultsPerPage, int nbResults) {
+			int nbResultsPerPage, int nbResults, int nbPages) {
 		this.pageNumber = pageNumber;
 		this.list = list;
 		this.nbResultsPerPage = nbResultsPerPage;
 		this.nbResults = nbResults;
+		this.nbPages = nbPages;
 	}
 
 	public int getPageNumber() {
@@ -69,13 +70,23 @@ public class Page<T> {
 		this.nbResults = nbResults;
 	}
 	
+	
+	
+	public int getNbPages() {
+		return nbPages;
+	}
+
+	public void setNbPages(int nbPages) {
+		this.nbPages = nbPages;
+	}
+
 	/**
 	 * Increment the pageNumber if there is more pages.
 	 * @return true if there is a next page
 	 */
 	public boolean nextPage() {
 		//Check if there is a next page before incrementing
-		if (pageNumber * nbResultsPerPage < nbResults) {
+		if (pageNumber < nbPages) {
 			pageNumber++;
 			return true;
 		}
@@ -95,11 +106,23 @@ public class Page<T> {
 		return false;
 	}
 
+	public void refreshNbPages() {
+		if (nbResultsPerPage != 0 ) {
+			nbPages = nbResults / nbResultsPerPage;
+			if (nbResults%nbResultsPerPage !=0) {
+				nbPages++;
+			}
+		} else {
+			nbPages = 0;
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((list == null) ? 0 : list.hashCode());
+		result = prime * result + nbPages;
 		result = prime * result + nbResults;
 		result = prime * result + nbResultsPerPage;
 		result = prime * result + pageNumber;
@@ -121,6 +144,8 @@ public class Page<T> {
 				return false;
 		} else if (!list.equals(other.list))
 			return false;
+		if (nbPages != other.nbPages)
+			return false;
 		if (nbResults != other.nbResults)
 			return false;
 		if (nbResultsPerPage != other.nbResultsPerPage)
@@ -129,6 +154,15 @@ public class Page<T> {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Page [pageNumber=" + pageNumber + ", list=" + list
+				+ ", nbResultsPerPage=" + nbResultsPerPage + ", nbResults="
+				+ nbResults + ", nbPages=" + nbPages + "]";
+	}
+
+	
 	
 	
 }

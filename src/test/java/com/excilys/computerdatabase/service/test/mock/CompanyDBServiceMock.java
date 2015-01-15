@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.service.mock;
+package com.excilys.computerdatabase.service.test.mock;
 
 import java.util.List;
 

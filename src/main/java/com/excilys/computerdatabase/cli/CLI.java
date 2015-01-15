@@ -207,11 +207,11 @@ public class CLI {
 		builder.name(inputName());
 
 		//Get the date of introduction. If the user enter nothing, the date is null
-		System.out.println("Enter introduction date (dd/MM/yyyy) or nothing if you don't know");
+		System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
 		builder.introducedDate(inputDate());
 		
 		//Get the date of discontinuation. If the user enter nothing, the date is null
-		System.out.println("Enter discontinued date (dd/MM/yyyy) or nothing if you don't know");
+		System.out.println("Enter discontinued date (yyyy-MM-dd) or nothing if you don't know");
 		builder.discontinuedDate(inputDate());
 
 		//Get the id of the company. If it's 0, then company = null
@@ -255,7 +255,7 @@ public class CLI {
 			System.out.println("Current introduced date : " + computer.getIntroducedDate());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
-				System.out.println("Enter the new introduced Date (dd/MM/yyyy)");
+				System.out.println("Enter the new introduced Date (yyyy-MM-dd)");
 				computer.setIntroducedDate(inputDate());
 			}
 			
@@ -263,7 +263,7 @@ public class CLI {
 			System.out.println("Current discontinued date : " + computer.getDiscontinuedDate());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
-				System.out.println("Enter the new dicontinued date (dd/MM/yyyy)");
+				System.out.println("Enter the new dicontinued date (yyyy-MM-dd)");
 				computer.setDiscontinuedDate(inputDate());
 			}
 			
@@ -315,7 +315,7 @@ public class CLI {
 		//Get the input
 		String name = sc.nextLine();
 		//Ask a new input while the name is empty or null
-		while (name == null || name.trim().isEmpty()) {
+		while (Validator.isName(name)) {
 			System.out.println("Computer name can't be empty or spaces only");
 			System.out.println("Enter computer name");
 			name = sc.nextLine();
@@ -332,12 +332,12 @@ public class CLI {
 	private LocalDate inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
-		while (!Validator.validateDate(date)) {
+		while (!Validator.isDate(date)) {
 			System.out.println("Incorrect date format");
-			System.out.println("Enter introduction date (dd/MM/yyyy) or nothing if you don't know");
+			System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
 			date = sc.nextLine();
 		}
-		return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 	
 	/**
@@ -349,7 +349,7 @@ public class CLI {
 		//Get the input
 		String stringLong = sc.nextLine();
 		//Check the input and ask a new one as long as the input isn't a long
-		while (!Validator.validateLong(stringLong)) {
+		while (!Validator.isLong(stringLong)) {
 			System.out.println("Input is not a Long, enter a new input :");
 			stringLong = sc.nextLine();
 		}

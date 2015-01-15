@@ -120,6 +120,8 @@ public enum CompanyDAO implements CompanyDAOI {
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
 			
+			page.refreshNbPages();
+			
 			//Create the SELECT query
 			PreparedStatement stmt = conn.prepareStatement(SELECT_QUERY + " LIMIT ? OFFSET ?;");
 			stmt.setInt(1, page.getNbResultsPerPage());

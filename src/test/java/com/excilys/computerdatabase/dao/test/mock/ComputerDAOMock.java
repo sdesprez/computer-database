@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.DAO.mock;
+package com.excilys.computerdatabase.dao.test.mock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +13,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.DAO.ConnectionManagerTest;
 import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.test.ConnectionManagerTest;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -269,6 +269,8 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
 
+			page.refreshNbPages();
+			
 			//Create the SELECT query
 			String query = SELECT_QUERY + " LIMIT ? OFFSET ? ;";
 			PreparedStatement stmt = conn.prepareStatement(query);

@@ -301,6 +301,8 @@ public enum ComputerDAO implements ComputerDAOI {
 			//Set the number of results of the page with the result
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
+			
+			page.refreshNbPages();
 
 			//Create the SELECT query
 			String query = SELECT_QUERY + " LIMIT ? OFFSET ? ;";

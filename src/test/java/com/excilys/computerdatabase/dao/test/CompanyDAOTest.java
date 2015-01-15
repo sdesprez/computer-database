@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.DAO;
+package com.excilys.computerdatabase.dao.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,8 +12,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.DAO.mock.CompanyDAOMock;
 import com.excilys.computerdatabase.dao.CompanyDAOI;
+import com.excilys.computerdatabase.dao.test.mock.CompanyDAOMock;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 
@@ -63,6 +63,7 @@ public class CompanyDAOTest {
 		pageReturned.setNbResultsPerPage(20);
 		pageReturned.setPageNumber(1);
 		pageReturned.setNbResults(1);
+		pageReturned.setNbPages(1);
 		pageReturned.setList(list);
 		assertEquals(pageReturned, companyDAO.getPagedList(page));
 	}

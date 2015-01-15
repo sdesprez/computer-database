@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.DAO;
+package com.excilys.computerdatabase.dao.test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

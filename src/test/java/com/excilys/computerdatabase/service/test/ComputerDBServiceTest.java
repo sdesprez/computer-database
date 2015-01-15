@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.service;
+package com.excilys.computerdatabase.service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyLong;
@@ -16,7 +16,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.excilys.computerdatabase.dao.ComputerDAOI;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.mock.ComputerDBServiceMock;
+import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.test.mock.ComputerDBServiceMock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDBServiceTest {
