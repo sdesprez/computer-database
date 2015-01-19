@@ -349,7 +349,7 @@ public class CLI {
 		//Get the input
 		String stringLong = sc.nextLine();
 		//Check the input and ask a new one as long as the input isn't a long
-		while (!Validator.isLong(stringLong)) {
+		while (!Validator.isPositiveLong(stringLong)) {
 			System.out.println("Input is not a Long, enter a new input :");
 			stringLong = sc.nextLine();
 		}

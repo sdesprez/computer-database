@@ -1,11 +1,7 @@
 package com.excilys.computerdatabase.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,13 +10,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.service.CompanyDBServiceI;
 import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.ComputerHttpService;
 import com.excilys.computerdatabase.service.impl.CompanyDBService;
 import com.excilys.computerdatabase.service.impl.ComputerDBService;
-import com.excilys.computerdatabase.utils.Validator;
 
 @WebServlet("/addComputer")
 public class AddComputerController extends HttpServlet {
@@ -32,6 +31,7 @@ public class AddComputerController extends HttpServlet {
 
 	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
 	private CompanyDBServiceI companyDBService = CompanyDBService.getInstance();
+	private Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -50,64 +50,16 @@ public class AddComputerController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		Computer computer = populateComputer(req);
+		Computer computer = ComputerHttpService.populate(req);
 		
 		if (computer != null) {
 			computerDBService.create(computer);
+			logger.info(computer + " Added to database");
+			resp.sendRedirect("dashboard");
+		} else {
+			doGet(req, resp);
 		}
-		
-		
-		doGet(req, resp);
 	}
 
-	private Computer populateComputer(HttpServletRequest req) {
-		Computer.Builder builder = Computer.builder();
-		String name = req.getParameter("computerName");
-		String iDate = req.getParameter("introducedDate");
-		String dDate = req.getParameter("discontinuedDate");
-		String companyId = req.getParameter("companyId");
-		
-		Map<String,String> errorMsgMap = new HashMap<String,String>();
-		
-		if (Validator.isName(name)) {
-			builder.name(name);
-		} else {
-			errorMsgMap.put("name", "Incorrect name : a name can't be empty or only spaces");
-		}
-		
-		if (iDate != null && !iDate.trim().isEmpty()) {
-			if (Validator.isDate(iDate)) {
-				builder.introducedDate(LocalDate.parse(iDate, DateTimeFormatter.ISO_LOCAL_DATE));
-			} else {
-				errorMsgMap.put("iDate", "Incorrect date : the field must be at the yyyy-MM-dd format or left empty");
-			}
-		}
-		
-		if (dDate != null && !dDate.trim().isEmpty()) {
-			if (Validator.isDate(dDate)) {
-				builder.discontinuedDate(LocalDate.parse(dDate, DateTimeFormatter.ISO_LOCAL_DATE));
-			} else {
-				errorMsgMap.put("dDate", "Incorrect date : the field must be at the yyyy-MM-dd format or left empty");
-			}
-		}
-		
-		if (companyId != null && !companyId.trim().isEmpty()) {
-			if (Validator.isLong(companyId)) {
-				Company company = companyDBService.getById(Long.valueOf(companyId));
-				
-				if (company != null) {
-					builder.company(company);
-				}
-				
-			} else {
-				errorMsgMap.put("companyId", "Incorrect Company identifier");
-			}
-		}
-		
-		if (errorMsgMap.isEmpty()) {
-			return builder.build();
-		}
-		req.setAttribute("error", errorMsgMap);
-		return null;
-	}
+	
 }

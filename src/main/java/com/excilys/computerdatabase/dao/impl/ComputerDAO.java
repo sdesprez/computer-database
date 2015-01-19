@@ -41,7 +41,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM computer";
-	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.computerDAO");
+	private Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	/**
 	 * Return the instance of the ComputerDAO

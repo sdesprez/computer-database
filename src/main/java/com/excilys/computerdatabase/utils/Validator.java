@@ -23,12 +23,12 @@ public class Validator {
 	/**
 	 * Regex expression for a long
 	 */
-	private static final String LONG_PATTERN = "^-?\\d{1,19}$";
+	private static final String POSITIVE_LONG_PATTERN = "^\\d{1,19}$";
 	
 	/**
 	 * Regex expression for a int
 	 */
-	private static final String INT_PATTERN = "-?\\d{1,9}";
+	private static final String POSITIVE_INT_PATTERN = "\\d{1,9}";
 	
 	/**
 	 * Check if a String as the format of a date
@@ -47,15 +47,15 @@ public class Validator {
 	}
 	
 	/**
-	 * Check if a String as the format of a long
+	 * Check if a String as the format of a long and positive
 	 * @param string String to check
 	 * @return true if the format if correct
 	 */
-	public static boolean isLong(String string) {
+	public static boolean isPositiveLong(String string) {
 		if (string == null || string.trim().isEmpty()) {
 			return false;
 		}
-		if (!string.matches(LONG_PATTERN)) {
+		if (!string.matches(POSITIVE_LONG_PATTERN)) {
 			return false;
 		}
 		
@@ -79,15 +79,15 @@ public class Validator {
 	
 	
 	/**
-	 * Check if a String as the format of an int
+	 * Check if a String as the format of an int and positive
 	 * @param string String to check
 	 * @return true if the format if correct
 	 */
-	public static boolean isInt(String integer) {
+	public static boolean isPositiveInt(String integer) {
 		if (integer == null || integer.trim().isEmpty()) {
 			return false;
 		}
-		if (!integer.matches(INT_PATTERN)) {
+		if (!integer.matches(POSITIVE_INT_PATTERN)) {
 			return false;
 		}
 		

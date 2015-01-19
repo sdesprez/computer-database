@@ -35,7 +35,7 @@ public class DashboardController extends HttpServlet {
 		
 		String intString = req.getParameter("page");
 		int pageNumber = 0;
-		if (Validator.isInt(intString)) {
+		if (Validator.isPositiveInt(intString)) {
 			pageNumber = Integer.valueOf(intString);
 		}
 		if (pageNumber < 1) {

@@ -29,7 +29,7 @@ public enum CompanyDAO implements CompanyDAOI {
 	INSTANCE;
 
 	private ConnectionManager cm = ConnectionManager.getInstance();
-	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.CompanyDAO");
+	private Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";

@@ -12,6 +12,11 @@ pageEncoding="UTF-8"%>
                     </div>
                     <h1>Edit Computer</h1>
 
+					<span>${error.get("id")}</span>
+					<span>${error.get("name")}</span>
+                    <span>${error.get("iDate")}</span>
+                    <span>${error.get("dDate")}</span>
+                    <span>${error.get("companyId")}</span>
                     <form action="editComputer" method="POST">
                         <input type="hidden" name="id" value="${computer.id}"/>
                         <fieldset>
@@ -32,6 +37,10 @@ pageEncoding="UTF-8"%>
                                 <select class="form-control" id="companyId" name="companyId">
                                     <option value="0">--</option>
                                    	<c:forEach items="${companies}" var="company">
+                                   	<c:if test="${company.id == computer.company.id}">
+                                   	<option value="${company.id}" selected="selected">${company.name}</option>
+                                   	</c:if>
+                                   	<c:if test="${company.id != computer.company.id}"></c:if>
                                    	<option value="${company.id}">${company.name}</option>
                                    	</c:forEach>
                                 </select>

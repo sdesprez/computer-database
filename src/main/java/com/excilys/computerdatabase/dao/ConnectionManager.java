@@ -32,7 +32,7 @@ public enum ConnectionManager {
 	 * Password for the database connection
 	 */
 	private static final String PASSWORD = "qwerty1234";
-	private Logger logger = LoggerFactory.getLogger("com.excilys.computerdatabase.dao.ConnectionManager");
+	private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 	
 	/**
 	 * Constructor.
