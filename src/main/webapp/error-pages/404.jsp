@@ -14,9 +14,9 @@ pageEncoding="UTF-8"%>
         </div>
     </section>
 
-    <script src="../js/jquery.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/dashboard.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/dashboard.js"></script>
 
 </body>
 </html>

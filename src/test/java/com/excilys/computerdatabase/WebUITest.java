@@ -31,21 +31,21 @@ public class WebUITest {
 	
 	@Test
 	public void pagination() {
-		int x = 20;
+		final int x = 20;
 		driver.get("http://localhost:8080/computer-database/dashboard?nbResults=" + x);
-		assertEquals(x,driver.findElements(By.cssSelector("#results tr")).size());
+		assertEquals(x, driver.findElements(By.cssSelector("#results tr")).size());
 	}
 	
 	@Test
 	public void addComputer() {
 		driver.get("http://localhost:8080/computer-database/addComputer");
 
-        WebElement element = driver.findElement(By.name("computerName"));
+        final WebElement element = driver.findElement(By.name("computerName"));
         element.sendKeys("Selenium");
         
         driver.findElement(By.name("introducedDate")).sendKeys("2000-02-10");
         driver.findElement(By.name("discontinuedDate")).sendKeys("2012-02-10");
-        Select select = new Select(driver.findElement(By.name("companyId")));
+        final Select select = new Select(driver.findElement(By.name("companyId")));
         select.selectByIndex(1);
         
         element.submit();
@@ -53,14 +53,14 @@ public class WebUITest {
 	
 	@Test
 	public void editComputer() {
-		driver.get("http://localhost:8080/computer-database/editComputer?id=580");
+		driver.get("http://localhost:8080/computer-database/editComputer?id=1");
 
-        WebElement element = driver.findElement(By.name("computerName"));
+        final WebElement element = driver.findElement(By.name("computerName"));
         element.sendKeys("Selenium Edited");
         
         driver.findElement(By.name("introducedDate")).sendKeys("2003-02-10");
         driver.findElement(By.name("discontinuedDate")).sendKeys("2015-02-10");
-        Select select = new Select(driver.findElement(By.name("companyId")));
+        final Select select = new Select(driver.findElement(By.name("companyId")));
         select.selectByIndex(2);
         
         element.submit();

@@ -6,6 +6,10 @@
 
 <ul class="pagination">
 	<c:if test="${page.pageNumber != 1}">
+		<li><a href="dashboard?page=1&nbResults=${page.nbResultsPerPage}"
+			aria-label="First"> 
+			<span aria-hidden="true">First</span>
+		</a></li>
 		<li><a href="dashboard?page=${page.pageNumber-1}&nbResults=${page.nbResultsPerPage}" 
 			aria-label="Previous"> 
 			<span aria-hidden="true">&laquo;</span>
@@ -22,13 +26,24 @@
 	</c:if>
 	<c:forEach begin="${page.pageNumber}" end="${page.pageNumber+3}" var="i">
 		<c:if test="${i <= page.nbPages}">
-			<li><a href="dashboard?page=${i}&nbResults=${page.nbResultsPerPage}" >${i}</a></li>
+			<c:choose>
+				<c:when test="${i == page.pageNumber}">
+				<li class="disabled"><span>${i}</span></li>
+				</c:when>
+				<c:otherwise>
+				<li><a href="dashboard?page=${i}&nbResults=${page.nbResultsPerPage}" >${i}</a></li>
+				</c:otherwise>
+			</c:choose>
 		</c:if>
 	</c:forEach>
 		<c:if test="${page.pageNumber != page.nbPages}">
 		<li><a href="dashboard?page=${page.pageNumber+1}&nbResults=${page.nbResultsPerPage}"
 			aria-label="Next"> 
 			<span aria-hidden="true">&raquo;</span>
+		</a></li>
+		<li><a href="dashboard?page=${page.nbPages}&nbResults=${page.nbResultsPerPage}"
+			aria-label="Last"> 
+			<span aria-hidden="true">Last</span>
 		</a></li>
 	</c:if>
 </ul>

@@ -27,6 +27,15 @@ public class ComputerHttpService {
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerHttpService.class);
 	
+	
+	/**
+	 * Return a computer created from the informations contained in a HttpServletRequest
+	 * If there was an error, set into the request a Map "errorMsgMap" who contain errors
+	 * messages 
+	 * @param req Request containing the informations of the computer
+	 * @return A Computer if there was no errors 
+	 * 			null if there was an error
+	 */
 	public static Computer populate(final HttpServletRequest req) {
 		final Computer.Builder builder = Computer.builder();
 		final String name = req.getParameter("computerName");
@@ -87,6 +96,14 @@ public class ComputerHttpService {
 	}
 	
 	
+	/**
+	 * Return a computer with its data updated from the informations of a HttpServletRequest
+	 * If there was an error, set into the request a Map "errorMsgMap" who contain errors
+	 * messages 
+	 * @param req Request containing the informations of the computer
+	 * @return A Computer if there was no errors 
+	 * 			null if there was an error
+	 */
 	public static Computer update(final HttpServletRequest req) {		
 		final Map<String, String> errorMsgMap = new HashMap<String, String>();
 		
@@ -121,15 +138,22 @@ public class ComputerHttpService {
 		return computer;
 	}
 	
-	
+	/**
+	 * 
+	 * @param req request containing the Ids of the computers to delete
+	 */
 	public static void delete(final HttpServletRequest req) {
+		//Get the String containing the Ids of the computers to delete
 		final String selection = req.getParameter("selection");
+		
+		//Create a matcher to find the positives longs in the String
 		final Matcher m = PATTERN.matcher(selection);
 		String id;
+		//For each long found, delete the computer
 		while (m.find()) {
 			id = m.group();
 			computerDBService.delete(Long.valueOf(id));
-			logger.info("Deletion of Computer with id="+id);
+			logger.info("Deletion of Computer with id=" + id);
 		}
 	}
 }
