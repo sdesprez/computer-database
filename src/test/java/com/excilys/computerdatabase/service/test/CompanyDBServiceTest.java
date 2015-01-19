@@ -27,7 +27,7 @@ public class CompanyDBServiceTest {
 	
 	@Before
 	public void init() {
-		CompanyDAOI companyDAOI = mock(CompanyDAOI.class);
+		final CompanyDAOI companyDAOI = mock(CompanyDAOI.class);
 		page = new Page<Company>();
 		page.setNbResultsPerPage(5);
 		page.setPageNumber(1);

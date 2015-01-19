@@ -35,7 +35,7 @@ public class Validator {
 	 * @param date String to check
 	 * @return true if the format if correct
 	 */
-	public static boolean isDate(String date) {
+	public static boolean isDate(final String date) {
 		if (date == null || date.trim().isEmpty()) {
 			return false;
 		}
@@ -51,7 +51,7 @@ public class Validator {
 	 * @param string String to check
 	 * @return true if the format if correct
 	 */
-	public static boolean isPositiveLong(String string) {
+	public static boolean isPositiveLong(final String string) {
 		if (string == null || string.trim().isEmpty()) {
 			return false;
 		}
@@ -67,7 +67,7 @@ public class Validator {
 	 * @param string String to check
 	 * @return true if it's a valid name
 	 */
-	public static boolean isName(String name) {
+	public static boolean isName(final String name) {
 		if (name == null) {
 			return false;
 		}
@@ -83,7 +83,7 @@ public class Validator {
 	 * @param string String to check
 	 * @return true if the format if correct
 	 */
-	public static boolean isPositiveInt(String integer) {
+	public static boolean isPositiveInt(final String integer) {
 		if (integer == null || integer.trim().isEmpty()) {
 			return false;
 		}

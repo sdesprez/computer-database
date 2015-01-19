@@ -45,7 +45,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Computer getById(long id) {
+	public Computer getById(final long id) {
 		return computerDAO.getById(id);
 	}
 
@@ -53,7 +53,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Computer> getByCompanyId(long id) {
+	public List<Computer> getByCompanyId(final long id) {
 		return computerDAO.getByCompanyId(id);
 	}
 
@@ -61,7 +61,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void create(Computer computer) {
+	public void create(final Computer computer) {
 		computerDAO.create(computer);
 	}
 
@@ -69,7 +69,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void update(Computer computer) {
+	public void update(final Computer computer) {
 		computerDAO.update(computer);
 	}
 
@@ -77,7 +77,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(Long id) {
+	public void delete(final Long id) {
 		computerDAO.delete(id);
 	}
 	
@@ -85,7 +85,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Page<Computer> getPagedList(Page<Computer> page) {
+	public Page<Computer> getPagedList(final Page<Computer> page) {
 		return computerDAO.getPagedList(page);
 	}
 }

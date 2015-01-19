@@ -44,7 +44,7 @@ public enum CompanyDBService implements CompanyDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Company getById(long id) {
+	public Company getById(final long id) {
 		return companyDAO.getById(id);
 	}
 	
@@ -52,7 +52,7 @@ public enum CompanyDBService implements CompanyDBServiceI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Page<Company> getPagedList(Page<Company> page) {
+	public Page<Company> getPagedList(final Page<Company> page) {
 		return companyDAO.getPagedList(page);
 	}
 }

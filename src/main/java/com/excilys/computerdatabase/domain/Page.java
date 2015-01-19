@@ -29,8 +29,8 @@ public class Page<T> {
 	public Page() { 
 	}
 
-	public Page(int pageNumber, List<T> list,
-			int nbResultsPerPage, int nbResults, int nbPages) {
+	public Page(final int pageNumber, final List<T> list,
+			final int nbResultsPerPage, final int nbResults, final int nbPages) {
 		this.pageNumber = pageNumber;
 		this.list = list;
 		this.nbResultsPerPage = nbResultsPerPage;
@@ -42,7 +42,7 @@ public class Page<T> {
 		return pageNumber;
 	}
 
-	public void setPageNumber(int pageNumber) {
+	public void setPageNumber(final int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
 
@@ -50,7 +50,7 @@ public class Page<T> {
 		return list;
 	}
 
-	public void setList(List<T> list) {
+	public void setList(final List<T> list) {
 		this.list = list;
 	}
 
@@ -58,7 +58,7 @@ public class Page<T> {
 		return nbResultsPerPage;
 	}
 
-	public void setNbResultsPerPage(int nbResultsPerPage) {
+	public void setNbResultsPerPage(final int nbResultsPerPage) {
 		this.nbResultsPerPage = nbResultsPerPage;
 	}
 
@@ -66,7 +66,7 @@ public class Page<T> {
 		return nbResults;
 	}
 
-	public void setNbResults(int nbResults) {
+	public void setNbResults(final int nbResults) {
 		this.nbResults = nbResults;
 	}
 	
@@ -76,7 +76,7 @@ public class Page<T> {
 		return nbPages;
 	}
 
-	public void setNbPages(int nbPages) {
+	public void setNbPages(final int nbPages) {
 		this.nbPages = nbPages;
 	}
 
@@ -130,7 +130,7 @@ public class Page<T> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -141,7 +141,7 @@ public class Page<T> {
 			return false;
 		}
 		@SuppressWarnings("unchecked")
-		Page<T> other = (Page<T>) obj;
+		final Page<T> other = (Page<T>) obj;
 		if (list == null) {
 			if (other.list != null) {
 				return false;

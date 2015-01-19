@@ -18,14 +18,14 @@ public class ComputerHttpService {
 	private static ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
 	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();	
 	
-	public static Computer populate(HttpServletRequest req) {
+	public static Computer populate(final HttpServletRequest req) {
 		final Computer.Builder builder = Computer.builder();
-		String name = req.getParameter("computerName");
-		String iDate = req.getParameter("introducedDate");
-		String dDate = req.getParameter("discontinuedDate");
-		String companyId = req.getParameter("companyId");
+		final String name = req.getParameter("computerName");
+		final String iDate = req.getParameter("introducedDate");
+		final String dDate = req.getParameter("discontinuedDate");
+		final String companyId = req.getParameter("companyId");
 		
-		Map<String, String> errorMsgMap = new HashMap<String, String>();
+		final Map<String, String> errorMsgMap = new HashMap<String, String>();
 		
 		//Check if the name is a valid Name
 		if (Validator.isName(name)) {
@@ -55,7 +55,7 @@ public class ComputerHttpService {
 		//Check if the company id is valid
 		if (companyId != null && !companyId.trim().isEmpty()) {
 			if (Validator.isPositiveLong(companyId)) {
-				Company company = companyDBService.getById(Long.valueOf(companyId));
+				final Company company = companyDBService.getById(Long.valueOf(companyId));
 				
 				//Check if a company with this id exist in the database 
 				if (company != null) {
@@ -78,11 +78,11 @@ public class ComputerHttpService {
 	}
 	
 	
-	public static Computer update(HttpServletRequest req) {		
-		Map<String, String> errorMsgMap = new HashMap<String, String>();
+	public static Computer update(final HttpServletRequest req) {		
+		final Map<String, String> errorMsgMap = new HashMap<String, String>();
 		
 		//Get the id
-		String idString = req.getParameter("id");
+		final String idString = req.getParameter("id");
 	
 		//Check if the idString is a valid id
 		if (!Validator.isPositiveLong(idString)) {
@@ -91,7 +91,7 @@ public class ComputerHttpService {
 			return null;
 		}
 
-		Long id = Long.valueOf(idString);
+		final Long id = Long.valueOf(idString);
 		
 		//Check if a computer with this id exist in the database
 		if (computerDBService.getById(id) == null) {
@@ -101,7 +101,7 @@ public class ComputerHttpService {
 		}
 		
 		//Create a computer with the informations in the request
-		Computer computer = populate(req);
+		final Computer computer = populate(req);
 		
 		//Check if the computer was created
 		if (computer == null) {

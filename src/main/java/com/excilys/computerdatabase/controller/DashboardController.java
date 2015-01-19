@@ -24,11 +24,11 @@ public class DashboardController extends HttpServlet {
 	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {		
 		Page<Computer> page = new Page<Computer>();
 		
-		String intString = req.getParameter("page");
+		final String intString = req.getParameter("page");
 		int pageNumber = 0;
 		if (Validator.isPositiveInt(intString)) {
 			pageNumber = Integer.valueOf(intString);
@@ -39,7 +39,7 @@ public class DashboardController extends HttpServlet {
 			page.setPageNumber(pageNumber);
 		}
 		
-		String nbResultsString = req.getParameter("nbResults");
+		final String nbResultsString = req.getParameter("nbResults");
 		int nbResults = 0;
 		if (Validator.isPositiveInt(nbResultsString)) {
 			nbResults = Integer.valueOf(nbResultsString);
@@ -55,7 +55,7 @@ public class DashboardController extends HttpServlet {
 		req.setAttribute("page", page);
 		
 		// Get the JSP dispatcher
-		RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
+		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 		// Forward the request
 		dispatcher.forward(req, resp);
 	}

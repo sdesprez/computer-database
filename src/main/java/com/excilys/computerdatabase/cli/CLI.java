@@ -183,7 +183,7 @@ public class CLI {
 		System.out.println("Enter the computer id");
 		
 		//Get the computer corresponding to the id
-		Computer computer = computerDBService.getById(inputLong());
+		final Computer computer = computerDBService.getById(inputLong());
 		//Show the detail of the computer
 		if (computer != null) {
 			System.out.println("Name : " + computer.getName());
@@ -217,7 +217,7 @@ public class CLI {
 		//Get the id of the company. If it's 0, then company = null
 		companyLabel : while (company == null) {
 			System.out.println("Enter company id (0 if you don't have one)");
-			Long id = inputLong();
+			final Long id = inputLong();
 			if (id == 0) {
 				break companyLabel;
 			}
@@ -240,7 +240,7 @@ public class CLI {
 	public void updateComputer() {
 		System.out.println("Enter the id of the computer you wish to update");
 		//Get the computer to update from the database
-		Computer computer = computerDBService.getById(inputLong());
+		final Computer computer = computerDBService.getById(inputLong());
 		Company company = null;
 		if (computer != null) {
 			//Change the name if the user wants
@@ -274,7 +274,7 @@ public class CLI {
 				System.out.println("Enter the new company id (0 if you don't have one)");
 				companyLabel : while (company == null) {
 					System.out.println("Enter company id (0 if you don't have one)");
-					Long id = inputLong();
+					final Long id = inputLong();
 					if (id == 0) {
 						break companyLabel;
 					}

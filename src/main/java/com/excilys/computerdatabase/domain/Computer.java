@@ -30,8 +30,8 @@ public class Computer {
 	
 	public Computer() { }
 
-	public Computer(Long id, String name, LocalDate introducedDate,
-			LocalDate discontinuedDate, Company company) {
+	public Computer(final Long id, final String name, final LocalDate introducedDate,
+			final LocalDate discontinuedDate, final Company company) {
 		this.id = id;
 		setName(name);
 		this.introducedDate = introducedDate;
@@ -43,7 +43,7 @@ public class Computer {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -51,7 +51,7 @@ public class Computer {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -59,7 +59,7 @@ public class Computer {
 		return introducedDate;
 	}
 
-	public void setIntroducedDate(LocalDate introducedDate) {
+	public void setIntroducedDate(final LocalDate introducedDate) {
 		this.introducedDate = introducedDate;
 	}
 
@@ -67,7 +67,7 @@ public class Computer {
 		return discontinuedDate;
 	}
 
-	public void setDiscontinuedDate(LocalDate discontinuedDate) {
+	public void setDiscontinuedDate(final LocalDate discontinuedDate) {
 		this.discontinuedDate = discontinuedDate;
 	}
 
@@ -75,7 +75,7 @@ public class Computer {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public void setCompany(final Company company) {
 		this.company = company;
 	}
 
@@ -88,7 +88,7 @@ public class Computer {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -98,7 +98,7 @@ public class Computer {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Computer other = (Computer) obj;
+		final Computer other = (Computer) obj;
 		if (id.compareTo(other.id) != 0) {
 			return false;
 		}
@@ -129,27 +129,27 @@ public class Computer {
 			computer = new Computer();
 		}
 		
-		public Builder id(long id) {
+		public Builder id(final long id) {
 			computer.id = id;
 			return this;
 		}
 		
-		public Builder name(String name) {
+		public Builder name(final String name) {
 			computer.name = name;
 			return this;
 		}
 		
-		public Builder introducedDate(LocalDate introducedDate) {
+		public Builder introducedDate(final LocalDate introducedDate) {
 			computer.introducedDate = introducedDate;
 			return this;
 		}
 		
-		public Builder discontinuedDate(LocalDate discontinuedDate) {
+		public Builder discontinuedDate(final LocalDate discontinuedDate) {
 			computer.discontinuedDate = discontinuedDate;
 			return this;
 		}
 		
-		public Builder company(Company company) {
+		public Builder company(final Company company) {
 			computer.company = company;
 			return this;
 		}

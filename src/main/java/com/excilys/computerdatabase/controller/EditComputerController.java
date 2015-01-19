@@ -32,30 +32,30 @@ public class EditComputerController extends HttpServlet {
 	private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		long id = 0;
-		String idString = req.getParameter("id");
+		final String idString = req.getParameter("id");
 		if (Validator.isPositiveLong(idString)) {
 			id = Long.valueOf(req.getParameter("id"));
 			
-			Computer computer = computerDBService.getById(id);		
+			final Computer computer = computerDBService.getById(id);		
 			req.setAttribute("computer", computer);
 		}
 		
-		List<Company> companies = companyDBService.getAll();
+		final List<Company> companies = companyDBService.getAll();
 		req.setAttribute("companies", companies);
 		
 		// Get the JSP dispatcher
-		RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/editComputer.jsp");
+		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/editComputer.jsp");
 		// Forward the request
 		dispatcher.forward(req, resp);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {		
-		Computer computer = ComputerHttpService.update(req);
+		final Computer computer = ComputerHttpService.update(req);
 		
 		if (computer != null) {
 			computerDBService.update(computer);

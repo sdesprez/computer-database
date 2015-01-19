@@ -34,9 +34,9 @@ public class ComputerDAOTest {
 		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, company));
 		
 		final ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
-		Connection connection = cm.getConnection();
+		final Connection connection = cm.getConnection();
 		
-		Statement stmt = connection.createStatement();
+		final Statement stmt = connection.createStatement();
 		stmt.execute("Truncate computer");
 		
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
@@ -64,11 +64,11 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void getPagedList() {
-		Page<Computer> page = new Page<Computer>();
+		final Page<Computer> page = new Page<Computer>();
 		page.setNbResultsPerPage(20);
 		page.setPageNumber(1);
 		
-		Page<Computer> pageReturned = new Page<Computer>();
+		final Page<Computer> pageReturned = new Page<Computer>();
 		pageReturned.setNbResultsPerPage(20);
 		pageReturned.setPageNumber(1);
 		pageReturned.setNbResults(2);
@@ -79,7 +79,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void create() {
-		Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(company).build();
+		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(company).build();
 		
 		computerDAO.create(computer);
 		computer.setId(3L);
@@ -88,7 +88,7 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void update() {
-		Computer computer = Computer.builder().id(2L).name("test").introducedDate(LocalDate.parse("1993-01-12")).build();
+		final Computer computer = Computer.builder().id(2L).name("test").introducedDate(LocalDate.parse("1993-01-12")).build();
 		computerDAO.update(computer);
 		assertEquals(computer, computerDAO.getById(2L));
 	}

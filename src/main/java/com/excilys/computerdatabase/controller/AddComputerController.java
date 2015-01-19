@@ -31,23 +31,23 @@ public class AddComputerController extends HttpServlet {
 	private Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		List<Company> companies = companyDBService.getAll();
+		final List<Company> companies = companyDBService.getAll();
 		req.setAttribute("companies", companies);
 		
 		// Get the JSP dispatcher
-		RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
+		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
 		// Forward the request
 		dispatcher.forward(req, resp);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		Computer computer = ComputerHttpService.populate(req);
+		final Computer computer = ComputerHttpService.populate(req);
 		
 		if (computer != null) {
 			computerDBService.create(computer);

@@ -41,7 +41,7 @@ public enum ConnectionManager {
 	private ConnectionManager() {
 		try {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			logger.error("MySQL JDBC driver not found");
 			throw new PersistenceException("Failed to load " + COM_MYSQL_JDBC_DRIVER);
 		}
@@ -61,7 +61,7 @@ public enum ConnectionManager {
 	public Connection getConnection() {
 		try {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("Couldn't connect to the database");
 			throw new PersistenceException();
 		}
@@ -71,11 +71,11 @@ public enum ConnectionManager {
 	 * Close the connection
 	 * @param conn
 	 */
-	public void close(Connection conn) {
+	public void close(final Connection conn) {
 		if (conn != null) {
 			try {
 				conn.close();
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				logger.warn("Couldn't close the connection to the database");
 				throw new PersistenceException();
 			}

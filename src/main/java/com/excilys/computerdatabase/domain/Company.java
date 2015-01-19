@@ -17,11 +17,11 @@ public class Company {
 	public Company() {
 	}
 
-	public Company(String name) {
+	public Company(final String name) {
 		this.name = name;
 	}
 
-	public Company(Long id, String name) {
+	public Company(final Long id, final String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -30,7 +30,7 @@ public class Company {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -38,7 +38,7 @@ public class Company {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -51,7 +51,7 @@ public class Company {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -90,12 +90,12 @@ public class Company {
 			company = new Company();
 		}
 		
-		public Builder id(Long id) {
+		public Builder id(final Long id) {
 			company.id = id;
 			return this;
 		}
 		
-		public Builder name(String name) {
+		public Builder name(final String name) {
 			company.name = name;
 			return this;
 		}

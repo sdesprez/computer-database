@@ -15,7 +15,7 @@ public class CompanyDBServiceMock implements CompanyDBServiceI {
 	
 	
 	
-	public CompanyDBServiceMock(CompanyDAOI companyDAO) {
+	public CompanyDBServiceMock(final CompanyDAOI companyDAO) {
 		this.companyDAO = companyDAO;
 	}
 	
@@ -25,12 +25,12 @@ public class CompanyDBServiceMock implements CompanyDBServiceI {
 	}
 
 	@Override
-	public Company getById(long id) {
+	public Company getById(final long id) {
 		return companyDAO.getById(id);
 	}
 
 	@Override
-	public Page<Company> getPagedList(Page<Company> page) {
+	public Page<Company> getPagedList(final Page<Company> page) {
 		return companyDAO.getPagedList(page);
 	}
 

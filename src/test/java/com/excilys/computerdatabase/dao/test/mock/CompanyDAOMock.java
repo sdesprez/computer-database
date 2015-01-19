@@ -38,15 +38,15 @@ public enum CompanyDAOMock implements CompanyDAOI {
 	@Override
 	public List<Company> getAll() {
 		Connection conn = null;
-		List<Company> companies = new ArrayList<Company>();
+		final List<Company> companies = new ArrayList<Company>();
 		Company company;
 		try {
 			//Get the connection
 			conn = cm.getConnection();
 			
 			//Create & execute the query
-			Statement stmt = conn.createStatement();
-			ResultSet results = stmt.executeQuery(SELECT_QUERY);
+			final Statement stmt = conn.createStatement();
+			final ResultSet results = stmt.executeQuery(SELECT_QUERY);
 			//Create companies with the results
 			while (results.next()) {
 				company = new Company();
@@ -55,7 +55,7 @@ public enum CompanyDAOMock implements CompanyDAOI {
 				companies.add(company);
 			}
 			return companies;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getAll()");
 			throw new PersistenceException();
 		} finally {
@@ -66,7 +66,7 @@ public enum CompanyDAOMock implements CompanyDAOI {
 
 	
 	@Override
-	public Company getById(long id) {
+	public Company getById(final long id) {
 		Connection conn = null;
 		Company company = null;
 		try {
@@ -74,14 +74,14 @@ public enum CompanyDAOMock implements CompanyDAOI {
 			conn = cm.getConnection();
 			
 			//Create & execute the query
-			Statement stmt = conn.createStatement();
-			ResultSet results = stmt.executeQuery(SELECT_QUERY + " WHERE company.id=" + id + ";");
+			final Statement stmt = conn.createStatement();
+			final ResultSet results = stmt.executeQuery(SELECT_QUERY + " WHERE company.id=" + id + ";");
 			//Create a company if there is a result
 			if (results.next()) {
 				company = createCompany(results);
 			}
 			return company;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException();
 		} finally {
@@ -91,16 +91,16 @@ public enum CompanyDAOMock implements CompanyDAOI {
 	}
 	
 	@Override
-	public Page<Company> getPagedList(Page<Company> page) {
+	public Page<Company> getPagedList(final Page<Company> page) {
 		Connection conn = null;
-		List<Company> companies = new ArrayList<Company>();
+		final List<Company> companies = new ArrayList<Company>();
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
 			//Create & execute the counting query
-			Statement countStmt = conn.createStatement();
-			ResultSet countResult = countStmt.executeQuery(COUNT_QUERY);
+			final Statement countStmt = conn.createStatement();
+			final ResultSet countResult = countStmt.executeQuery(COUNT_QUERY);
 			//Set the number of results of the page with the result
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
@@ -108,11 +108,11 @@ public enum CompanyDAOMock implements CompanyDAOI {
 			page.refreshNbPages();
 			
 			//Create the SELECT query
-			PreparedStatement stmt = conn.prepareStatement(SELECT_QUERY + " LIMIT ? OFFSET ?;");
+			final PreparedStatement stmt = conn.prepareStatement(SELECT_QUERY + " LIMIT ? OFFSET ?;");
 			stmt.setInt(1, page.getNbResultsPerPage());
 			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 			//Execute the SELECT query
-			ResultSet results = stmt.executeQuery();
+			final ResultSet results = stmt.executeQuery();
 			//Create the computers with the results
 			while (results.next()) {
 				companies.add(createCompany(results));
@@ -120,7 +120,7 @@ public enum CompanyDAOMock implements CompanyDAOI {
 			page.setList(companies);
 			return page;
 			
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getCompany() with " + page);
 			throw new PersistenceException();
 		} finally {
@@ -129,7 +129,7 @@ public enum CompanyDAOMock implements CompanyDAOI {
 		}
 	}
 	
-	private static Company createCompany(ResultSet rs) throws SQLException {
+	private static Company createCompany(final ResultSet rs) throws SQLException {
 		return Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build();
 	}
 }

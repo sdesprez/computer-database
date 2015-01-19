@@ -43,21 +43,21 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	@Override
 	public List<Computer> getAll() {
 		Connection conn = null;
-		List<Computer> computers = new ArrayList<Computer>();
+		final List<Computer> computers = new ArrayList<Computer>();
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
 			//Query the database to get all the computers
 			ResultSet results;
-			Statement stmt = conn.createStatement();
+			final Statement stmt = conn.createStatement();
 			results = stmt.executeQuery(SELECT_QUERY);
 			//Create computers and put them in the computers list with the result
 			while (results.next()) {
 				computers.add(createComputer(results));
 			}
 			return computers;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getAll()");
 			throw new PersistenceException();
 		} finally {
@@ -67,7 +67,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 	
 	@Override
-	public Computer getById(long id) {
+	public Computer getById(final long id) {
 		Connection conn = null;
 		Computer computer = null;
 		try {
@@ -75,9 +75,9 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			conn = cm.getConnection();
 			
 			//Query the database
-			String query = SELECT_QUERY + " WHERE c.id=" + id;
+			final String query = SELECT_QUERY + " WHERE c.id=" + id;
 			ResultSet results;
-			Statement stmt = conn.createStatement();
+			final Statement stmt = conn.createStatement();
 			results = stmt.executeQuery(query);
 			
 			//Create a computer if there is a result
@@ -85,7 +85,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 				computer = createComputer(results);
 			}
 			return computer;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException();
 		} finally {
@@ -95,17 +95,17 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 
 	@Override
-	public List<Computer> getByCompanyId(long id) {
+	public List<Computer> getByCompanyId(final long id) {
 		Connection conn = null;
-		List<Computer> computers = new ArrayList<Computer>();
+		final List<Computer> computers = new ArrayList<Computer>();
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
 			//Create the query to get the computers of a Company
-			String query = SELECT_QUERY + " WHERE company_id =" + id;
+			final String query = SELECT_QUERY + " WHERE company_id =" + id;
 			ResultSet results;
-			Statement stmt = conn.createStatement();
+			final Statement stmt = conn.createStatement();
 			
 			//Query the database
 			results = stmt.executeQuery(query);
@@ -114,7 +114,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 				computers.add(createComputer(results));
 			}
 			return computers;
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getByCompanyId() with company_id = " + id);
 			throw new PersistenceException();
 		} finally {
@@ -124,18 +124,18 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 
 	@Override
-	public void create(Computer computer) {
+	public void create(final Computer computer) {
 		Connection conn = null;
-		Company company = computer.getCompany();
+		final Company company = computer.getCompany();
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			
 			//Create the query
-			PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY);
+			final PreparedStatement stmt = conn.prepareStatement(INSERT_QUERY);
 			stmt.setString(1, computer.getName());
-			LocalDate introduced = computer.getIntroducedDate();
-			LocalDate discontinued = computer.getDiscontinuedDate();
+			final LocalDate introduced = computer.getIntroducedDate();
+			final LocalDate discontinued = computer.getDiscontinuedDate();
 			if (introduced != null) {
 				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
 			} else {
@@ -155,7 +155,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			
 			//Execute the query
 			stmt.executeUpdate();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in create() with " + computer);
 			throw new PersistenceException();
 		} finally {
@@ -165,19 +165,19 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 
 	@Override
-	public void update(Computer computer) {
+	public void update(final Computer computer) {
 		Connection conn = null;
-		Company company = computer.getCompany();
+		final Company company = computer.getCompany();
 		try {
 			//Get a connection to the database
 			conn = cm.getConnection();
 			conn.setAutoCommit(false);
 			
 			//Create the query
-			PreparedStatement stmt = conn.prepareStatement(UPDATE_QUERY);
+			final PreparedStatement stmt = conn.prepareStatement(UPDATE_QUERY);
 			stmt.setString(1, computer.getName());
-			LocalDate introduced = computer.getIntroducedDate();
-			LocalDate discontinued = computer.getDiscontinuedDate();
+			final LocalDate introduced = computer.getIntroducedDate();
+			final LocalDate discontinued = computer.getDiscontinuedDate();
 			if (introduced != null) {
 				stmt.setTimestamp(2, Timestamp.valueOf(introduced.atStartOfDay()));
 			} else {
@@ -200,12 +200,12 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			stmt.executeUpdate();
 			//Commit the query
 			conn.commit();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in update() with " + computer);
 			if (conn != null) {
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (final SQLException e1) {
 					logger.error("SQLError in update() while doing rollback");
 					throw new PersistenceException();
 				}
@@ -219,7 +219,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(final Long id) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
@@ -236,12 +236,12 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			
 			//Commit the query
 			conn.commit();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in delete() with id = " + id);
 			if (conn != null) {
 				try {
 					conn.rollback();
-				} catch (SQLException e1) {
+				} catch (final SQLException e1) {
 					logger.error("SQLError in delete() while doing rollback");
 					throw new PersistenceException();
 				}
@@ -254,16 +254,16 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 	
 	@Override
-	public Page<Computer> getPagedList(Page<Computer> page) {
+	public Page<Computer> getPagedList(final Page<Computer> page) {
 		Connection conn = null;
-		List<Computer> computers = new ArrayList<Computer>();
+		final List<Computer> computers = new ArrayList<Computer>();
 		try {
 			//Get a connection
 			conn = cm.getConnection();
 			
 			//Execute the counting query
 			ResultSet countResult;
-			Statement countStmt = conn.createStatement();
+			final Statement countStmt = conn.createStatement();
 			countResult = countStmt.executeQuery(COUNT_QUERY);
 			//Set the number of results of the page with the result
 			countResult.next();
@@ -272,13 +272,13 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			page.refreshNbPages();
 			
 			//Create the SELECT query
-			String query = SELECT_QUERY + " LIMIT ? OFFSET ? ;";
-			PreparedStatement stmt = conn.prepareStatement(query);
+			final String query = SELECT_QUERY + " LIMIT ? OFFSET ? ;";
+			final PreparedStatement stmt = conn.prepareStatement(query);
 			stmt.setInt(1, page.getNbResultsPerPage());
 			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 			
 			//Execute the SELECT query
-			ResultSet results = stmt.executeQuery();
+			final ResultSet results = stmt.executeQuery();
 			//Create the computers with the results
 			while (results.next()) {
 				computers.add(createComputer(results));
@@ -286,7 +286,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 			page.setList(computers);
 			return page;
 			
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			logger.error("SQLError in getCompany() with " + page);
 			throw new PersistenceException();
 		} finally {
@@ -295,17 +295,17 @@ public enum ComputerDAOMock implements ComputerDAOI {
 		}
 	}
 	
-	private static Computer createComputer(ResultSet rs) throws SQLException {
+	private static Computer createComputer(final ResultSet rs) throws SQLException {
 		final Computer.Builder builder = Computer.builder().id(rs.getLong("id")).name(rs.getString("name"));
-		Timestamp introduced = rs.getTimestamp("introduced");
-		Timestamp discontinued = rs.getTimestamp("discontinued");
+		final Timestamp introduced = rs.getTimestamp("introduced");
+		final Timestamp discontinued = rs.getTimestamp("discontinued");
 		if (introduced != null) {
 			builder.introducedDate(introduced.toLocalDateTime().toLocalDate());
 		}
 		if (discontinued != null) {
 			builder.discontinuedDate(discontinued.toLocalDateTime().toLocalDate());
 		}
-		Long companyId = rs.getLong("company_Id");
+		final Long companyId = rs.getLong("company_Id");
 		if (companyId != null) {
 			builder.company(Company.builder().id(companyId).name(rs.getString("company")).build());
 		}
