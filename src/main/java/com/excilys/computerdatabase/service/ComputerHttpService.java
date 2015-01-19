@@ -4,8 +4,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
@@ -17,6 +22,10 @@ public class ComputerHttpService {
 
 	private static ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
 	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();	
+	
+	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
+	
+	private static Logger logger = LoggerFactory.getLogger(ComputerHttpService.class);
 	
 	public static Computer populate(final HttpServletRequest req) {
 		final Computer.Builder builder = Computer.builder();
@@ -110,5 +119,17 @@ public class ComputerHttpService {
 		
 		computer.setId(id);
 		return computer;
+	}
+	
+	
+	public static void delete(final HttpServletRequest req) {
+		final String selection = req.getParameter("selection");
+		final Matcher m = PATTERN.matcher(selection);
+		String id;
+		while (m.find()) {
+			id = m.group();
+			computerDBService.delete(Long.valueOf(id));
+			logger.info("Deletion of Computer with id="+id);
+		}
 	}
 }

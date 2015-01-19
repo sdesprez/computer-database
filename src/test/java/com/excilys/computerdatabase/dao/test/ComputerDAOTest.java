@@ -72,6 +72,7 @@ public class ComputerDAOTest {
 		pageReturned.setNbResultsPerPage(20);
 		pageReturned.setPageNumber(1);
 		pageReturned.setNbResults(2);
+		pageReturned.setNbPages(1);
 		pageReturned.setList(list);
 		
 		assertEquals(pageReturned, computerDAO.getPagedList(page));

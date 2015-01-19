@@ -23,7 +23,7 @@ public class Validator {
 	/**
 	 * Regex expression for a long
 	 */
-	private static final String POSITIVE_LONG_PATTERN = "^\\d{1,19}$";
+	private static final String POSITIVE_LONG_PATTERN = "\\d{1,19}";
 	
 	/**
 	 * Regex expression for a int
