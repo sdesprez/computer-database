@@ -7,7 +7,7 @@ import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBServiceI;
 
-public class CompanyDBServiceMock implements CompanyDBServiceI{
+public class CompanyDBServiceMock implements CompanyDBServiceI {
 
 
 	

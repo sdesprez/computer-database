@@ -107,9 +107,9 @@ public class Page<T> {
 	}
 
 	public void refreshNbPages() {
-		if (nbResultsPerPage != 0 ) {
+		if (nbResultsPerPage != 0) {
 			nbPages = nbResults / nbResultsPerPage;
-			if (nbResults%nbResultsPerPage !=0) {
+			if (nbResults % nbResultsPerPage != 0) {
 				nbPages++;
 			}
 		} else {
@@ -131,27 +131,36 @@ public class Page<T> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		@SuppressWarnings("unchecked")
 		Page<T> other = (Page<T>) obj;
 		if (list == null) {
-			if (other.list != null)
+			if (other.list != null) {
 				return false;
-		} else if (!list.equals(other.list))
+			}
+		} else if (!list.equals(other.list)) {
 			return false;
-		if (nbPages != other.nbPages)
+		}
+		if (nbPages != other.nbPages) {
 			return false;
-		if (nbResults != other.nbResults)
+		}
+		if (nbResults != other.nbResults) {
 			return false;
-		if (nbResultsPerPage != other.nbResultsPerPage)
+		}
+		if (nbResultsPerPage != other.nbResultsPerPage) {
 			return false;
-		if (pageNumber != other.pageNumber)
+		}
+		if (pageNumber != other.pageNumber) {
 			return false;
+		}
 		return true;
 	}
 

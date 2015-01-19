@@ -18,11 +18,6 @@ import com.excilys.computerdatabase.utils.Validator;
 @WebServlet("/dashboard")
 public class DashboardController extends HttpServlet {
 
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -44,7 +39,17 @@ public class DashboardController extends HttpServlet {
 			page.setPageNumber(pageNumber);
 		}
 		
-		page.setNbResultsPerPage(20);
+		String nbResultsString = req.getParameter("nbResults");
+		int nbResults = 0;
+		if (Validator.isPositiveInt(nbResultsString)) {
+			nbResults = Integer.valueOf(nbResultsString);
+		}
+		if (nbResults < 10) {
+			page.setNbResultsPerPage(10);
+		} else {
+			page.setNbResultsPerPage(nbResults);
+		}
+		
 		page = computerDBService.getPagedList(page);
 		
 		req.setAttribute("page", page);

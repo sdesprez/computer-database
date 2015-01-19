@@ -70,7 +70,7 @@ public class ComputerDBServiceTest {
 	
 	@Test
 	public void getPagedList() {
-		assertEquals(pageReturned,computerDBService.getPagedList(page));
+		assertEquals(pageReturned, computerDBService.getPagedList(page));
 	}
 	
 	@Test

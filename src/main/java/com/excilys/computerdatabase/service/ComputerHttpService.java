@@ -19,13 +19,13 @@ public class ComputerHttpService {
 	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();	
 	
 	public static Computer populate(HttpServletRequest req) {
-		Computer.Builder builder = Computer.builder();
+		final Computer.Builder builder = Computer.builder();
 		String name = req.getParameter("computerName");
 		String iDate = req.getParameter("introducedDate");
 		String dDate = req.getParameter("discontinuedDate");
 		String companyId = req.getParameter("companyId");
 		
-		Map<String,String> errorMsgMap = new HashMap<String,String>();
+		Map<String, String> errorMsgMap = new HashMap<String, String>();
 		
 		//Check if the name is a valid Name
 		if (Validator.isName(name)) {
@@ -79,7 +79,7 @@ public class ComputerHttpService {
 	
 	
 	public static Computer update(HttpServletRequest req) {		
-		Map<String,String> errorMsgMap = new HashMap<String,String>();
+		Map<String, String> errorMsgMap = new HashMap<String, String>();
 		
 		//Get the id
 		String idString = req.getParameter("id");

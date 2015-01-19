@@ -11,20 +11,20 @@ public class PersistenceException extends RuntimeException {
 		super();
 	}
 
-	public PersistenceException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
+	public PersistenceException(final String message, final Throwable cause,
+			final boolean enableSuppression, final boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	public PersistenceException(String message, Throwable cause) {
+	public PersistenceException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
-	public PersistenceException(String message) {
+	public PersistenceException(final String message) {
 		super(message);
 	}
 
-	public PersistenceException(Throwable cause) {
+	public PersistenceException(final Throwable cause) {
 		super(cause);
 	}
 

@@ -199,7 +199,7 @@ public class CLI {
 	 * Interface for creating a new computer
 	 */
 	public void createComputer() {
-		Computer.Builder builder = Computer.builder();
+		final Computer.Builder builder = Computer.builder();
 		Company company = null;
 		
 		//Get the name of the computer, it can't be null or empty

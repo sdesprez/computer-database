@@ -296,7 +296,7 @@ public enum ComputerDAOMock implements ComputerDAOI {
 	}
 	
 	private static Computer createComputer(ResultSet rs) throws SQLException {
-		Computer.Builder builder = Computer.builder().id(rs.getLong("id")).name(rs.getString("name"));
+		final Computer.Builder builder = Computer.builder().id(rs.getLong("id")).name(rs.getString("name"));
 		Timestamp introduced = rs.getTimestamp("introduced");
 		Timestamp discontinued = rs.getTimestamp("discontinued");
 		if (introduced != null) {

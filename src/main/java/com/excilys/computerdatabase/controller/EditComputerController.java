@@ -25,9 +25,6 @@ import com.excilys.computerdatabase.utils.Validator;
 @WebServlet("/editComputer")
 public class EditComputerController extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();

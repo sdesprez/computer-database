@@ -77,13 +77,13 @@ public class Company {
 
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer("Company [id=").append(id)
+		final StringBuffer buffer = new StringBuffer("Company [id=").append(id)
 				.append(", name=").append(name).append("]");
 		return buffer.toString();
 	}
 
 	
-	public static class Builder {
+	public static final class Builder {
 		private Company company;
 		
 		private Builder() {

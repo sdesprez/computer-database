@@ -114,7 +114,7 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer("Computer [id=").append(id)
+		final StringBuffer buffer = new StringBuffer("Computer [id=").append(id)
 				.append(", name=").append(name)
 				.append(", introducedDate=").append(introducedDate)
 				.append(", discontinuedDate=").append(discontinuedDate)
@@ -122,7 +122,7 @@ public class Computer {
 		return buffer.toString();
 	}
 
-	public static class Builder {
+	public static final class Builder {
 		private Computer computer;
 		
 		private Builder() {

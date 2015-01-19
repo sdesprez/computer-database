@@ -30,10 +30,10 @@ public class ComputerDAOTest {
 	public void init() throws SQLException {
 		computerDAO = ComputerDAOMock.getInstance();
 		list = new ArrayList<Computer>();
-		list.add(new Computer(1L, "MacBook Pro 15.4 inch",null,null,company));
-		list.add(new Computer(2L, "MacBook Pro",LocalDate.parse("2006-01-10"),null,company));
+		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, company));
+		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, company));
 		
-		ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
+		final ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
 		Connection connection = cm.getConnection();
 		
 		Statement stmt = connection.createStatement();

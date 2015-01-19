@@ -24,9 +24,6 @@ import com.excilys.computerdatabase.service.impl.ComputerDBService;
 @WebServlet("/addComputer")
 public class AddComputerController extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
@@ -60,6 +57,4 @@ public class AddComputerController extends HttpServlet {
 			doGet(req, resp);
 		}
 	}
-
-	
 }

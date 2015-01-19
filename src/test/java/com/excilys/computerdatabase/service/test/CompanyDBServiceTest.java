@@ -52,11 +52,11 @@ public class CompanyDBServiceTest {
 	
 	@Test
 	public void getById() {
-		assertEquals(Company.builder().id(1L).build(),companyDBService.getById(1L));
+		assertEquals(Company.builder().id(1L).build(), companyDBService.getById(1L));
 	}
 	
 	@Test
 	public void getPagedList() {
-		assertEquals(pageReturned,companyDBService.getPagedList(page));
+		assertEquals(pageReturned, companyDBService.getPagedList(page));
 	}
 }

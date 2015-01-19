@@ -7,7 +7,7 @@ import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBServiceI;
 
-public class ComputerDBServiceMock implements ComputerDBServiceI{
+public class ComputerDBServiceMock implements ComputerDBServiceI {
 
 	private ComputerDAOI computerDAO;
 	

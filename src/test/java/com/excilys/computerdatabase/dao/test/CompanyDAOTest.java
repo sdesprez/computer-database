@@ -28,7 +28,7 @@ public class CompanyDAOTest {
 		companyDAO = CompanyDAOMock.getInstance();
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
-		ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
+		final ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
 		Connection connection = cm.getConnection();
 		
 		Statement stmt = connection.createStatement();
