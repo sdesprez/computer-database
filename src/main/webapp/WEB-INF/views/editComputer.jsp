@@ -12,11 +12,11 @@ pageEncoding="UTF-8"%>
                     </div>
                     <h1>Edit Computer</h1>
 
-					<span>${error.get("id")}</span>
-					<span>${error.get("name")}</span>
-                    <span>${error.get("iDate")}</span>
-                    <span>${error.get("dDate")}</span>
-                    <span>${error.get("companyId")}</span>
+					<p>${error.get("id")}</p>
+					<p class="text-warning">${error.get("name")}</p>
+                    <p class="text-warning">${error.get("iDate")}</p>
+                    <p class="text-warning">${error.get("dDate")}</p>
+                    <p class="text-warning">${error.get("companyId")}</p>
                     <form action="editComputer" method="POST">
                         <input type="hidden" name="id" value="${computer.id}"/>
                         <fieldset>
@@ -41,7 +41,7 @@ pageEncoding="UTF-8"%>
                                    	<option value="${company.id}" selected="selected">${company.name}</option>
                                    	</c:if>
                                    	<c:if test="${company.id != computer.company.id}"></c:if>
-                                   	<option value="${company.id}">${company.name}</option>
+                                   	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                    	</c:forEach>
                                 </select>
                             </div>            

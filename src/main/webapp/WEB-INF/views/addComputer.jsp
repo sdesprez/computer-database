@@ -11,10 +11,10 @@ pageEncoding="UTF-8"%>
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
 
-                    <span>${error.get("name")}</span>
-                    <span>${error.get("iDate")}</span>
-                    <span>${error.get("dDate")}</span>
-                    <span>${error.get("companyId")}</span>
+                    <p class="text-warning">${error.get("name")}</p>
+                    <p class="text-warning">${error.get("iDate")}</p>
+                    <p class="text-warning">${error.get("dDate")}</p>
+                    <p class="text-warning">${error.get("companyId")}</p>
                     <form action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
@@ -34,7 +34,7 @@ pageEncoding="UTF-8"%>
                                 <select class="form-control" id="companyId" name="companyId" >
                                     <option value="0">--</option>
                                     <c:forEach items="${companies}" var="company">
-                                   	<option value="${company.id}">${company.name}</option>
+                                   	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                    	</c:forEach>
                                 </select>
                             </div>                  
