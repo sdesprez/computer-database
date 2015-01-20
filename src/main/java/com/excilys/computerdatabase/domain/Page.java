@@ -2,6 +2,8 @@ package com.excilys.computerdatabase.domain;
 
 import java.util.List;
 
+import com.excilys.computerdatabase.dao.impl.ColumnNames;
+
 /**
  * Class representing a Page of results from an SQL request
  */
@@ -28,7 +30,7 @@ public class Page<T> {
 	
 	private String search;
 	
-	private String order;
+	private ColumnNames order;
 	
 	
 	
@@ -39,7 +41,7 @@ public class Page<T> {
 	}
 
 	public Page(final int pageNumber, final List<T> list,
-			final int nbResultsPerPage, final int nbResults, final int nbPages, final String search, final String order) {
+			final int nbResultsPerPage, final int nbResults, final int nbPages, final String search, final ColumnNames order) {
 		this.pageNumber = pageNumber;
 		this.list = list;
 		this.nbResultsPerPage = nbResultsPerPage;
@@ -81,11 +83,11 @@ public class Page<T> {
 		this.nbResults = nbResults;
 	}
 	
-	public String getOrder() {
+	public ColumnNames getOrder() {
 		return order;
 	}
 
-	public void setOrder(final String order) {
+	public void setOrder(final ColumnNames order) {
 		this.order = order;
 	}
 

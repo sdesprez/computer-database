@@ -64,7 +64,7 @@ public class DashboardController extends HttpServlet {
 		if (cName == null) {
 			cName = ColumnNames.ID;
 		}
-		page.setOrder(cName.getName());
+		page.setOrder(cName);
 		page = computerDBService.getPagedList(page);
 		
 		req.setAttribute("page", page);

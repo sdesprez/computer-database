@@ -321,7 +321,7 @@ public enum ComputerDAO implements ComputerDAOI {
 			page.refreshNbPages();
 
 			//Create the SELECT query
-			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY " + page.getOrder() + " ASC LIMIT ? OFFSET ?;";
+			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY " + page.getOrder().getName() + " ASC LIMIT ? OFFSET ?;";
 			stmt = conn.prepareStatement(query);
 			stmt.setString(1, search);
 			stmt.setString(2, search);
