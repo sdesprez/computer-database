@@ -27,6 +27,8 @@ public class Page<T> {
 	private int nbPages;
 	
 	public Page() { 
+		pageNumber = 1;
+		nbResultsPerPage = 10;
 	}
 
 	public Page(final int pageNumber, final List<T> list,
