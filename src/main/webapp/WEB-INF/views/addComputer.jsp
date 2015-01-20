@@ -4,7 +4,10 @@ pageEncoding="UTF-8"%>
 <%@ page import="com.excilys.computerdatabase.domain.*"%>
 <%@ page import="java.util.*" %>
 <jsp:include page="includes/header.jsp" />
-
+<script type="text/javascript" src="js/jquery.min.js"></script>	
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+<script src="js/formValidation.js"></script>
+	
     <section id="main">
         <div class="container">
             <div class="row">
@@ -15,11 +18,11 @@ pageEncoding="UTF-8"%>
                     <p class="text-warning">${error.get("iDate")}</p>
                     <p class="text-warning">${error.get("dDate")}</p>
                     <p class="text-warning">${error.get("companyId")}</p>
-                    <form action="addComputer" method="POST">
+                    <form id="form" action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName"  name="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName"  name="computerName" placeholder="Computer name" required="required">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -45,6 +48,7 @@ pageEncoding="UTF-8"%>
                             <a href="dashboard" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
+                    
                 </div>
             </div>
         </div>
