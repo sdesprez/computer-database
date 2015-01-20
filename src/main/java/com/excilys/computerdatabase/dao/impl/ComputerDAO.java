@@ -40,7 +40,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	private static final String INSERT_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
-	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM computer";
+	private static final String COUNT_QUERY = "SELECT COUNT(c.id) AS total FROM computer c LEFT JOIN company ON company.id=c.company_id WHERE c.name LIKE ? OR company.name LIKE ?;";
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	/**
@@ -300,17 +300,20 @@ public enum ComputerDAO implements ComputerDAOI {
 	@Override
 	public Page<Computer> getPagedList(final Page<Computer> page) {
 		Connection conn = null;
-		Statement countStmt = null;
+		PreparedStatement countStmt = null;
 		PreparedStatement stmt = null;
 		final List<Computer> computers = new ArrayList<Computer>();
+		final String search = "%" + page.getSearch() + "%";
 		try {
 			//Get a connection
 			conn = cm.getConnection();
 			
 			//Execute the counting query
 			ResultSet countResult;
-			countStmt = conn.createStatement();
-			countResult = countStmt.executeQuery(COUNT_QUERY);
+			countStmt = conn.prepareStatement(COUNT_QUERY);
+			countStmt.setString(1, search);
+			countStmt.setString(2, search);
+			countResult = countStmt.executeQuery();
 			//Set the number of results of the page with the result
 			countResult.next();
 			page.setNbResults(countResult.getInt("total"));
@@ -318,10 +321,12 @@ public enum ComputerDAO implements ComputerDAOI {
 			page.refreshNbPages();
 
 			//Create the SELECT query
-			final String query = SELECT_QUERY + " LIMIT ? OFFSET ? ;";
+			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? LIMIT ? OFFSET ? ;";
 			stmt = conn.prepareStatement(query);
-			stmt.setInt(1, page.getNbResultsPerPage());
-			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
+			stmt.setString(1, search);
+			stmt.setString(2, search);
+			stmt.setInt(3, page.getNbResultsPerPage());
+			stmt.setInt(4, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 			
 			//Execute the SELECT query
 			final ResultSet results = stmt.executeQuery();

@@ -26,18 +26,24 @@ public class Page<T> {
 
 	private int nbPages;
 	
+	private String search;
+	
+	
+	
 	public Page() { 
 		pageNumber = 1;
 		nbResultsPerPage = 10;
+		search = "";
 	}
 
 	public Page(final int pageNumber, final List<T> list,
-			final int nbResultsPerPage, final int nbResults, final int nbPages) {
+			final int nbResultsPerPage, final int nbResults, final int nbPages, final String search) {
 		this.pageNumber = pageNumber;
 		this.list = list;
 		this.nbResultsPerPage = nbResultsPerPage;
 		this.nbResults = nbResults;
 		this.nbPages = nbPages;
+		this.search = search;
 	}
 
 	public int getPageNumber() {
@@ -74,6 +80,14 @@ public class Page<T> {
 	
 	
 	
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
 	public int getNbPages() {
 		return nbPages;
 	}
@@ -170,7 +184,7 @@ public class Page<T> {
 	public String toString() {
 		return "Page [pageNumber=" + pageNumber + ", list=" + list
 				+ ", nbResultsPerPage=" + nbResultsPerPage + ", nbResults="
-				+ nbResults + ", nbPages=" + nbPages + "]";
+				+ nbResults + ", nbPages=" + nbPages + ", search=" + search +"]";
 	}
 
 	

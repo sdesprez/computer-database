@@ -50,6 +50,13 @@ public class DashboardController extends HttpServlet {
 			page.setNbResultsPerPage(nbResults);
 		}
 		
+		String search = req.getParameter("search");
+		if (search == null) {
+			page.setSearch("");
+		} else {
+			page.setSearch(search.trim());
+		}
+		
 		page = computerDBService.getPagedList(page);
 		
 		req.setAttribute("page", page);
