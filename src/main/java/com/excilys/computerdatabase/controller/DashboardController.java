@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBServiceI;
@@ -50,13 +51,20 @@ public class DashboardController extends HttpServlet {
 			page.setNbResultsPerPage(nbResults);
 		}
 		
-		String search = req.getParameter("search");
+		final String search = req.getParameter("search");
 		if (search == null) {
 			page.setSearch("");
 		} else {
 			page.setSearch(search.trim());
 		}
 		
+		final String order = req.getParameter("order");
+		ColumnNames cName = ColumnNames.getInstance(order);
+		
+		if (cName == null) {
+			cName = ColumnNames.ID;
+		}
+		page.setOrder(cName.getName());
 		page = computerDBService.getPagedList(page);
 		
 		req.setAttribute("page", page);
