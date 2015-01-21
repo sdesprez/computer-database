@@ -22,7 +22,7 @@ import com.excilys.computerdatabase.service.impl.CompanyDBService;
 import com.excilys.computerdatabase.service.impl.ComputerDBService;
 import com.excilys.computerdatabase.utils.Validator;
 
-@WebServlet("/editComputer")
+@WebServlet("/edit-computer")
 public class EditComputerController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

@@ -21,7 +21,7 @@ pageEncoding="UTF-8"%>
                     <p class="text-warning">${error.get("iDate")}</p>
                     <p class="text-warning">${error.get("dDate")}</p>
                     <p class="text-warning">${error.get("companyId")}</p>
-                    <form id="form" action="editComputer" method="POST">
+                    <form id="form" action="edit-computer" method="POST">
                         <input type="hidden" name="id" value="${computer.id}"/>
                         <fieldset>
                             <div class="form-group">
