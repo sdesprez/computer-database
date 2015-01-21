@@ -10,6 +10,7 @@
 	<properties>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
 		<jstl.version>1.2</jstl.version>
+		<jsp-api.version>2.3.1</jsp-api.version>
 		<mysql.version>5.1.34</mysql.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.0.2-beta</mockito.version>
@@ -33,6 +34,11 @@
 			<version>${jstl.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>${jsp-api.version}</version>
+		</dependency>
 
 		<!-- Driver for MySQL database connection -->
 		<dependency>
@@ -73,7 +79,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>Computer-Database</finalName>
 		<plugins>

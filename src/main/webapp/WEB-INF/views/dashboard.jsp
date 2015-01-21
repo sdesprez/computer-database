@@ -2,6 +2,7 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.excilys.computerdatabase.domain.*"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="h" %>
 <jsp:include page="includes/header.jsp" />
 
 	<section id="main">
@@ -43,12 +44,12 @@ pageEncoding="UTF-8"%>
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="dashboard?page=1&nbResults=${page.nbResultsPerPage}&search=${page.search}&order=name">Computer name</a></th>
-						<th><a href="dashboard?page=1&nbResults=${page.nbResultsPerPage}&search=${page.search}&order=introduced">Introduced date</a></th>
+						<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" order="name">Computer name</h:link></th>
+						<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" order="introduced">Introduced date</h:link></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href="dashboard?page=1&nbResults=${page.nbResultsPerPage}&search=${page.search}&order=discontinued">Discontinued date</a></th>
+						<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" order="discontinued">Discontinued date</h:link></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard?page=1&nbResults=${page.nbResultsPerPage}&search=${page.search}&order=company_name">Company</a></th>
+						<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" order="company_name">Company</h:link></th>
 
 					</tr>
 				</thead>
@@ -70,7 +71,7 @@ pageEncoding="UTF-8"%>
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<jsp:include page="includes/pagination.jsp"/>
+			<h:pagination order="${page.order.id}" pages="${page.nbPages}" pageNumber="${page.pageNumber}" limit="${page.nbResultsPerPage}" search="${page.search}" target="dashboard"/>
 		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
