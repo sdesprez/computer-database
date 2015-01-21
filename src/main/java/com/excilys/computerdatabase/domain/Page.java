@@ -38,6 +38,7 @@ public class Page<T> {
 		pageNumber = 1;
 		nbResultsPerPage = 10;
 		search = "";
+		order = ColumnNames.ID;
 	}
 
 	public Page(final int pageNumber, final List<T> list,

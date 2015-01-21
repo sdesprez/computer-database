@@ -2,7 +2,9 @@ package com.excilys.computerdatabase.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,7 @@ public enum ConnectionManager {
 			Class.forName(COM_MYSQL_JDBC_DRIVER);
 		} catch (final ClassNotFoundException e) {
 			logger.error("MySQL JDBC driver not found");
-			throw new PersistenceException("Failed to load " + COM_MYSQL_JDBC_DRIVER);
+			throw new PersistenceException(e.getMessage(), e);
 		}
 	}
 	
@@ -63,21 +65,54 @@ public enum ConnectionManager {
 			return DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (final SQLException e) {
 			logger.error("Couldn't connect to the database");
-			throw new PersistenceException();
+			throw new PersistenceException(e.getMessage(), e);
 		}
 	}
 	
 	/**
 	 * Close the connection
-	 * @param conn
+	 * @param connection
 	 */
-	public void close(final Connection conn) {
-		if (conn != null) {
+	public void close(final Connection connection) {
+		if (connection != null) {
 			try {
-				conn.close();
+				connection.close();
 			} catch (final SQLException e) {
 				logger.warn("Couldn't close the connection to the database");
-				throw new PersistenceException();
+				throw new PersistenceException(e.getMessage(), e);
+			}
+		}
+	}
+	
+	public void close(final Statement statement) {
+		if (statement != null) {
+				try {
+					statement.close();
+				} catch (final SQLException e) {
+					logger.warn("Couldn't close the statement");
+					throw new PersistenceException(e.getMessage(), e);
+				}
+		}
+	}
+	
+	public void close(final ResultSet rs) {
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (final SQLException e) {
+				logger.warn("Couldn't close the ResultSet");
+				throw new PersistenceException(e.getMessage(), e);
+			}
+		}
+	}
+	
+	public void rollback(final Connection connection) {
+		if (connection != null) {
+			try {
+				connection.rollback();
+			} catch (final SQLException e) {
+				logger.warn("Couldn't Rollback the connection");
+				throw new PersistenceException(e.getMessage(), e);
 			}
 		}
 	}
