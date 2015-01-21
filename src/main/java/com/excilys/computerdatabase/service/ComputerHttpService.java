@@ -36,7 +36,7 @@ public class ComputerHttpService {
 	 * @return A Computer if there was no errors 
 	 * 			null if there was an error
 	 */
-	public static Computer populate(final HttpServletRequest req) {
+	public static Computer create(final HttpServletRequest req) {
 		final Computer.Builder builder = Computer.builder();
 		final String name = req.getParameter("computerName");
 		final String iDate = req.getParameter("introducedDate");
@@ -127,7 +127,7 @@ public class ComputerHttpService {
 		}
 		
 		//Create a computer with the informations in the request
-		final Computer computer = populate(req);
+		final Computer computer = create(req);
 		
 		//Check if the computer was created
 		if (computer == null) {

@@ -47,7 +47,7 @@ public class AddComputerController extends HttpServlet {
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		final Computer computer = ComputerHttpService.populate(req);
+		final Computer computer = ComputerHttpService.create(req);
 		
 		if (computer != null) {
 			computerDBService.create(computer);
