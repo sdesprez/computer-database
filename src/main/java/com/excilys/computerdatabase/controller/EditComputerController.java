@@ -27,8 +27,8 @@ public class EditComputerController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
-	private CompanyDBServiceI companyDBService = CompanyDBService.getInstance();
+	private ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
+	private CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;
 	private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 
 	@Override

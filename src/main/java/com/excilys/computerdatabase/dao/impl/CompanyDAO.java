@@ -29,20 +29,13 @@ public enum CompanyDAO implements CompanyDAOI {
 	 */
 	INSTANCE;
 
-	private static final ConnectionManager CM = ConnectionManager.getInstance();
+	private static final ConnectionManager CM = ConnectionManager.INSTANCE;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";
 	private RowMapper<Company> companyMapper = new CompanyRowMapperImpl();
-	
-	/**
-	 * Return the instance of the CompanyDAO
-	 * @return Instance of the CompanyDAO
-	 */
-	public static CompanyDAO getInstance() {
-		return INSTANCE;
-	}
+
 
 	/**
 	 * {@inheritDoc}

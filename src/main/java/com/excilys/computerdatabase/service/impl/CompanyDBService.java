@@ -22,15 +22,8 @@ public enum CompanyDBService implements CompanyDBServiceI {
 	/**
 	 * Instance of the CompanyDAOI
 	 */
-	private CompanyDAOI companyDAO = CompanyDAO.getInstance();
+	private CompanyDAOI companyDAO = CompanyDAO.INSTANCE;
 
-	/**
-	 * Return the instance of the CompanyDBService
-	 * @return Instance of the CompanyDBService
-	 */
-	public static CompanyDBService getInstance() {
-		return INSTANCE;
-	}
 
 	/**
 	 * {@inheritDoc}

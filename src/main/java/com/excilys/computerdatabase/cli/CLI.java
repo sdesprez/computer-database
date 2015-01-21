@@ -26,11 +26,11 @@ public class CLI {
 	/**
 	 * Instance of ComputerDBService for the access to the database
 	 */
-	private static ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
+	private static ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
 	/**
 	 * Instance of CompanyDBService for the access to the database
 	 */
-	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();
+	private static CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;
 
 	
 	/**

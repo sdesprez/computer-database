@@ -22,7 +22,7 @@ public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
+	private ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)

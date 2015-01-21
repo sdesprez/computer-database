@@ -32,7 +32,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	 */
 	INSTANCE;
 
-	private static final ConnectionManager CM = ConnectionManager.getInstance();
+	private static final ConnectionManager CM = ConnectionManager.INSTANCE;
 	
 	/**
 	 * Base Query for all the Select queries
@@ -46,14 +46,6 @@ public enum ComputerDAO implements ComputerDAOI {
 	
 	private RowMapper<Computer> computerMapper = new ComputerRowMapperImpl();
 	
-	/**
-	 * Return the instance of the ComputerDAO
-	 * @return Instance of the ComputerDAO
-	 */
-	public static ComputerDAO getInstance() {
-		return INSTANCE;
-	}
-
 
 	/**
 	 * {@inheritDoc}

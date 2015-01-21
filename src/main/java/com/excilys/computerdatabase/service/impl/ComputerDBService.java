@@ -23,15 +23,8 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	/**
 	 * Instance of the ComputerDAOI
 	 */
-	private ComputerDAOI computerDAO = ComputerDAO.getInstance();
+	private ComputerDAOI computerDAO = ComputerDAO.INSTANCE;
 
-	/**
-	 * Return the instance of the ComputerDBService
-	 * @return Instance of the computerDBService
-	 */
-	public static ComputerDBService getInstance() {
-		return INSTANCE;
-	}
 
 	/**
 	 * {@inheritDoc}

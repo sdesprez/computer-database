@@ -20,8 +20,8 @@ import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerHttpService {
 
-	private static ComputerDBServiceI computerDBService = ComputerDBService.getInstance();
-	private static CompanyDBServiceI companyDBService = CompanyDBService.getInstance();	
+	private static ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
+	private static CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;	
 	
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	

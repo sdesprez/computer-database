@@ -69,7 +69,7 @@ public class WebUITest {
 	@Test
 	public void search() {
 		driver.get("http://localhost:8080/computer-database/dashboard");
-		WebElement element = driver.findElement(By.id("searchbox"));
+		final WebElement element = driver.findElement(By.id("searchbox"));
 		element.sendKeys("mac");
 		element.submit();
 	}

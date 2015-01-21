@@ -25,7 +25,7 @@ public enum ColumnNames {
 		return id;
 	}
 	
-	public static ColumnNames getInstance(String name) {
+	public static ColumnNames getInstance(final String name) {
 		if (name != null) {
 			switch(name) {
 			case "id":
