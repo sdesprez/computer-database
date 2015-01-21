@@ -6,16 +6,18 @@
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Computer-Database</name>
-	<url>http://maven.apache.org</url>
 
 	<properties>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
-		<junit.version>4.12</junit.version>
-		<mysql.version>5.1.34</mysql.version>
 		<jstl.version>1.2</jstl.version>
+		<mysql.version>5.1.34</mysql.version>
+		<junit.version>4.12</junit.version>
 		<mockito.version>2.0.2-beta</mockito.version>
 		<selenium.version>2.44.0</selenium.version>
+		<maven-compiler.version>3.1</maven-compiler.version>
+		<maven-war.version>2.6</maven-war.version>
 	</properties>
+
 
 	<dependencies>
 		<dependency>
@@ -31,18 +33,25 @@
 			<version>${jstl.version}</version>
 		</dependency>
 
+
+		<!-- Driver for MySQL database connection -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+
+		<!-- Logger, implementation of SLF4J -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-		</dependency>
 
+		<!-- Dependencies for tests -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -64,16 +73,21 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<finalName>Computer-Database</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>${maven-compiler.version}</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war.version}</version>
 			</plugin>
 		</plugins>
 	</build>
