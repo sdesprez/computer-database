@@ -32,7 +32,7 @@ public class ComputerDTO {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -138,15 +138,9 @@ public class ComputerDTO {
 		return true;
 	}
 
-	
-	
-	
-	
-	
-
 	@Override
 	public String toString() {
-		StringBuilder builder2 = new StringBuilder();
+		final StringBuilder builder2 = new StringBuilder();
 		builder2.append("ComputerDTO [id=").append(id).append(", name=")
 				.append(name).append(", introduced=").append(introduced)
 				.append(", discontinued=").append(discontinued)

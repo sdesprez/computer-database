@@ -2,6 +2,8 @@ package com.excilys.computerdatabase.mapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
@@ -27,13 +29,28 @@ public class ComputerDTOConverter {
 		return builder.build();
 	}
 	
+
+	public static List<Computer> fromDTO(final List<ComputerDTO> dtos) {
+		final List<Computer> computers = new ArrayList<Computer>();
+		dtos.forEach(d -> { final Computer computer = ComputerDTOConverter.fromDTO(d);
+							if (computer != null) {
+								computers.add(computer);
+							}
+							});
+		return computers;
+	}
+	
 	public static ComputerDTO toDTO(final Computer computer) {
 		final ComputerDTO.Builder builder = ComputerDTO.builder();
 		builder.id(computer.getId())
-				.name(computer.getName())
-				.introduced(computer.getIntroducedDate().toString())
-				.discontinued(computer.getDiscontinuedDate().toString());
+				.name(computer.getName());
 		
+		if (computer.getIntroducedDate() != null) {
+			builder.introduced(computer.getIntroducedDate().toString());
+		}
+		if (computer.getDiscontinuedDate() != null) {
+			builder.discontinued(computer.getDiscontinuedDate().toString());
+		}		
 		if (computer.getCompany() != null) {
 			builder.company(computer.getCompany().getId());
 			builder.companyName(computer.getCompany().getName());
@@ -42,5 +59,16 @@ public class ComputerDTOConverter {
 		}
 		
 		return builder.build();
+	}
+	
+	
+	public static List<ComputerDTO> toDTO(final List<Computer> computers) {
+		final List<ComputerDTO> dtos = new ArrayList<ComputerDTO>();
+		computers.forEach(c -> { final ComputerDTO dto = ComputerDTOConverter.toDTO(c);
+								if (dto != null) {
+									dtos.add(dto);
+								}
+								});
+		return dtos;
 	}
 }
