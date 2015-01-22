@@ -30,6 +30,7 @@ public class CompanyDAOTest {
 		companyDAO = CompanyDAO.INSTANCE;
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
+		list.add(new Company(2L, "Thinking Machines"));
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
 		final Connection connection = cm.getConnection();
 		
@@ -47,6 +48,7 @@ public class CompanyDAOTest {
 		stmt.execute("create index ix_computer_company_1 on computer (company_id);");
 		
 		stmt.execute("insert into company (id,name) values (  1,'Apple Inc.');");
+		stmt.execute("insert into company (id,name) values (  2,'Thinking Machines');");
 		
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
@@ -70,13 +72,11 @@ public class CompanyDAOTest {
 	@Test
 	public void getById() {
 		assertEquals(new Company(1L, "Apple Inc."), companyDAO.getById(1L));
-		
-		
 	}
 	
 	@Test
 	public void getByIdInvalid() {
-		assertNull(companyDAO.getById(2L));
+		assertNull(companyDAO.getById(3L));
 		assertNull(companyDAO.getById(-1L));
 	}
 	
@@ -95,7 +95,7 @@ public class CompanyDAOTest {
 		final Page<Company> pageReturned = new Page<Company>();
 		pageReturned.setNbResultsPerPage(20);
 		pageReturned.setPageNumber(1);
-		pageReturned.setNbResults(1);
+		pageReturned.setNbResults(2);
 		pageReturned.setNbPages(1);
 		pageReturned.setList(list);
 		assertEquals(pageReturned, companyDAO.getPagedList(page));
@@ -118,5 +118,41 @@ public class CompanyDAOTest {
 		final Page<Company> page = new Page<Company>();
 		page.setNbResultsPerPage(-1);
 		companyDAO.getPagedList(page);
+	}
+	
+	
+	
+	/*
+	 * Tests of the delete function
+	 */
+	@Test
+	public void delete() throws SQLException {
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
+		final Connection connection = cm.getConnection();
+		connection.setAutoCommit(false);
+		companyDAO.delete(2L, connection);
+		connection.commit();
+		
+		assertNull(companyDAO.getById(2L));
+	}
+	
+	@Test
+	public void deleteInvalidId() throws SQLException {
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
+		final Connection connection = cm.getConnection();
+		connection.setAutoCommit(false);
+		companyDAO.delete(-1L, connection);
+		connection.commit();
+		
+		assertEquals(list, companyDAO.getAll());
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void deleteComputerLeft() throws SQLException {
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
+		final Connection connection = cm.getConnection();
+		connection.setAutoCommit(false);
+		companyDAO.delete(1L, connection);
+		connection.commit();
 	}
 }

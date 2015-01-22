@@ -26,4 +26,7 @@ public interface CompanyDBServiceI {
 	 * @return A Page containing the list of companies 
 	 */
 	Page<Company> getPagedList(Page<Company> page);
+	
+	
+	void delete(long id);
 }

@@ -34,6 +34,7 @@ public enum CompanyDAO implements CompanyDAOI {
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";
+	private static final String DELETE_QUERY = "DELETE company FROM company WHERE id = ?";
 	private RowMapper<Company> companyMapper = new CompanyRowMapperImpl();
 
 
@@ -143,6 +144,21 @@ public enum CompanyDAO implements CompanyDAOI {
 			CM.close(stmt);
 			//Close the connection
 			CM.close(conn);
+		}
+	}
+
+	@Override
+	public void delete(final long id, final Connection connection) {
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(DELETE_QUERY);
+			statement.setLong(1, id);
+			statement.executeUpdate();
+		} catch (final SQLException e) {
+			LOGGER.error("SQLError while deleting Company with id=" + id);
+			throw new PersistenceException(e.getMessage(), e);
+		} finally {
+			CM.close(statement);
 		}
 	}
 }

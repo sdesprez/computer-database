@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
@@ -26,4 +27,7 @@ public interface CompanyDAOI {
 	 * @return A Page containing the list of companies 
 	 */
 	Page<Company> getPagedList(Page<Company> page);
+	
+	
+	void delete(long id, Connection connection);
 }

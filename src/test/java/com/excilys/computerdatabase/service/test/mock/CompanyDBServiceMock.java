@@ -11,6 +11,12 @@ public class CompanyDBServiceMock implements CompanyDBServiceI {
 
 
 	
+	@Override
+	public void delete(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private CompanyDAOI companyDAO;
 	
 	

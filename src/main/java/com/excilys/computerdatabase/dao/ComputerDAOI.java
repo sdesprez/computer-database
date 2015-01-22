@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.computerdatabase.domain.Computer;
@@ -44,6 +45,9 @@ public interface ComputerDAOI {
 	 * @param id : id of the computer to delete
 	 */
 	void delete(long id);
+	
+	void deleteByCompanyId(long id, Connection connection);
+	
 	
 	/**
 	 * Get a Page of computers in the database.

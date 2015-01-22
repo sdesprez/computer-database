@@ -1,11 +1,20 @@
 package com.excilys.computerdatabase.service.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.dao.CompanyDAOI;
+import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.dao.impl.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.service.CompanyDBServiceI;
 
 /**
@@ -24,6 +33,10 @@ public enum CompanyDBService implements CompanyDBServiceI {
 	 */
 	private CompanyDAOI companyDAO = CompanyDAO.INSTANCE;
 
+	private ComputerDAOI computerDAO = ComputerDAO.INSTANCE;
+	private static final ConnectionManager CM = ConnectionManager.INSTANCE;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDBService.class);
 
 	/**
 	 * {@inheritDoc}
@@ -47,5 +60,24 @@ public enum CompanyDBService implements CompanyDBServiceI {
 	@Override
 	public Page<Company> getPagedList(final Page<Company> page) {
 		return companyDAO.getPagedList(page);
+	}
+	
+	
+	@Override
+	public void delete(final long id) {
+		Connection connection = null;
+		try {
+			connection = CM.getConnection();
+			connection.setAutoCommit(false);
+			computerDAO.deleteByCompanyId(id, connection);
+			companyDAO.delete(id, connection);
+			connection.commit();
+		} catch (final PersistenceException | SQLException e) {
+			LOGGER.error("Error while deleting a computer");
+			CM.rollback(connection);
+			throw new PersistenceException(e.getMessage(), e);
+		} finally {
+			CM.close(connection);
+		}
 	}
 }

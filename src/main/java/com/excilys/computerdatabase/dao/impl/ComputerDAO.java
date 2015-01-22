@@ -42,6 +42,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	private static final String INSERT_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
+	private static final String DELETE_COMPANY_QUERY = "DELETE computer FROM computer WHERE computer.company_id = ?";
 	private static final String COUNT_QUERY = "SELECT COUNT(c.id) AS total "
 												+ "FROM computer c "
 												+ "LEFT JOIN company ON company.id=c.company_id "
@@ -338,4 +339,23 @@ public enum ComputerDAO implements ComputerDAOI {
 			CM.close(conn);
 		}
 	}
+
+	@Override
+	public void deleteByCompanyId(final long id, final Connection connection) {
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement(DELETE_COMPANY_QUERY);
+			statement.setLong(1, id);
+			statement.executeUpdate();
+		} catch (final SQLException e) {
+			LOGGER.error("SQLError while deleting Computers of Company " + id);
+			throw new PersistenceException(e.getMessage(), e);
+		} finally {
+			CM.close(statement);
+		}
+		
+	}
+	
+	
+	
 }

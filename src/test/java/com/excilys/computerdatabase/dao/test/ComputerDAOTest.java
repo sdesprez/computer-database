@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.dao.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,14 +27,17 @@ public class ComputerDAOTest {
 
 	ComputerDAOI computerDAO;
 	List<Computer> list;
-	Company company = new Company(1L, "Apple Inc.");
+	Company apple = new Company(1L, "Apple Inc.");
+	Company thinking = new Company(2L, "Thinking Machines");
 	
 	@Before
 	public void init() throws SQLException {
 		computerDAO = ComputerDAO.INSTANCE;
 		list = new ArrayList<Computer>();
-		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, company));
-		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, company));
+		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, apple));
+		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, apple));
+		list.add(new Computer(3L, "CM-2a", null, null, thinking));
+		list.add(new Computer(4L, "CM-200", null, null, thinking));
 		
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
 		final Connection connection = cm.getConnection();
@@ -52,9 +56,12 @@ public class ComputerDAOTest {
 		stmt.execute("create index ix_computer_company_1 on computer (company_id);");
 		
 		stmt.execute("insert into company (id,name) values (  1,'Apple Inc.');");
+		stmt.execute("insert into company (id,name) values (  2,'Thinking Machines');");
 		
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
+		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  3,'CM-2a',null,null,2);");
+		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  4,'CM-200',null,null,2);");
 		cm.close(connection);
 		
 	}
@@ -79,7 +86,7 @@ public class ComputerDAOTest {
 		}
 	
 	public void getByIdInvalid() {
-		assertNull(computerDAO.getById(3L));
+		assertNull(computerDAO.getById(5L));
 		assertNull(computerDAO.getById(0L));
 		assertNull(computerDAO.getById(-1L));
 	}
@@ -91,7 +98,7 @@ public class ComputerDAOTest {
 	 */
 	@Test
 	public void getByCompanyId() {
-		assertEquals(list, computerDAO.getByCompanyId(1L));
+		assertEquals(list.subList(0, 2), computerDAO.getByCompanyId(1L));
 	}
 	
 	@Test
@@ -115,7 +122,7 @@ public class ComputerDAOTest {
 		final Page<Computer> pageReturned = new Page<Computer>();
 		pageReturned.setNbResultsPerPage(20);
 		pageReturned.setPageNumber(1);
-		pageReturned.setNbResults(2);
+		pageReturned.setNbResults(list.size());
 		pageReturned.setNbPages(1);
 		pageReturned.setList(list);
 		
@@ -155,11 +162,11 @@ public class ComputerDAOTest {
 	 */
 	@Test
 	public void create() {
-		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(company).build();
+		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(apple).build();
 		
 		computerDAO.create(computer);
-		computer.setId(3L);
-		assertEquals(computer, computerDAO.getById(3L));
+		computer.setId(5L);
+		assertEquals(computer, computerDAO.getById(5L));
 	}
 	
 	@Test
@@ -172,8 +179,8 @@ public class ComputerDAOTest {
 	public void createEmptyComputer() {
 		final Computer computer = new Computer();
 		computerDAO.create(new Computer());
-		computer.setId(3L);
-		assertEquals(computer, computerDAO.getById(3L));
+		computer.setId(5L);
+		assertEquals(computer, computerDAO.getById(5L));
 	}
 	
 	
@@ -229,4 +236,30 @@ public class ComputerDAOTest {
 	}
 	
 	
+	/*
+	 * Tests of the deleteByCompanyId function
+	 */
+	@Test
+	public void deleteByCompanyId() throws SQLException {
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
+		final Connection connection = cm.getConnection();
+		connection.setAutoCommit(false);
+		computerDAO.deleteByCompanyId(2L, connection);
+		connection.commit();
+		cm.close(connection);
+		
+		assertTrue(computerDAO.getByCompanyId(2L).isEmpty());
+	}
+	
+	@Test
+	public void DeleteCompanyInvalid() throws SQLException {
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
+		final Connection connection = cm.getConnection();
+		connection.setAutoCommit(false);
+		computerDAO.deleteByCompanyId(-2L, connection);
+		connection.commit();
+		cm.close(connection);
+		
+		assertEquals(list, computerDAO.getAll());
+	}
 }
