@@ -37,11 +37,15 @@ public enum ComputerDAO implements ComputerDAOI {
 	/**
 	 * Base Query for all the Select queries
 	 */
-	private static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company_name FROM computer c LEFT JOIN company ON company.id=c.company_id";
+	private static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company_name "
+												+ "FROM computer c LEFT JOIN company ON company.id=c.company_id";
 	private static final String INSERT_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
-	private static final String COUNT_QUERY = "SELECT COUNT(c.id) AS total FROM computer c LEFT JOIN company ON company.id=c.company_id WHERE c.name LIKE ? OR company.name LIKE ?;";
+	private static final String COUNT_QUERY = "SELECT COUNT(c.id) AS total "
+												+ "FROM computer c "
+												+ "LEFT JOIN company ON company.id=c.company_id "
+												+ "WHERE c.name LIKE ? OR company.name LIKE ?;";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private RowMapper<Computer> computerMapper = new ComputerRowMapperImpl();

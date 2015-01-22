@@ -12,14 +12,18 @@ import com.excilys.computerdatabase.utils.Validator;
 public class ComputerDTOConverter {
 
 	public static Computer fromDTO(final ComputerDTO dto) {
+		if (!Validator.validComputerDTO(dto)) {
+			return null;
+		}
+		
 		final Computer.Builder builder = Computer.builder();
 		builder.id(dto.getId())
 				.name(dto.getName());
 		
-		if (Validator.isDate(dto.getIntroduced())) {
+		if (dto.getIntroduced() != null) {
 			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
-		if (Validator.isDate(dto.getDiscontinued())) {
+		if (dto.getDiscontinued() != null) {
 			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		if (dto.getCompany() != 0) {

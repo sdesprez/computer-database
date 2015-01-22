@@ -102,6 +102,9 @@ public enum CompanyDAO implements CompanyDAOI {
 	 */
 	@Override
 	public Page<Company> getPagedList(final Page<Company> page) {
+		if (page == null) {
+			return null;
+		}
 		Connection conn = null;
 		Statement countStmt = null;
 		PreparedStatement stmt = null;

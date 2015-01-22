@@ -59,11 +59,20 @@ public class ComputerDAOTest {
 		
 	}
 	
+	
+	/*
+	 * Tests of the getAll function
+	 */
 	@Test
 	public void getAll() {
 		assertEquals(list, computerDAO.getAll());
 	}
 	
+	
+	
+	/*
+	 * Tests of the getById function
+	 */
 	@Test
 	public void getByIdValid() {
 		assertEquals(list.get(0), computerDAO.getById(1L));
@@ -75,6 +84,11 @@ public class ComputerDAOTest {
 		assertNull(computerDAO.getById(-1L));
 	}
 	
+	
+	
+	/*
+	 * Tests of the getByCompanyId function
+	 */
 	@Test
 	public void getByCompanyId() {
 		assertEquals(list, computerDAO.getByCompanyId(1L));
@@ -86,6 +100,12 @@ public class ComputerDAOTest {
 		assertEquals(new ArrayList<Computer>(), computerDAO.getByCompanyId(-2L));
 	}
 	
+	
+	
+	
+	/*
+	 * Tests of the getPagedList function
+	 */
 	@Test
 	public void getPagedList() {
 		final Page<Computer> page = new Page<Computer>();
@@ -129,6 +149,10 @@ public class ComputerDAOTest {
 	}
 	
 	
+	
+	/*
+	 * Tests of the create function
+	 */
 	@Test
 	public void create() {
 		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(company).build();
@@ -152,6 +176,11 @@ public class ComputerDAOTest {
 		assertEquals(computer, computerDAO.getById(3L));
 	}
 	
+	
+	
+	/*
+	 * Tests of the update function
+	 */
 	@Test
 	public void update() {
 		final Computer computer = Computer.builder().id(2L).name("test").introducedDate(LocalDate.parse("1993-01-12")).build();
@@ -181,6 +210,11 @@ public class ComputerDAOTest {
 		computerDAO.update(computer);
 	}
 	
+	
+	
+	/*
+	 * Tests of the delete function
+	 */
 	@Test
 	public void delete() {
 		assertNotNull(computerDAO.getById(2L));

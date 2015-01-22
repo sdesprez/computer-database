@@ -17,6 +17,7 @@ import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.dao.impl.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 
 public class CompanyDAOTest {
@@ -53,19 +54,38 @@ public class CompanyDAOTest {
 		cm.close(connection);
 	}
 	
+	
+	/*
+	 * Tests of the getAll function
+	 */
 	@Test
 	public void getAll() {
-		
 		assertEquals(list, companyDAO.getAll());
 	}
 	
+	
+	/*
+	 * Tests of the getById function
+	 */
 	@Test
 	public void getById() {
 		assertEquals(new Company(1L, "Apple Inc."), companyDAO.getById(1L));
+		
+		
+	}
+	
+	@Test
+	public void getByIdInvalid() {
 		assertNull(companyDAO.getById(2L));
 		assertNull(companyDAO.getById(-1L));
 	}
 	
+	
+	
+	
+	/*
+	 * Tests of the getPagedList function
+	 */
 	@Test
 	public void getPagedList() {
 		final Page<Company> page = new Page<Company>();
@@ -79,5 +99,24 @@ public class CompanyDAOTest {
 		pageReturned.setNbPages(1);
 		pageReturned.setList(list);
 		assertEquals(pageReturned, companyDAO.getPagedList(page));
+	}
+	
+	@Test
+	public void getPagedListNull() {
+		assertNull(companyDAO.getPagedList(null));
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void invalidPageNumber() {
+		final Page<Company> page = new Page<Company>();
+		page.setPageNumber(-1);
+		companyDAO.getPagedList(page);
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void invalidResultsPerPage() {
+		final Page<Company> page = new Page<Company>();
+		page.setNbResultsPerPage(-1);
+		companyDAO.getPagedList(page);
 	}
 }

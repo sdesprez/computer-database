@@ -1,5 +1,7 @@
 package com.excilys.computerdatabase.utils;
 
+import com.excilys.computerdatabase.dto.ComputerDTO;
+
 /**
  * Utilitary class to Validate the format of Strings
  */
@@ -91,6 +93,36 @@ public class Validator {
 			return false;
 		}
 		
+		return true;
+	}
+	
+	
+	public static boolean validComputerDTO(final ComputerDTO dto) {
+		if (dto == null) {
+			return false;
+		}
+		if (dto.getId() < 0) {
+			return false;
+		}
+		if (dto.getName() == null) {
+			return false;
+		}
+		if (dto.getName().trim().isEmpty()) {
+			return false;
+		}
+		if (dto.getIntroduced() != null) {
+			if (!isDate(dto.getIntroduced())) {
+				return false;
+			}
+		}
+		if (dto.getDiscontinued() != null) {
+			if (!isDate(dto.getDiscontinued())) {
+				return false;
+			}
+		}
+		if (dto.getCompany() < 0) {
+			return false;
+		}
 		return true;
 	}
 }
