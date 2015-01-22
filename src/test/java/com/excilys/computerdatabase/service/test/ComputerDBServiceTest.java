@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import com.excilys.computerdatabase.dao.ComputerDAOI;
 import com.excilys.computerdatabase.domain.Computer;
@@ -47,6 +50,16 @@ public class ComputerDBServiceTest {
 		when(computerDAO.getById(anyLong())).thenReturn(Computer.builder().id(1L).build());
 		when(computerDAO.getByCompanyId(anyLong())).thenReturn(new ArrayList<Computer>());
 		when(computerDAO.getPagedList(page)).thenReturn(pageReturned);
+		
+		Mockito.doAnswer(new Answer<Computer>() {
+
+			@Override
+			public Computer answer(InvocationOnMock invocation) {
+				Computer computer = (Computer) invocation.getArguments()[0];
+				System.out.println(computer);
+				return null;
+			}
+		}).when(computerDAO).create(computer);
 		
 		
 		computerDBService = new ComputerDBServiceMock(computerDAO);

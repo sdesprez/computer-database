@@ -30,25 +30,28 @@ public class Page<T> {
 	
 	private String search;
 	
-	private ColumnNames order;
+	private ColumnNames sort;
 	
-	
+	private String order;
 	
 	public Page() { 
 		pageNumber = 1;
 		nbResultsPerPage = 10;
 		search = "";
-		order = ColumnNames.ID;
+		sort = ColumnNames.ID;
+		order = "ASC";
 	}
 
-	public Page(final int pageNumber, final List<T> list,
-			final int nbResultsPerPage, final int nbResults, final int nbPages, final String search, final ColumnNames order) {
+	public Page(final int pageNumber, final List<T> list, final int nbResultsPerPage,
+			final int nbResults, final int nbPages, final String search,
+			final ColumnNames sort, final String order) {
 		this.pageNumber = pageNumber;
 		this.list = list;
 		this.nbResultsPerPage = nbResultsPerPage;
 		this.nbResults = nbResults;
 		this.nbPages = nbPages;
 		this.search = search;
+		this.sort = sort;
 		this.order = order;
 	}
 
@@ -84,12 +87,12 @@ public class Page<T> {
 		this.nbResults = nbResults;
 	}
 	
-	public ColumnNames getOrder() {
-		return order;
+	public ColumnNames getSort() {
+		return sort;
 	}
 
-	public void setOrder(final ColumnNames order) {
-		this.order = order;
+	public void setSort(final ColumnNames sort) {
+		this.sort = sort;
 	}
 
 	public String getSearch() {
@@ -106,6 +109,14 @@ public class Page<T> {
 
 	public void setNbPages(final int nbPages) {
 		this.nbPages = nbPages;
+	}
+
+	public String getOrder() {
+		return order;
+	}
+
+	public void setOrder(final String order) {
+		this.order = order;
 	}
 
 	/**
@@ -153,7 +164,10 @@ public class Page<T> {
 		result = prime * result + nbPages;
 		result = prime * result + nbResults;
 		result = prime * result + nbResultsPerPage;
+		result = prime * result + ((order == null) ? 0 : order.hashCode());
 		result = prime * result + pageNumber;
+		result = prime * result + ((search == null) ? 0 : search.hashCode());
+		result = prime * result + ((sort == null) ? 0 : sort.hashCode());
 		return result;
 	}
 
@@ -168,8 +182,8 @@ public class Page<T> {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		@SuppressWarnings("unchecked")
-		final Page<T> other = (Page<T>) obj;
+		@SuppressWarnings("rawtypes")
+		final Page other = (Page) obj;
 		if (list == null) {
 			if (other.list != null) {
 				return false;
@@ -186,7 +200,24 @@ public class Page<T> {
 		if (nbResultsPerPage != other.nbResultsPerPage) {
 			return false;
 		}
+		if (order == null) {
+			if (other.order != null) {
+				return false;
+			}
+		} else if (!order.equals(other.order)) {
+			return false;
+		}
 		if (pageNumber != other.pageNumber) {
+			return false;
+		}
+		if (search == null) {
+			if (other.search != null) {
+				return false;
+			}
+		} else if (!search.equals(other.search)) {
+			return false;
+		}
+		if (sort != other.sort) {
 			return false;
 		}
 		return true;
@@ -194,10 +225,16 @@ public class Page<T> {
 
 	@Override
 	public String toString() {
-		return "Page [pageNumber=" + pageNumber + ", list=" + list
-				+ ", nbResultsPerPage=" + nbResultsPerPage + ", nbResults="
-				+ nbResults + ", nbPages=" + nbPages + ", search=" + search + ", order=" + order + "]";
+		final StringBuilder builder = new StringBuilder();
+		builder.append("Page [pageNumber=").append(pageNumber)
+				.append(", list=").append(list).append(", nbResultsPerPage=")
+				.append(nbResultsPerPage).append(", nbResults=")
+				.append(nbResults).append(", nbPages=").append(nbPages)
+				.append(", search=").append(search).append(", sort=")
+				.append(sort).append(", order=").append(order).append("]");
+		return builder.toString();
 	}
+
 
 	
 	

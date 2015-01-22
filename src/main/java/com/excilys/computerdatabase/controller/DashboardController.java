@@ -58,13 +58,19 @@ public class DashboardController extends HttpServlet {
 			page.setSearch(search.trim());
 		}
 		
-		final String order = req.getParameter("order");
-		ColumnNames cName = ColumnNames.getInstance(order);
+		final String sort = req.getParameter("sort");
+		ColumnNames cName = ColumnNames.getInstance(sort);
 		
 		if (cName == null) {
 			cName = ColumnNames.ID;
 		}
-		page.setOrder(cName);
+		page.setSort(cName);
+		
+		final String order = req.getParameter("order");
+		if (order != null && (order.compareToIgnoreCase("ASC") == 0 || order.compareToIgnoreCase("desc") == 0)) {
+			page.setOrder(order.toUpperCase());
+		}
+		
 		page = computerDBService.getPagedList(page);
 		
 		req.setAttribute("page", page);
