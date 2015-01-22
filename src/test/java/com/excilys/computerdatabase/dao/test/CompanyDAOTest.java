@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.excilys.computerdatabase.dao.CompanyDAOI;
-import com.excilys.computerdatabase.dao.test.mock.CompanyDAOMock;
+import com.excilys.computerdatabase.dao.ConnectionManager;
+import com.excilys.computerdatabase.dao.impl.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 
@@ -25,10 +26,10 @@ public class CompanyDAOTest {
 	
 	@Before
 	public void init() throws SQLException {
-		companyDAO = CompanyDAOMock.getInstance();
+		companyDAO = CompanyDAO.INSTANCE;
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
-		final ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
 		final Connection connection = cm.getConnection();
 		
 		final Statement stmt = connection.createStatement();

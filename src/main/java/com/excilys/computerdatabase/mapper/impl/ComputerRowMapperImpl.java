@@ -35,7 +35,7 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
 			}
 			final Long companyId = rs.getLong("company_Id");
 			if (companyId != null) {
-				builder.company(Company.builder().id(companyId).name(rs.getString("company")).build());
+				builder.company(Company.builder().id(companyId).name(rs.getString("company_name")).build());
 			}
 			
 			return builder.build();

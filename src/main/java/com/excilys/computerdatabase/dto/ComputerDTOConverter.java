@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.mapper;
+package com.excilys.computerdatabase.dto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerDTOConverter {

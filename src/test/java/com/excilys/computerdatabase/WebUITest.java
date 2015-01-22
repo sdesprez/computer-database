@@ -22,21 +22,21 @@ public class WebUITest {
         driver = new FirefoxDriver();
 	}
 	
-	@Test
+	
 	public void test() {
         driver.get("http://localhost:8080/computer-database/dashboard");
 
         driver.findElement(By.id("addComputer"));
 	}
 	
-	@Test
+	
 	public void pagination() {
 		final int x = 20;
 		driver.get("http://localhost:8080/computer-database/dashboard?nbResults=" + x);
 		assertEquals(x, driver.findElements(By.cssSelector("#results tr")).size());
 	}
 	
-	@Test
+	
 	public void addComputer() {
 		driver.get("http://localhost:8080/computer-database/addComputer");
 
@@ -51,7 +51,7 @@ public class WebUITest {
         element.submit();
 	}
 	
-	@Test
+	
 	public void editComputer() {
 		driver.get("http://localhost:8080/computer-database/editComputer?id=1");
 
@@ -66,7 +66,7 @@ public class WebUITest {
         element.submit();
 	}
 	
-	@Test
+	
 	public void search() {
 		driver.get("http://localhost:8080/computer-database/dashboard");
 		final WebElement element = driver.findElement(By.id("searchbox"));

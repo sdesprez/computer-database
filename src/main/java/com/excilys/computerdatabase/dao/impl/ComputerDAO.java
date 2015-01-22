@@ -37,7 +37,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	/**
 	 * Base Query for all the Select queries
 	 */
-	private static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company FROM computer c LEFT JOIN company ON company.id=c.company_id";
+	private static final String SELECT_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, company_id, company.name as company_name FROM computer c LEFT JOIN company ON company.id=c.company_id";
 	private static final String INSERT_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id  =? WHERE id = ?";
 	private static final String DELETE_QUERY = "DELETE computer FROM computer WHERE id = ?";
@@ -147,6 +147,9 @@ public enum ComputerDAO implements ComputerDAOI {
 	 */
 	@Override
 	public void create(final Computer computer) {
+		if (computer == null) {
+			return;
+		}
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		final Company company = computer.getCompany();
@@ -193,6 +196,9 @@ public enum ComputerDAO implements ComputerDAOI {
 	 */
 	@Override
 	public void update(final Computer computer) {
+		if (computer == null) {
+			return;
+		}
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		final Company company = computer.getCompany();
@@ -243,7 +249,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(final Long id) {
+	public void delete(final long id) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
@@ -276,6 +282,9 @@ public enum ComputerDAO implements ComputerDAOI {
 	 */
 	@Override
 	public Page<Computer> getPagedList(final Page<Computer> page) {
+		if (page == null) {
+			return null;
+		}
 		Connection conn = null;
 		PreparedStatement countStmt = null;
 		PreparedStatement stmt = null;
@@ -300,7 +309,7 @@ public enum ComputerDAO implements ComputerDAOI {
 
 			//Create the SELECT query
 			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY " 
-						+ page.getSort().getName() + " " + page.getOrder() + " LIMIT ? OFFSET ?;";
+						+ ColumnNames.ID.toString() + " " + page.getOrder() + " LIMIT ? OFFSET ?;";
 			stmt = conn.prepareStatement(query);
 			stmt.setString(1, search);
 			stmt.setString(2, search);

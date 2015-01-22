@@ -1,24 +1,18 @@
 package com.excilys.computerdatabase.dao.impl;
 
 public enum ColumnNames {
-	ID("c.id", "id"),
-	NAME("c.name", "name"),
-	INTRODUCED("c.introduced", "introduced"),
-	DISCONTINUED("c.discontinued", "discontinued"),
-	COMPANY_ID("company.id", "company_id"),
-	COMPANY_NAME("company.name", "company_name");
+	ID("id"),
+	NAME("name"),
+	INTRODUCED("introduced"),
+	DISCONTINUED("discontinued"),
+	COMPANY_ID("company_id"),
+	COMPANY_NAME("company_name");
 	
 
-	private String name;
 	private String id;
 	
-	private ColumnNames(final String name, final String id) {
-		this.name = name;
+	private ColumnNames(final String id) {
 		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	public String getId() {

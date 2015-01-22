@@ -15,10 +15,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.excilys.computerdatabase.dao.ComputerDAOI;
-import com.excilys.computerdatabase.dao.test.mock.ComputerDAOMock;
+import com.excilys.computerdatabase.dao.ConnectionManager;
+import com.excilys.computerdatabase.dao.impl.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 public class ComputerDAOTest {
 
@@ -28,12 +30,12 @@ public class ComputerDAOTest {
 	
 	@Before
 	public void init() throws SQLException {
-		computerDAO = ComputerDAOMock.getInstance();
+		computerDAO = ComputerDAO.INSTANCE;
 		list = new ArrayList<Computer>();
 		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, company));
 		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, company));
 		
-		final ConnectionManagerTest cm = ConnectionManagerTest.getInstance();
+		final ConnectionManager cm = ConnectionManager.INSTANCE;
 		final Connection connection = cm.getConnection();
 		
 		final Statement stmt = connection.createStatement();
@@ -63,15 +65,25 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
-	public void getById() {
+	public void getByIdValid() {
 		assertEquals(list.get(0), computerDAO.getById(1L));
+		}
+	
+	public void getByIdInvalid() {
 		assertNull(computerDAO.getById(3L));
 		assertNull(computerDAO.getById(0L));
+		assertNull(computerDAO.getById(-1L));
 	}
 	
 	@Test
 	public void getByCompanyId() {
 		assertEquals(list, computerDAO.getByCompanyId(1L));
+	}
+	
+	@Test
+	public void getByCompanyIdInvalid() {
+		assertEquals(new ArrayList<Computer>(), computerDAO.getByCompanyId(0L));
+		assertEquals(new ArrayList<Computer>(), computerDAO.getByCompanyId(-2L));
 	}
 	
 	@Test
@@ -91,10 +103,51 @@ public class ComputerDAOTest {
 	}
 	
 	@Test
+	public void getPagedListNull() {
+		assertNull(computerDAO.getPagedList(null));
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void invalidOrder() {
+		final Page<Computer> page = new Page<Computer>();
+		page.setOrder("x");
+		computerDAO.getPagedList(page);
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void invalidPageNumber() {
+		final Page<Computer> page = new Page<Computer>();
+		page.setPageNumber(-1);
+		computerDAO.getPagedList(page);
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void invalidResultsPerPage() {
+		final Page<Computer> page = new Page<Computer>();
+		page.setNbResultsPerPage(-1);
+		computerDAO.getPagedList(page);
+	}
+	
+	
+	@Test
 	public void create() {
 		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(company).build();
 		
 		computerDAO.create(computer);
+		computer.setId(3L);
+		assertEquals(computer, computerDAO.getById(3L));
+	}
+	
+	@Test
+	public void createNull() {
+		computerDAO.create(null);
+		assertEquals(list, computerDAO.getAll());
+	}
+	
+	@Test
+	public void createEmptyComputer() {
+		final Computer computer = new Computer();
+		computerDAO.create(new Computer());
 		computer.setId(3L);
 		assertEquals(computer, computerDAO.getById(3L));
 	}
@@ -107,9 +160,39 @@ public class ComputerDAOTest {
 	}
 
 	@Test
+	public void updateNull() {
+		computerDAO.update(null);
+		assertEquals(list, computerDAO.getAll());
+	}
+	
+	@Test
+	public void updateInvalidId() {
+		final Computer computer = new Computer();
+		computer.setId(-1L);
+		computerDAO.update(computer);
+		assertEquals(list, computerDAO.getAll());
+	}
+	
+	@Test(expected = PersistenceException.class)
+	public void updateInvalidCompanyId() {
+		final Computer computer = new Computer();
+		computer.setId(1L);
+		computer.setCompany(new Company(-1L, ""));
+		computerDAO.update(computer);
+	}
+	
+	@Test
 	public void delete() {
 		assertNotNull(computerDAO.getById(2L));
 		computerDAO.delete(2L);
 		assertNull(computerDAO.getById(2L));
 	}
+	
+	@Test
+	public void deleteInvalidId() {
+		computerDAO.delete(-1);
+		assertEquals(list, computerDAO.getAll());
+	}
+	
+	
 }

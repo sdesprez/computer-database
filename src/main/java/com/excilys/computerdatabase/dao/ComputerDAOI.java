@@ -43,7 +43,7 @@ public interface ComputerDAOI {
 	 * Delete a computer in the database
 	 * @param id : id of the computer to delete
 	 */
-	void delete(Long id);
+	void delete(long id);
 	
 	/**
 	 * Get a Page of computers in the database.
