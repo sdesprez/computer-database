@@ -9,21 +9,16 @@ import com.excilys.computerdatabase.service.CompanyDBServiceI;
 
 public class CompanyDBServiceMock implements CompanyDBServiceI {
 
-
-	
-	@Override
-	public void delete(long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private CompanyDAOI companyDAO;
-	
 	
 	
 	public CompanyDBServiceMock(final CompanyDAOI companyDAO) {
 		this.companyDAO = companyDAO;
 	}
+	
+	
+	
+	
 	
 	@Override
 	public List<Company> getAll() {
@@ -34,10 +29,15 @@ public class CompanyDBServiceMock implements CompanyDBServiceI {
 	public Company getById(final long id) {
 		return companyDAO.getById(id);
 	}
-
+	
 	@Override
 	public Page<Company> getPagedList(final Page<Company> page) {
 		return companyDAO.getPagedList(page);
+	}
+	
+	
+	@Override
+	public void delete(final long id) {
 	}
 
 }

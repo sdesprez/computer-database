@@ -1,11 +1,11 @@
 <%@ tag body-content="empty" %>
 <%@ attribute name="target" required="true" %>
-<%@ attribute name="pages" required="true" %>
+<%@ attribute name="pages" required="true" type="java.lang.Integer" %>
 <%@ attribute name="sort" required="true" %>
 <%@ attribute name="search" required="true" %>
 <%@ attribute name="limit" required="true" %>
 <%@ attribute name="order" required="true" %>
-<%@ attribute name="pageNumber" required="true" %>
+<%@ attribute name="pageNumber" required="true" type="java.lang.Integer"%>
 
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -37,7 +37,7 @@
 			</c:choose>
 		</c:if>
 	</c:forEach>
-	<c:if test="${Integer.valueOf(pageNumber) < Integer.valueOf(pages)}">
+	<c:if test="${pageNumber < pages}">
 		<li><h:link target="${target}" page="${pageNumber+1}" limit="${limit}" search="${search}" sort="${sort}" order="${order}">&raquo;</h:link></li>
 		<li><h:link target="${target}" page="${pages}" limit="${limit}" search="${search}" sort="${sort}" order="${order}">Last</h:link></li>
 	</c:if>
