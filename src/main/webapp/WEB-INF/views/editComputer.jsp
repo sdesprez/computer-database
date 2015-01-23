@@ -6,6 +6,11 @@ pageEncoding="UTF-8"%>
 <script type="text/javascript" src="js/jquery.min.js"></script>	
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <script src="js/formValidation.js"></script>
+<style>
+.error{
+	color: red;
+}
+</style>
 
     <section id="main">
         <div class="container">
@@ -16,25 +21,25 @@ pageEncoding="UTF-8"%>
                     </div>
                     <h1>Edit Computer</h1>
 
-					<p>${error.get("id")}</p>
-					<p class="text-warning">${error.get("name")}</p>
-                    <p class="text-warning">${error.get("iDate")}</p>
-                    <p class="text-warning">${error.get("dDate")}</p>
-                    <p class="text-warning">${error.get("companyId")}</p>
+					<span class="error">${error.get("id")}</span>
+					      
                     <form id="form" action="edit-computer" method="POST">
                         <input type="hidden" name="id" value="${computer.id}"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" id="computerName" name="computerName" placeholder="name" value="${computer.name}" required="required">
+                            	<span class="error">${error.get("name")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introducedDate" placeholder="yyyy-MM-dd" value="${computer.introducedDate}">
+                            	<span class="error">${error.get("iDate")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinuedDate" placeholder="yyyy-MM-dd" value="${computer.discontinuedDate}">
+                            	<span class="error">${error.get("dDate")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -48,6 +53,7 @@ pageEncoding="UTF-8"%>
                                    	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                    	</c:forEach>
                                 </select>
+                                <span class="error">${error.get("companyId")}</span>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">

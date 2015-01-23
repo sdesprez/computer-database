@@ -7,30 +7,35 @@ pageEncoding="UTF-8"%>
 <script type="text/javascript" src="js/jquery.min.js"></script>	
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <script src="js/formValidation.js"></script>
-	
+<style>
+.error{
+	color: red;
+}
+</style>
+
     <section id="main">
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
 
-                    <p class="text-warning">${error.get("name")}</p>
-                    <p class="text-warning">${error.get("iDate")}</p>
-                    <p class="text-warning">${error.get("dDate")}</p>
-                    <p class="text-warning">${error.get("companyId")}</p>
+                    
                     <form id="form" action="add-computer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" id="computerName"  name="computerName" placeholder="Computer name" required="required">
+                            	<span class="error">${error.get("name")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="introducedDate" placeholder="yyyy-MM-dd">
+                            	<span class="error">${error.get("iDate")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinuedDate" placeholder="yyyy-MM-dd">
+                            	<span class="error">${error.get("dDate")}</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -40,6 +45,7 @@ pageEncoding="UTF-8"%>
                                    	<option value="${company.id}"><c:out value="${company.name}"/></option>
                                    	</c:forEach>
                                 </select>
+                                <span class="error">${error.get("companyId")}</span>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
