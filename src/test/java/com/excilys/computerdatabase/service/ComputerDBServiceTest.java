@@ -1,9 +1,11 @@
 package com.excilys.computerdatabase.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -11,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -130,15 +133,22 @@ public class ComputerDBServiceTest {
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				if (l > 0 && l <= list.size()) {
-					list.remove((int) l - 1);
-				}
+				list = list.stream().filter(c -> c.getId() != l).collect(Collectors.toList());
 				return null;
 			}
 			
 		}).when(computerDAO).delete(anyLong());
 		
-		
+		doAnswer(new Answer<Computer>() {
+
+			@Override
+			public Computer answer(final InvocationOnMock invocation) {
+				final List<Long> l = (List<Long>) invocation.getArguments()[0];
+				list = list.stream().filter(c -> !l.contains(c.getId())).collect(Collectors.toList());
+				return null;
+			}
+			
+		}).when(computerDAO).delete((List<Long>) anyList());
 		
 		when(computerDAO.getPagedList(page)).thenReturn(pageReturned);
 		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongPNumber);
@@ -266,20 +276,34 @@ public class ComputerDBServiceTest {
 	
 	
 	/*
-	 * Tests of the delete function
+	 * Tests of the delete() function
 	 */
 	@Test
 	public void delete() {
 		final int x = computerDBService.getAll().size();
 		computerDBService.delete(3L);
-		assertEquals(x - 1, computerDBService.getAll().size());
+		assertEquals(x - 1, list.size());
 	}
 	
 	@Test
 	public void deleteInvalidId() {
 		final int x = computerDBService.getAll().size();
 		computerDAO.delete(-1);
-		computerDAO.delete(3L);
-		assertEquals(x - 1, computerDBService.getAll().size());
+		computerDAO.delete(4L);
+		assertEquals(x, list.size());
+	}
+	
+	
+	/*
+	 * Test of the delete(List) function
+	 */
+	@Test
+	public void multipleDelete() {
+		final List<Long> l = new ArrayList<Long>();
+		l.add(1L);
+		l.add(2L);
+		l.forEach(id -> assertNotNull(computerDAO.getById(id)));
+		computerDBService.delete(l);
+		l.forEach(id -> assertNull(computerDAO.getById(id)));
 	}
 }

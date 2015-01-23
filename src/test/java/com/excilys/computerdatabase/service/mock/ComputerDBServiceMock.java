@@ -47,8 +47,13 @@ public class ComputerDBServiceMock implements ComputerDBServiceI {
 
 	
 	@Override
-	public void delete(final Long id) {
+	public void delete(final long id) {
 		computerDAO.delete(id);
+	}
+	
+	@Override
+	public void delete(final List<Long> list) {
+		computerDAO.delete(list);
 	}
 	
 	

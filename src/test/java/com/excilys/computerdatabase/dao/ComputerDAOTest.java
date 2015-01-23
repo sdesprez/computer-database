@@ -260,4 +260,18 @@ public class ComputerDAOTest {
 		
 		assertEquals(list, computerDAO.getAll());
 	}
+	
+	
+	/*
+	 * Test of the delete(List) function
+	 */
+	@Test
+	public void multipleDelete() {
+		final List<Long> l = new ArrayList<Long>();
+		l.add(1L);
+		l.add(2L);
+		l.forEach(id -> assertNotNull(computerDAO.getById(id)));
+		computerDAO.delete(l);
+		l.forEach(id -> assertNull(computerDAO.getById(id)));
+	}
 }

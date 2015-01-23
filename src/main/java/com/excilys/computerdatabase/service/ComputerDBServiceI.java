@@ -45,7 +45,9 @@ public interface ComputerDBServiceI {
 	 * Delete a computer in the database
 	 * @param id : id of the computer to delete
 	 */
-	void delete(Long id);
+	void delete(long id);
+	
+	void delete(List<Long> list);
 	
 	/**
 	 * Get a Page of computers in the database.

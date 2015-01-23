@@ -2,7 +2,9 @@ package com.excilys.computerdatabase.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +27,7 @@ public class ComputerHttpService {
 	
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	
-	private static Logger logger = LoggerFactory.getLogger(ComputerHttpService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerHttpService.class);
 	
 	
 	/**
@@ -148,12 +150,13 @@ public class ComputerHttpService {
 		
 		//Create a matcher to find the positives longs in the String
 		final Matcher m = PATTERN.matcher(selection);
-		String id;
+		
 		//For each long found, delete the computer
+		final List<Long> list = new ArrayList<Long>();
 		while (m.find()) {
-			id = m.group();
-			computerDBService.delete(Long.valueOf(id));
-			logger.info("Deletion of Computer with id=" + id);
+			list.add(Long.valueOf(m.group()));
 		}
+		computerDBService.delete(list);
+		LOGGER.info("Deletion of Computer with ids =" + list);
 	}
 }

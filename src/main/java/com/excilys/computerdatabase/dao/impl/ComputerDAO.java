@@ -282,6 +282,36 @@ public enum ComputerDAO implements ComputerDAOI {
 		}
 	}
 	
+	@Override
+	public void delete(final List<Long> list) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			//Get a connection
+			conn = CM.getConnection();
+			conn.setAutoCommit(false);
+			
+			for(long id : list) {
+				//Create the query
+				stmt = conn.prepareStatement(DELETE_QUERY);
+				stmt.setLong(1, id);
+				
+				//Execute the query
+				stmt.executeUpdate();
+			}
+			//Commit the query
+			conn.commit();
+		} catch (final SQLException e) {
+			LOGGER.error("SQLError in delete() with id List = " + list);
+			CM.rollback(conn);
+			throw new PersistenceException(e.getMessage(), e);
+		} finally {
+			CM.close(stmt);
+			//Close the connection
+			CM.close(conn);
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

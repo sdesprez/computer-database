@@ -46,6 +46,8 @@ public interface ComputerDAOI {
 	 */
 	void delete(long id);
 	
+	void delete(List<Long> list);
+	
 	void deleteByCompanyId(long id, Connection connection);
 	
 	
