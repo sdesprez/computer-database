@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +72,7 @@ public class CompanyDBServiceTest {
 		wrongRPP = new Page<Company>();
 		wrongRPP.setNbResultsPerPage(-1);
 		
-		when(companyDAO.getAll()).thenReturn(new ArrayList<Company>());
+		when(companyDAO.getAll()).thenReturn(companyList);
 		when(companyDAO.getById(1L)).thenReturn(c1);
 		when(companyDAO.getPagedList(page)).thenReturn(pageReturned);
 		
@@ -81,27 +83,19 @@ public class CompanyDBServiceTest {
 			@Override
 			public List<Computer> answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				if (l > 0 && l <= companyList.size()) {
-					companyList.remove((int) l - 1);
-				}
+				companyList = companyList.stream().filter(c -> c.getId() != l).collect(Collectors.toList());
 				return null;
 			}
-		}).when(companyDAO).delete(anyLong(), null);
+		}).when(companyDAO).delete(anyLong(), any());
 		
 		doAnswer(new Answer<List<Computer>>() {
 			@Override
 			public List<Computer> answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				if (l > 0 && l <= companyList.size()) {
-					computerList.forEach(c -> {
-						if (c.getCompany().getId() == l) {
-							computerList.remove(c);
-						}
-					});
-				}
+				computerList = computerList.stream().filter(c -> c.getCompany().getId() != l).collect(Collectors.toList());
 				return null;
 			}
-		}).when(computerDAO).deleteByCompanyId(anyLong(), null);
+		}).when(computerDAO).deleteByCompanyId(anyLong(), any());
 		
 		companyDBService = new CompanyDBServiceMock(companyDAO, computerDAO);
 	}
