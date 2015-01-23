@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dao.test;
+package com.excilys.computerdatabase.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

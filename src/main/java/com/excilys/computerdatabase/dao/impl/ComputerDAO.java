@@ -152,7 +152,7 @@ public enum ComputerDAO implements ComputerDAOI {
 	 */
 	@Override
 	public void create(final Computer computer) {
-		if (computer == null) {
+		if (computer == null || computer.getName() == null || computer.getName().trim().isEmpty()) {
 			return;
 		}
 		Connection conn = null;

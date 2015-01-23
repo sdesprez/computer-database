@@ -1,4 +1,4 @@
-package com.excilys.computerdatabase.dao.test;
+package com.excilys.computerdatabase.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -177,10 +177,8 @@ public class ComputerDAOTest {
 	
 	@Test
 	public void createEmptyComputer() {
-		final Computer computer = new Computer();
 		computerDAO.create(new Computer());
-		computer.setId(5L);
-		assertEquals(computer, computerDAO.getById(5L));
+		assertEquals(list, computerDAO.getAll());
 	}
 	
 	
