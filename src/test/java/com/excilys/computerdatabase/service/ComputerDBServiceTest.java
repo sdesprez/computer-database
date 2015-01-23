@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
@@ -76,15 +76,7 @@ public class ComputerDBServiceTest {
 			@Override
 			public List<Computer> answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				final List<Computer> cList = new ArrayList<Computer>();
-				if (l > 0 && l < list.size()) {
-					list.forEach(c -> {
-						if (c.getCompany().getId() == l) {
-							cList.add(c);
-						}
-					});
-				}
-				return cList;
+				return list.stream().filter(c -> c.getCompany().getId() == l).collect(Collectors.toList());
 			}
 		}).when(computerDAO).getByCompanyId(anyLong());
 
@@ -133,7 +125,7 @@ public class ComputerDBServiceTest {
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				list = list.stream().filter(c -> c.getId() != l).collect(Collectors.toList());
+				list.removeIf(c -> c.getId() == l);
 				return null;
 			}
 			
@@ -143,12 +135,13 @@ public class ComputerDBServiceTest {
 
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
+				@SuppressWarnings("unchecked")
 				final List<Long> l = (List<Long>) invocation.getArguments()[0];
-				list = list.stream().filter(c -> !l.contains(c.getId())).collect(Collectors.toList());
+				list.removeIf(c -> !l.contains(c.getId()));
 				return null;
 			}
 			
-		}).when(computerDAO).delete((List<Long>) anyList());
+		}).when(computerDAO).delete(Matchers.anyListOf(Long.class));
 		
 		when(computerDAO.getPagedList(page)).thenReturn(pageReturned);
 		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongPNumber);

@@ -2,8 +2,8 @@ package com.excilys.computerdatabase.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,6 @@ import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.service.CompanyDBServiceI;
 import com.excilys.computerdatabase.service.mock.CompanyDBServiceMock;
 
 
@@ -83,7 +81,7 @@ public class CompanyDBServiceTest {
 			@Override
 			public List<Computer> answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				companyList = companyList.stream().filter(c -> c.getId() != l).collect(Collectors.toList());
+				companyList.removeIf(c -> c.getId() == l);
 				return null;
 			}
 		}).when(companyDAO).delete(anyLong(), any());
@@ -92,7 +90,7 @@ public class CompanyDBServiceTest {
 			@Override
 			public List<Computer> answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				computerList = computerList.stream().filter(c -> c.getCompany().getId() != l).collect(Collectors.toList());
+				computerList.removeIf(c -> c.getCompany().getId() == l);
 				return null;
 			}
 		}).when(computerDAO).deleteByCompanyId(anyLong(), any());
