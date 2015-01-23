@@ -12,6 +12,7 @@
 		<jstl.version>1.2</jstl.version>
 		<jsp-api.version>2.3.1</jsp-api.version>
 		<mysql.version>5.1.34</mysql.version>
+		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		<logback.version>1.1.2</logback.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.0.2-beta</mockito.version>
@@ -47,6 +48,15 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		
+		
+		<!-- Connection Pool -->
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${bonecp.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 

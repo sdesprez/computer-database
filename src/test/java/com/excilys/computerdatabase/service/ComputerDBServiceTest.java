@@ -137,7 +137,7 @@ public class ComputerDBServiceTest {
 			public Computer answer(final InvocationOnMock invocation) {
 				@SuppressWarnings("unchecked")
 				final List<Long> l = (List<Long>) invocation.getArguments()[0];
-				list.removeIf(c -> !l.contains(c.getId()));
+				list.removeIf(c -> l.contains(c.getId()));
 				return null;
 			}
 			
