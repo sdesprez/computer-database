@@ -49,6 +49,7 @@ public class CLI {
 			System.out.println("4:Add a computer");
 			System.out.println("5:Update a computer");
 			System.out.println("6:Delete a computer");
+			System.out.println("7:Delete a company (and all associated computers)");
 			
 			//Check the input and send to the corresponding function.
 			switch (sc.nextLine()) {
@@ -72,6 +73,9 @@ public class CLI {
 				break;
 			case "6":
 				deleteComputer();
+				break;
+			case "7":
+				deleteCompany();
 				break;
 			default:
 				System.out.println("Invalid Input");
@@ -305,6 +309,16 @@ public class CLI {
 		System.out.println("The computer has been deleted");
 	}
 	
+	/**
+	 * Interface for deleting a company
+	 */
+	public void deleteCompany() {
+		Long id;
+		System.out.println("Enter the id of the company you wish to delete");
+		id = inputLong();
+		companyDBService.delete(id);
+		System.out.println("The company and it's computers have been deleted");
+	}
 	
 	/**
 	 * Function checking the user input to see if it's a valid computer name.
