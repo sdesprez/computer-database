@@ -291,7 +291,7 @@ public enum ComputerDAO implements ComputerDAOI {
 			conn = CM.getConnection();
 			conn.setAutoCommit(false);
 			
-			for(long id : list) {
+			for (long id : list) {
 				//Create the query
 				stmt = conn.prepareStatement(DELETE_QUERY);
 				stmt.setLong(1, id);
@@ -344,7 +344,8 @@ public enum ComputerDAO implements ComputerDAOI {
 
 			//Create the SELECT query
 			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY " 
-						+ ColumnNames.ID.toString() + " " + page.getOrder() + " LIMIT ? OFFSET ?;";
+						+ page.getSort() + " " + page.getOrder() + " LIMIT ? OFFSET ?;";
+			System.out.println(query);
 			stmt = conn.prepareStatement(query);
 			stmt.setString(1, search);
 			stmt.setString(2, search);

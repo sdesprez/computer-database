@@ -73,7 +73,7 @@ public enum CompanyDBService implements CompanyDBServiceI {
 			companyDAO.delete(id, connection);
 			connection.commit();
 		} catch (final PersistenceException | SQLException e) {
-			LOGGER.error("Error while deleting a computer");
+			LOGGER.error("Error while deleting a company");
 			CM.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
