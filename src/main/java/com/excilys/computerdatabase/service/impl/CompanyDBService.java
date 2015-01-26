@@ -62,18 +62,26 @@ public enum CompanyDBService implements CompanyDBServiceI {
 		return companyDAO.getPagedList(page);
 	}
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(final long id) {
 		Connection connection = null;
 		try {
+			//Get a connection and set it to transactional mode
 			connection = CM.getConnection();
 			connection.setAutoCommit(false);
+			
+			//Delete the Computers of the Company
 			computerDAO.deleteByCompanyId(id, connection);
+			//Delete the Company
 			companyDAO.delete(id, connection);
+			//Commit the transaction
 			connection.commit();
 		} catch (final PersistenceException | SQLException e) {
 			LOGGER.error("Error while deleting a company");
+			//If there was an error, rollback
 			CM.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {

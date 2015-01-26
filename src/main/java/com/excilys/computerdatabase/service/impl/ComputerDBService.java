@@ -74,9 +74,9 @@ public enum ComputerDBService implements ComputerDBServiceI {
 		computerDAO.delete(id);
 	}
 	
-	
-	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(final List<Long> list) {
 		computerDAO.delete(list);

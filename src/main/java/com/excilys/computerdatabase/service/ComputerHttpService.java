@@ -59,7 +59,7 @@ public class ComputerHttpService {
 			if (Validator.isDate(iDate)) {
 				builder.introducedDate(LocalDate.parse(iDate, DateTimeFormatter.ISO_LOCAL_DATE));
 			} else {
-				errorMsgMap.put("iDate", "Incorrect date : the field must be at the yyyy-MM-dd format or left empty");
+				errorMsgMap.put("iDate", "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy");
 			}
 		}
 		
@@ -68,7 +68,7 @@ public class ComputerHttpService {
 			if (Validator.isDate(dDate)) {
 				builder.discontinuedDate(LocalDate.parse(dDate, DateTimeFormatter.ISO_LOCAL_DATE));
 			} else {
-				errorMsgMap.put("dDate", "Incorrect date : the field must be at the yyyy-MM-dd format or left empty");
+				errorMsgMap.put("dDate", "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy");
 			}
 		}
 		

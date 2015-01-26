@@ -27,6 +27,9 @@ public interface CompanyDBServiceI {
 	 */
 	Page<Company> getPagedList(Page<Company> page);
 	
-	
+	/**
+	 * Delete a Company from the database and all associated Computers
+	 * @param id Id of the Company to delete
+	 */
 	void delete(long id);
 }
