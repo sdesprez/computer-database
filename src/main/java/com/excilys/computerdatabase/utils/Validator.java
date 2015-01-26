@@ -96,7 +96,11 @@ public class Validator {
 		return true;
 	}
 	
-	
+	/**
+	 * Check if the fields of a ComputerDTO are valid for a Computer
+	 * @param dto ComputerDTO to check
+	 * @return	Return true if the ComputerDTO is valid.
+	 */
 	public static boolean validComputerDTO(final ComputerDTO dto) {
 		if (dto == null) {
 			return false;

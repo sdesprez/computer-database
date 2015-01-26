@@ -42,12 +42,13 @@ public enum ConnectionManager {
 			// Load the Driver class
 			Class.forName(properties.getProperty("DB_DRIVER_CLASS"));
 
+			//Configure the Pool
 			config.setJdbcUrl(properties.getProperty("DB_URL"));
 			config.setUser(properties.getProperty("DB_USERNAME"));
 			config.setPassword(properties.getProperty("DB_PASSWORD"));
-			config.setMinConnectionsPerPartition(5);
-			config.setMaxConnectionsPerPartition(10);
-			config.setPartitionCount(1);
+			config.setMinConnectionsPerPartition(Integer.valueOf(properties.getProperty("DB_MIN_CONNECTION_PER_PART").trim()));
+			config.setMaxConnectionsPerPartition(Integer.valueOf(properties.getProperty("DB_MAX_CONNECTION_PER_PART").trim()));
+			config.setPartitionCount(Integer.valueOf(properties.getProperty("DB_PARTITION_COUNT").trim()));
 
 			connectionPool = new BoneCP(config);
 		} catch (final SQLException e) {

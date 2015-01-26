@@ -147,6 +147,10 @@ public enum CompanyDAO implements CompanyDAOI {
 		}
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(final long id, final Connection connection) {
 		PreparedStatement statement = null;

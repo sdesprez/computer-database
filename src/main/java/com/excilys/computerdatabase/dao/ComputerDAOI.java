@@ -46,8 +46,19 @@ public interface ComputerDAOI {
 	 */
 	void delete(long id);
 	
+	
+	/**
+	 * Delete all the computers corresponding to the IDs of the list
+	 * @param list of the IDs of computers to delete
+	 */
 	void delete(List<Long> list);
 	
+	
+	/**
+	 * Delete all the computers with the Company corresponding to the ID
+	 * @param id of the company
+	 * @param connection connection to the database to use
+	 */
 	void deleteByCompanyId(long id, Connection connection);
 	
 	

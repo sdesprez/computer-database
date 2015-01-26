@@ -28,6 +28,10 @@ public interface CompanyDAOI {
 	 */
 	Page<Company> getPagedList(Page<Company> page);
 	
-	
+	/**
+	 * Delete a Company from the database
+	 * @param id Id of the company to delete
+	 * @param connection Connection to the database to use
+	 */
 	void delete(long id, Connection connection);
 }

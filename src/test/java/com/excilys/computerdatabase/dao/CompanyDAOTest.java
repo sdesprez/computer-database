@@ -12,8 +12,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.dao.CompanyDAOI;
-import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.dao.impl.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;

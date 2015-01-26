@@ -11,6 +11,11 @@ import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerDTOConverter {
 
+	/**
+	 * Create a Computer from a ComputerDTO
+	 * @param dto The ComputerDTO to be converted
+	 * @return A Computer corresponding to the ComputerDTO or null if the ComputerDTO wasn't valid
+	 */
 	public static Computer fromDTO(final ComputerDTO dto) {
 		if (!Validator.validComputerDTO(dto)) {
 			return null;
@@ -33,6 +38,11 @@ public class ComputerDTOConverter {
 	}
 	
 
+	/**
+	 * Create a List of Computer from a List of ComputerDTO
+	 * @param dto The List of ComputerDTO to be converted
+	 * @return The List of Computer corresponding to the List of ComputerDTO who are valid or an empty List if none were valid
+	 */
 	public static List<Computer> fromDTO(final List<ComputerDTO> dtos) {
 		final List<Computer> computers = dtos.stream().map(dto -> {
 			final Computer computer = ComputerDTOConverter.fromDTO(dto);
@@ -44,7 +54,16 @@ public class ComputerDTOConverter {
 		return computers;
 	}
 	
+	
+	/**
+	 * Create a ComputerDTO from a Computer
+	 * @param computer to be converted
+	 * @return The ComputerDTO corresponding to the Computer or null if the computer was null
+	 */
 	public static ComputerDTO toDTO(final Computer computer) {
+		if (computer == null) {
+			return null;
+		}
 		final ComputerDTO.Builder builder = ComputerDTO.builder();
 		builder.id(computer.getId())
 				.name(computer.getName());
@@ -65,7 +84,11 @@ public class ComputerDTOConverter {
 		return builder.build();
 	}
 	
-	
+	/**
+	 * Create a List of ComputerDTO from a List of Computer
+	 * @param List of Computer to be converted
+	 * @return The List ComputerDTO corresponding to the List Computer of computers who are valid or an empty List if none were valid
+	 */
 	public static List<ComputerDTO> toDTO(final List<Computer> computers) {
 		final List<ComputerDTO> dtos = computers.stream().map(computer -> {
 			final ComputerDTO dto = ComputerDTOConverter.toDTO(computer);

@@ -282,6 +282,9 @@ public enum ComputerDAO implements ComputerDAOI {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void delete(final List<Long> list) {
 		Connection conn = null;
@@ -345,7 +348,6 @@ public enum ComputerDAO implements ComputerDAOI {
 			//Create the SELECT query
 			final String query = SELECT_QUERY + " WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY " 
 						+ page.getSort() + " " + page.getOrder() + " LIMIT ? OFFSET ?;";
-			System.out.println(query);
 			stmt = conn.prepareStatement(query);
 			stmt.setString(1, search);
 			stmt.setString(2, search);
@@ -371,6 +373,9 @@ public enum ComputerDAO implements ComputerDAOI {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void deleteByCompanyId(final long id, final Connection connection) {
 		PreparedStatement statement = null;
