@@ -5,7 +5,7 @@ import java.util.List;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 
-public interface ComputerDBServiceI {
+public interface ComputerDBService {
 
 	/**
 	 * Get the List of all the computers in the database

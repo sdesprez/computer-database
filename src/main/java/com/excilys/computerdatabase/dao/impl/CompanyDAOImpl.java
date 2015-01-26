@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computerdatabase.dao.CompanyDAOI;
+import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
@@ -22,7 +22,7 @@ import com.excilys.computerdatabase.mapper.impl.CompanyRowMapperImpl;
  * Data Access Object for the Computer
  * Singleton
  */
-public enum CompanyDAO implements CompanyDAOI {
+public enum CompanyDAOImpl implements CompanyDAO {
 
 	/**
 	 * Instance of ComputerDAO
@@ -30,7 +30,7 @@ public enum CompanyDAO implements CompanyDAOI {
 	INSTANCE;
 
 	private static final ConnectionManager CM = ConnectionManager.INSTANCE;
-	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";
@@ -152,14 +152,16 @@ public enum CompanyDAO implements CompanyDAOI {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void delete(final long id, final Connection connection) {
+	public void delete(final long id) {
 		PreparedStatement statement = null;
+		final Connection connection = CM.getTransactionnalConnection();
 		try {
 			statement = connection.prepareStatement(DELETE_QUERY);
 			statement.setLong(1, id);
 			statement.executeUpdate();
 		} catch (final SQLException e) {
 			LOGGER.error("SQLError while deleting Company with id=" + id);
+			CM.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			CM.close(statement);

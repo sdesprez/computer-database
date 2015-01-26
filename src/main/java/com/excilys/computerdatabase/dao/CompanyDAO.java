@@ -1,12 +1,11 @@
 package com.excilys.computerdatabase.dao;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 
-public interface CompanyDAOI {
+public interface CompanyDAO {
 
 	/**
 	 * Get the List of all the companies in the database
@@ -33,5 +32,5 @@ public interface CompanyDAOI {
 	 * @param id Id of the company to delete
 	 * @param connection Connection to the database to use
 	 */
-	void delete(long id, Connection connection);
+	void delete(long id);
 }

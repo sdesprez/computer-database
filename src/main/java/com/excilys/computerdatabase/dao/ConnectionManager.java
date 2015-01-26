@@ -24,6 +24,7 @@ public enum ConnectionManager {
 
 	private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 	private BoneCP connectionPool = null;
+	private ThreadLocal<Connection> connection;
 
 	/**
 	 * Constructor. Load the MySQL JDBC Driver
@@ -74,7 +75,30 @@ public enum ConnectionManager {
 			throw new PersistenceException(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * @return A transactional connection to the database
+	 */
+	public void startTransactionalConnection() {
+		try {
+			final Connection connection = connectionPool.getConnection();
+			connection.setAutoCommit(false);
+			this.connection = new ThreadLocal<Connection>();
+			this.connection.set(connection);
+		} catch (final SQLException e) {
+			logger.error("Couldn't connect to the database");
+			throw new PersistenceException(e.getMessage(), e);
+		}
+	}
 
+	public Connection getTransactionnalConnection() {
+		if (connection != null) {
+			return connection.get();
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * Close the connection
 	 * 
@@ -91,6 +115,11 @@ public enum ConnectionManager {
 		}
 	}
 
+	/**
+	 * Close the statement
+	 * 
+	 * @param connection
+	 */
 	public void close(final Statement statement) {
 		if (statement != null) {
 			try {
@@ -102,6 +131,11 @@ public enum ConnectionManager {
 		}
 	}
 
+	/**
+	 * Close the ResultSet
+	 * 
+	 * @param connection
+	 */
 	public void close(final ResultSet rs) {
 		if (rs != null) {
 			try {
@@ -113,12 +147,42 @@ public enum ConnectionManager {
 		}
 	}
 
+	/**
+	 * Rollback the connection
+	 * @param connection
+	 */
 	public void rollback(final Connection connection) {
 		if (connection != null) {
 			try {
 				connection.rollback();
 			} catch (final SQLException e) {
 				logger.warn("Couldn't Rollback the connection");
+				throw new PersistenceException(e.getMessage(), e);
+			}
+		}
+	}
+	
+	/**
+	 * Commit the connection
+	 * @param connection
+	 */
+	public void commit() {
+		if (connection != null) {
+			try {
+				connection.get().commit();
+			} catch (final SQLException e) {
+				logger.warn("Couldn't Commit the connection");
+				throw new PersistenceException(e.getMessage(), e);
+			}
+		}
+	}
+	
+	public void closeConnection() {
+		if (connection != null) {
+			try {
+				connection.get().close();
+			} catch (final SQLException e) {
+				logger.warn("Couldn't Commit the connection");
 				throw new PersistenceException(e.getMessage(), e);
 			}
 		}

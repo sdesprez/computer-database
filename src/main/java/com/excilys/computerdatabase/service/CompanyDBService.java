@@ -5,7 +5,7 @@ import java.util.List;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 
-public interface CompanyDBServiceI {
+public interface CompanyDBService {
 
 	/**
 	 * Get the List of all the companies in the database

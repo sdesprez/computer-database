@@ -2,18 +2,18 @@ package com.excilys.computerdatabase.service.mock;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.dao.CompanyDAOI;
-import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.CompanyDAO;
+import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.CompanyDBServiceI;
+import com.excilys.computerdatabase.service.CompanyDBService;
 
-public class CompanyDBServiceMock implements CompanyDBServiceI {
+public class CompanyDBServiceMock implements CompanyDBService {
 
-	private CompanyDAOI companyDAO;
-	private ComputerDAOI computerDAO;
+	private CompanyDAO companyDAO;
+	private ComputerDAO computerDAO;
 	
-	public CompanyDBServiceMock(final CompanyDAOI companyDAO, final ComputerDAOI computerDAO) {
+	public CompanyDBServiceMock(final CompanyDAO companyDAO, final ComputerDAO computerDAO) {
 		this.companyDAO = companyDAO;
 		this.computerDAO = computerDAO;
 	}
@@ -40,8 +40,8 @@ public class CompanyDBServiceMock implements CompanyDBServiceI {
 	
 	@Override
 	public void delete(final long id) {
-		computerDAO.deleteByCompanyId(id, null);
-		companyDAO.delete(id, null);
+		computerDAO.deleteByCompanyId(id);
+		companyDAO.delete(id);
 	}
 
 }

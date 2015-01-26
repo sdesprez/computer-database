@@ -3,17 +3,17 @@ package com.excilys.computerdatabase.service.impl;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.dao.ComputerDAOI;
-import com.excilys.computerdatabase.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.dao.ComputerDAO;
+import com.excilys.computerdatabase.dao.impl.ComputerDAOImpl;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.ComputerDBService;
 
 /**
  * Database Service for the Computer
  * Singleton
  */
-public enum ComputerDBService implements ComputerDBServiceI {
+public enum ComputerDBServiceImpl implements ComputerDBService {
 
 	/**
 	 * Instance of ComputerDBService
@@ -23,7 +23,7 @@ public enum ComputerDBService implements ComputerDBServiceI {
 	/**
 	 * Instance of the ComputerDAOI
 	 */
-	private ComputerDAOI computerDAO = ComputerDAO.INSTANCE;
+	private ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
 
 
 	/**

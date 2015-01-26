@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.service.CompanyDBServiceI;
-import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.CompanyDBService;
+import com.excilys.computerdatabase.service.ComputerDBService;
 import com.excilys.computerdatabase.service.ComputerHttpService;
-import com.excilys.computerdatabase.service.impl.CompanyDBService;
-import com.excilys.computerdatabase.service.impl.ComputerDBService;
+import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
+import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 @WebServlet("/edit-computer")
@@ -27,24 +27,28 @@ public class EditComputerController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
-	private CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;
+	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
+	private CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
 	private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
+	
+	private static final String ID = "id";
+	private static final String COMPUTER = "computer";
+	private static final String COMPANIES = "companies";
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
 		long id = 0;
-		final String idString = req.getParameter("id");
+		final String idString = req.getParameter(ID);
 		if (Validator.isPositiveLong(idString)) {
-			id = Long.valueOf(req.getParameter("id"));
+			id = Long.valueOf(idString);
 			
 			final Computer computer = computerDBService.getById(id);		
-			req.setAttribute("computer", computer);
+			req.setAttribute(COMPUTER, computer);
 		}
 		
 		final List<Company> companies = companyDBService.getAll();
-		req.setAttribute("companies", companies);
+		req.setAttribute(COMPANIES, companies);
 		
 		// Get the JSP dispatcher
 		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/editComputer.jsp");

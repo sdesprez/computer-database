@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.dao.impl.ComputerDAO;
+import com.excilys.computerdatabase.dao.impl.ComputerDAOImpl;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -23,14 +23,14 @@ import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 public class ComputerDAOTest {
 
-	ComputerDAOI computerDAO;
+	ComputerDAO computerDAO;
 	List<Computer> list;
 	Company apple = new Company(1L, "Apple Inc.");
 	Company thinking = new Company(2L, "Thinking Machines");
 	
 	@Before
 	public void init() throws SQLException {
-		computerDAO = ComputerDAO.INSTANCE;
+		computerDAO = ComputerDAOImpl.INSTANCE;
 		list = new ArrayList<Computer>();
 		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, apple));
 		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, apple));
@@ -238,11 +238,10 @@ public class ComputerDAOTest {
 	@Test
 	public void deleteByCompanyId() throws SQLException {
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
-		connection.setAutoCommit(false);
-		computerDAO.deleteByCompanyId(2L, connection);
-		connection.commit();
-		cm.close(connection);
+		cm.startTransactionalConnection();
+		computerDAO.deleteByCompanyId(2L);
+		cm.commit();
+		cm.closeConnection();
 		
 		assertTrue(computerDAO.getByCompanyId(2L).isEmpty());
 	}
@@ -250,11 +249,10 @@ public class ComputerDAOTest {
 	@Test
 	public void DeleteCompanyInvalid() throws SQLException {
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
-		connection.setAutoCommit(false);
-		computerDAO.deleteByCompanyId(-2L, connection);
-		connection.commit();
-		cm.close(connection);
+		cm.startTransactionalConnection();
+		computerDAO.deleteByCompanyId(-2L);
+		cm.commit();
+		cm.closeConnection();
 		
 		assertEquals(list, computerDAO.getAll());
 	}

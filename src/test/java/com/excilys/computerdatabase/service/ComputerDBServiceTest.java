@@ -22,7 +22,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -32,12 +32,12 @@ import com.excilys.computerdatabase.service.mock.ComputerDBServiceMock;
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDBServiceTest {
 
-	ComputerDBServiceI computerDBService;
+	ComputerDBService computerDBService;
 	Page<Computer> page;
 	Page<Computer> pageReturned;
 	Page<Computer> wrongPNumber;
 	Page<Computer> wrongRPP;
-	ComputerDAOI computerDAO;
+	ComputerDAO computerDAO;
 	List<Computer> list;
 	Company c1;
 	Company c2;
@@ -45,7 +45,7 @@ public class ComputerDBServiceTest {
 
 	@Before
 	public void init() {
-		computerDAO = mock(ComputerDAOI.class);
+		computerDAO = mock(ComputerDAO.class);
 
 		c1 = new Company(1L, "company 1");
 		c2 = new Company(2L, "company 2");

@@ -1,12 +1,11 @@
 package com.excilys.computerdatabase.dao;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 
-public interface ComputerDAOI {
+public interface ComputerDAO {
 
 	/**
 	 * Get the List of all the computers in the database
@@ -59,7 +58,7 @@ public interface ComputerDAOI {
 	 * @param id of the company
 	 * @param connection connection to the database to use
 	 */
-	void deleteByCompanyId(long id, Connection connection);
+	void deleteByCompanyId(long id);
 	
 	
 	/**

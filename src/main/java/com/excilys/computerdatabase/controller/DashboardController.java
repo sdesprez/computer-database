@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.ComputerDBServiceI;
-import com.excilys.computerdatabase.service.impl.ComputerDBService;
+import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 @WebServlet("/dashboard")
@@ -21,15 +21,20 @@ public class DashboardController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final String PAGE = "page";
+	private static final String NB_RESULTS = "nbResults";
+	private static final String SORT = "sort";
+	private static final String SEARCH = "search";
+	private static final String ORDER = "order";
 	
-	private ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
+	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {		
 		Page<Computer> page = new Page<Computer>();
 		
-		final String intString = req.getParameter("page");
+		final String intString = req.getParameter(PAGE);
 		int pageNumber = 0;
 		if (Validator.isPositiveInt(intString)) {
 			pageNumber = Integer.valueOf(intString);
@@ -40,7 +45,7 @@ public class DashboardController extends HttpServlet {
 			page.setPageNumber(pageNumber);
 		}
 		
-		final String nbResultsString = req.getParameter("nbResults");
+		final String nbResultsString = req.getParameter(NB_RESULTS);
 		int nbResults = 0;
 		if (Validator.isPositiveInt(nbResultsString)) {
 			nbResults = Integer.valueOf(nbResultsString);
@@ -51,14 +56,14 @@ public class DashboardController extends HttpServlet {
 			page.setNbResultsPerPage(nbResults);
 		}
 		
-		final String search = req.getParameter("search");
+		final String search = req.getParameter(SEARCH);
 		if (search == null) {
 			page.setSearch("");
 		} else {
 			page.setSearch(search.trim());
 		}
 		
-		final String sort = req.getParameter("sort");
+		final String sort = req.getParameter(SORT);
 		ColumnNames cName = ColumnNames.getInstance(sort);
 		
 		if (cName == null) {
@@ -66,14 +71,14 @@ public class DashboardController extends HttpServlet {
 		}
 		page.setSort(cName);
 		
-		final String order = req.getParameter("order");
+		final String order = req.getParameter(ORDER);
 		if (order != null && (order.compareToIgnoreCase("ASC") == 0 || order.compareToIgnoreCase("desc") == 0)) {
 			page.setOrder(order.toUpperCase());
 		}
 		
 		page = computerDBService.getPagedList(page);
 		
-		req.setAttribute("page", page);
+		req.setAttribute(PAGE, page);
 		
 		// Get the JSP dispatcher
 		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");

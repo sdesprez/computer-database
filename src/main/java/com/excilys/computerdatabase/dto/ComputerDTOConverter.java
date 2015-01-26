@@ -5,12 +5,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
+import com.excilys.computerdatabase.service.CompanyDBService;
+import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerDTOConverter {
 
+	private static CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
+	
 	/**
 	 * Create a Computer from a ComputerDTO
 	 * @param dto The ComputerDTO to be converted
@@ -32,7 +35,7 @@ public class ComputerDTOConverter {
 			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		if (dto.getCompany() != 0) {
-			builder.company(new Company(dto.getCompany(), dto.getCompanyName()));
+			builder.company(companyDBService.getById(dto.getCompany()));
 		}
 		return builder.build();
 	}
@@ -76,7 +79,6 @@ public class ComputerDTOConverter {
 		}		
 		if (computer.getCompany() != null) {
 			builder.company(computer.getCompany().getId());
-			builder.companyName(computer.getCompany().getName());
 		} else {
 			builder.company(0);
 		}

@@ -2,17 +2,17 @@ package com.excilys.computerdatabase.service.mock;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.dao.ComputerDAOI;
+import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.ComputerDBServiceI;
+import com.excilys.computerdatabase.service.ComputerDBService;
 
-public class ComputerDBServiceMock implements ComputerDBServiceI {
+public class ComputerDBServiceMock implements ComputerDBService {
 
-	private ComputerDAOI computerDAO;
+	private ComputerDAO computerDAO;
 	
 	
-	public ComputerDBServiceMock(final ComputerDAOI computerDAO) {
+	public ComputerDBServiceMock(final ComputerDAO computerDAO) {
 		this.computerDAO = computerDAO;
 	}
 	

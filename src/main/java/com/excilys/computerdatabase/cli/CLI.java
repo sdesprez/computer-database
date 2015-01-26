@@ -8,10 +8,10 @@ import java.util.Scanner;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.service.CompanyDBServiceI;
-import com.excilys.computerdatabase.service.ComputerDBServiceI;
-import com.excilys.computerdatabase.service.impl.CompanyDBService;
-import com.excilys.computerdatabase.service.impl.ComputerDBService;
+import com.excilys.computerdatabase.service.CompanyDBService;
+import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
+import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 /**
@@ -26,11 +26,11 @@ public class CLI {
 	/**
 	 * Instance of ComputerDBService for the access to the database
 	 */
-	private static ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
+	private static ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
 	/**
 	 * Instance of CompanyDBService for the access to the database
 	 */
-	private static CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;
+	private static CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
 
 	
 	/**

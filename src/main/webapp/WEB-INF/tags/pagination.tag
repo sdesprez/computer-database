@@ -29,7 +29,7 @@
 		<c:if test="${i <= pages}">
 			<c:choose>
 				<c:when test="${i == pageNumber}">
-				<li class="disabled"><span>${i}</span></li>
+				<li class="active"><span>${i}</span></li>
 				</c:when>
 				<c:otherwise>
 				<li><h:link target="${target}" page="${i}" limit="${limit}" search="${search}" sort="${sort}" order="${order}">${i}</h:link></li>

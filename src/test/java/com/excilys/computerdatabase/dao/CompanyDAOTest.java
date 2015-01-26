@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computerdatabase.dao.impl.CompanyDAO;
+import com.excilys.computerdatabase.dao.impl.CompanyDAOImpl;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -20,12 +20,12 @@ import com.excilys.computerdatabase.exceptions.PersistenceException;
 
 public class CompanyDAOTest {
 
-	CompanyDAOI companyDAO;
+	CompanyDAO companyDAO;
 	List<Company> list;
 	
 	@Before
 	public void init() throws SQLException {
-		companyDAO = CompanyDAO.INSTANCE;
+		companyDAO = CompanyDAOImpl.INSTANCE;
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
 		list.add(new Company(2L, "Thinking Machines"));
@@ -124,33 +124,31 @@ public class CompanyDAOTest {
 	 * Tests of the delete function
 	 */
 	@Test
-	public void delete() throws SQLException {
+	public void delete() {
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
-		connection.setAutoCommit(false);
-		companyDAO.delete(2L, connection);
-		connection.commit();
-		
+		cm.startTransactionalConnection();
+		companyDAO.delete(2L);
+		cm.commit();
+		cm.closeConnection();
 		assertNull(companyDAO.getById(2L));
 	}
 	
 	@Test
-	public void deleteInvalidId() throws SQLException {
+	public void deleteInvalidId() {
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
-		connection.setAutoCommit(false);
-		companyDAO.delete(-1L, connection);
-		connection.commit();
-		
+		cm.startTransactionalConnection();
+		companyDAO.delete(-1L);
+		cm.commit();
+		cm.closeConnection();
 		assertEquals(list, companyDAO.getAll());
 	}
 	
 	@Test(expected = PersistenceException.class)
-	public void deleteComputerLeft() throws SQLException {
+	public void deleteComputerLeft() {
 		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
-		connection.setAutoCommit(false);
-		companyDAO.delete(1L, connection);
-		connection.commit();
+		cm.startTransactionalConnection();
+		companyDAO.delete(1L);
+		cm.commit();
+		cm.closeConnection();
 	}
 }

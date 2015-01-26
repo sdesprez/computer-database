@@ -16,14 +16,14 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.service.impl.CompanyDBService;
-import com.excilys.computerdatabase.service.impl.ComputerDBService;
+import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
+import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerHttpService {
 
-	private static ComputerDBServiceI computerDBService = ComputerDBService.INSTANCE;
-	private static CompanyDBServiceI companyDBService = CompanyDBService.INSTANCE;	
+	private static ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
+	private static CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;	
 	
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	
