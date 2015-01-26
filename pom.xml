@@ -4,7 +4,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>Computer-Database</artifactId>
 	<packaging>war</packaging>
-	<version>0.2.20</version>
+	<version>0.2.22</version>
 	<name>Computer-Database</name>
 
 	<properties>
