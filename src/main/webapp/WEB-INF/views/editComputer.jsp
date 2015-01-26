@@ -46,11 +46,14 @@ pageEncoding="UTF-8"%>
                                 <select class="form-control" id="companyId" name="companyId">
                                     <option value="0">--</option>
                                    	<c:forEach items="${companies}" var="company">
-                                   	<c:if test="${company.id == computer.company.id}">
-                                   	<option value="${company.id}" selected="selected">${company.name}</option>
-                                   	</c:if>
-                                   	<c:if test="${company.id != computer.company.id}"></c:if>
-                                   	<option value="${company.id}"><c:out value="${company.name}"/></option>
+                                   	<c:choose>
+                                   		<c:when test="${company.id == computer.company.id}">
+                                   			<option value="${company.id}" selected="selected">${company.name}</option>
+                                 		</c:when>
+                                   		<c:otherwise>
+                                   			<option value="${company.id}"><c:out value="${company.name}"/></option>
+                                   		</c:otherwise>
+                                  	</c:choose>
                                    	</c:forEach>
                                 </select>
                                 <span class="error">${error.get("companyId")}</span>

@@ -1,7 +1,9 @@
 package com.excilys.computerdatabase.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,14 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
+import com.excilys.computerdatabase.dto.ComputerDTO;
+import com.excilys.computerdatabase.dto.ComputerDTOConverter;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.service.ComputerHttpService;
 import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
 import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
@@ -29,11 +29,15 @@ public class EditComputerController extends HttpServlet {
 	
 	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
 	private CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
-	private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 	
 	private static final String ID = "id";
 	private static final String COMPUTER = "computer";
 	private static final String COMPANIES = "companies";
+	private static final String COMPUTER_NAME = "computerName";
+	private static final String INTRODUCED_DATE = "introducedDate";
+	private static final String DISCONTINUED_DATE = "discontinuedDate";
+	private static final String COMPANY_ID = "companyId";
+	private static final String ERROR = "error";
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
@@ -59,13 +63,32 @@ public class EditComputerController extends HttpServlet {
 	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {		
-		final Computer computer = ComputerHttpService.update(req);
+		final Map<String, String> error = new HashMap<String, String>();
+		final ComputerDTO.Builder builder = ComputerDTO.builder().name(req.getParameter(COMPUTER_NAME))
+																.introduced(req.getParameter(INTRODUCED_DATE))
+																.discontinued(req.getParameter(DISCONTINUED_DATE));
 		
-		if (computer != null) {
-			computerDBService.update(computer);
-			logger.info(computer + " was updated");
+		if (Validator.isPositiveLong(req.getParameter(ID))) {
+			builder.id(Long.valueOf(req.getParameter(ID)));
+		} else {
+			error.put(ID, "Incorrect id : an id should be a long");
+		}
+		
+		if (Validator.isPositiveLong(req.getParameter(COMPANY_ID))) {
+			builder.company(Long.valueOf(req.getParameter(COMPANY_ID)));
+		} else {
+			error.put(COMPANY_ID, "Incorrect Company identifier");
+		}
+		
+		final ComputerDTO dto = builder.build();
+		
+		ComputerDTOConverter.validate(dto, error);
+		
+		if (error.isEmpty()) {
+			computerDBService.update(ComputerDTOConverter.fromDTO(dto));
 			resp.sendRedirect("dashboard");
 		} else {
+			req.setAttribute(ERROR, error);
 			doGet(req, resp);
 		}
 	}

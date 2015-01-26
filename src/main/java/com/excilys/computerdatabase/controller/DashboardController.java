@@ -26,6 +26,8 @@ public class DashboardController extends HttpServlet {
 	private static final String SORT = "sort";
 	private static final String SEARCH = "search";
 	private static final String ORDER = "order";
+	private static final String ASC = "ASC";
+	private static final String DESC = "DESC";
 	
 	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
 
@@ -72,7 +74,7 @@ public class DashboardController extends HttpServlet {
 		page.setSort(cName);
 		
 		final String order = req.getParameter(ORDER);
-		if (order != null && (order.compareToIgnoreCase("ASC") == 0 || order.compareToIgnoreCase("desc") == 0)) {
+		if (order != null && (order.compareToIgnoreCase(ASC) == 0 || order.compareToIgnoreCase(DESC) == 0)) {
 			page.setOrder(order.toUpperCase());
 		}
 		

@@ -186,6 +186,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			
 			//Execute the query
 			stmt.executeUpdate();
+			LOGGER.info(computer + " Added to database");
 		} catch (final SQLException e) {
 			LOGGER.error("SQLError in create() with " + computer);
 			throw new PersistenceException(e.getMessage(), e);
@@ -236,6 +237,7 @@ public enum ComputerDAOImpl implements ComputerDAO {
 			stmt.setLong(5, computer.getId());
 			//Execute the query
 			stmt.executeUpdate();
+			LOGGER.info(computer + " Updated in the database");
 		} catch (final SQLException e) {
 			LOGGER.error("SQLError in update() with " + computer);
 			throw new PersistenceException(e.getMessage(), e);

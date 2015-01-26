@@ -164,7 +164,6 @@ public enum ConnectionManager {
 	
 	/**
 	 * Commit the connection
-	 * @param connection
 	 */
 	public void commit() {
 		if (connection != null) {
@@ -181,6 +180,7 @@ public enum ConnectionManager {
 		if (connection != null) {
 			try {
 				connection.get().close();
+				connection.remove();
 			} catch (final SQLException e) {
 				logger.warn("Couldn't Commit the connection");
 				throw new PersistenceException(e.getMessage(), e);
