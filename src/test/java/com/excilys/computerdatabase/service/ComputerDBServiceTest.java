@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Matchers;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
@@ -27,16 +29,19 @@ import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.service.mock.ComputerDBServiceMock;
+import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerDBServiceTest {
 
-	ComputerDBService computerDBService;
+	@InjectMocks
+	ComputerDBServiceImpl computerDBService;
 	Page<Computer> page;
 	Page<Computer> pageReturned;
 	Page<Computer> wrongPNumber;
 	Page<Computer> wrongRPP;
+	
+	
 	ComputerDAO computerDAO;
 	List<Computer> list;
 	Company c1;
@@ -147,7 +152,8 @@ public class ComputerDBServiceTest {
 		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongPNumber);
 		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongRPP);
 
-		computerDBService = new ComputerDBServiceMock(computerDAO);
+
+		MockitoAnnotations.initMocks(this);
 	}
 
 	

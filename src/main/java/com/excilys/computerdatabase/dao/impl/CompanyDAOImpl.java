@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ConnectionManager;
@@ -22,14 +24,11 @@ import com.excilys.computerdatabase.mapper.impl.CompanyRowMapperImpl;
  * Data Access Object for the Computer
  * Singleton
  */
-public enum CompanyDAOImpl implements CompanyDAO {
+@Repository
+public class CompanyDAOImpl implements CompanyDAO {
 
-	/**
-	 * Instance of ComputerDAO
-	 */
-	INSTANCE;
-
-	private static final ConnectionManager CM = ConnectionManager.INSTANCE;
+	@Autowired
+	private ConnectionManager cm;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
@@ -48,7 +47,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get the connection
-			conn = CM.getConnection();
+			conn = cm.getConnection();
 			
 			//Create & execute the query
 			stmt = conn.createStatement();
@@ -59,10 +58,10 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			LOGGER.error("SQLError in getAll()");
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
-			CM.close(results);
-			CM.close(stmt);
+			cm.close(results);
+			cm.close(stmt);
 			//Close the connection
-			CM.close(conn);
+			cm.close(conn);
 		}
 	}
 
@@ -77,7 +76,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = CM.getConnection();
+			conn = cm.getConnection();
 			
 			//Create & execute the query
 			stmt = conn.createStatement();
@@ -91,10 +90,10 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			LOGGER.error("SQLError in getById() with id = " + id);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
-			CM.close(results);
-			CM.close(stmt);
+			cm.close(results);
+			cm.close(stmt);
 			//Close the connection
-			CM.close(conn);
+			cm.close(conn);
 		}
 	}
 	
@@ -113,7 +112,7 @@ public enum CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = CM.getConnection();
+			conn = cm.getConnection();
 			
 			//Create & execute the counting query
 			countStmt = conn.createStatement();
@@ -138,12 +137,12 @@ public enum CompanyDAOImpl implements CompanyDAO {
 			LOGGER.error("SQLError in getCompany() with " + page);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
-			CM.close(countResult);
-			CM.close(results);
-			CM.close(countStmt);
-			CM.close(stmt);
+			cm.close(countResult);
+			cm.close(results);
+			cm.close(countStmt);
+			cm.close(stmt);
 			//Close the connection
-			CM.close(conn);
+			cm.close(conn);
 		}
 	}
 
@@ -154,17 +153,17 @@ public enum CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public void delete(final long id) {
 		PreparedStatement statement = null;
-		final Connection connection = CM.getTransactionnalConnection();
+		final Connection connection = cm.getTransactionnalConnection();
 		try {
 			statement = connection.prepareStatement(DELETE_QUERY);
 			statement.setLong(1, id);
 			statement.executeUpdate();
 		} catch (final SQLException e) {
 			LOGGER.error("SQLError while deleting Company with id=" + id);
-			CM.rollback(connection);
+			cm.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
-			CM.close(statement);
+			cm.close(statement);
 		}
 	}
 }

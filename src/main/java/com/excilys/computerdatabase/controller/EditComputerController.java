@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerDTOConverter;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
-import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 @WebServlet("/edit-computer")
@@ -27,8 +28,10 @@ public class EditComputerController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
-	private CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
+	@Autowired
+	private ComputerDBService computerDBService;
+	@Autowired
+	private CompanyDBService companyDBService;
 	
 	private static final String ID = "id";
 	private static final String COMPUTER = "computer";
@@ -39,6 +42,12 @@ public class EditComputerController extends HttpServlet {
 	private static final String COMPANY_ID = "companyId";
 	private static final String ERROR = "error";
 
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
+	
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -85,7 +94,7 @@ public class EditComputerController extends HttpServlet {
 		ComputerDTOConverter.validate(dto, error);
 		
 		if (error.isEmpty()) {
-			computerDBService.update(ComputerDTOConverter.fromDTO(dto));
+			computerDBService.update(ComputerDTOConverter.fromDTO(dto, companyDBService));
 			resp.sendRedirect("dashboard");
 		} else {
 			req.setAttribute(ERROR, error);

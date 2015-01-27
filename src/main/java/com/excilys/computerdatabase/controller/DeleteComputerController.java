@@ -14,21 +14,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 
 @WebServlet("/delete")
 public class DeleteComputerController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private static ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
+	@Autowired
+	private ComputerDBService computerDBService;
 	
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerController.class);
 	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)

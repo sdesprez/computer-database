@@ -14,23 +14,33 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
+import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.service.mock.CompanyDBServiceMock;
+import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyDBServiceTest {
 
-	CompanyDBService companyDBService;
+	@InjectMocks
+	CompanyDBServiceImpl companyDBService;
+	
+
+	CompanyDAO companyDAO;
+	ComputerDAO computerDAO;
+	ConnectionManager cm;
+	
 	Page<Company> page;
 	Page<Company> pageReturned;
 	Page<Company> wrongPNumber;
@@ -42,8 +52,9 @@ public class CompanyDBServiceTest {
 	
 	@Before
 	public void init() {
-		final CompanyDAO companyDAO = mock(CompanyDAO.class);
-		final ComputerDAO computerDAO = mock(ComputerDAO.class);
+		companyDAO = mock(CompanyDAO.class);
+		computerDAO = mock(ComputerDAO.class);
+		cm = mock(ConnectionManager.class);
 		
 		companyList = new ArrayList<Company>();
 		c1 = new Company(1L, "company 1");
@@ -94,7 +105,8 @@ public class CompanyDBServiceTest {
 			}
 		}).when(computerDAO).deleteByCompanyId(anyLong());
 		
-		companyDBService = new CompanyDBServiceMock(companyDAO, computerDAO);
+		//companyDBService = new CompanyDBServiceMock(companyDAO, computerDAO);
+		MockitoAnnotations.initMocks(this);
 	}
 	
 	

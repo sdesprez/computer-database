@@ -8,12 +8,9 @@ import java.util.stream.Collectors;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.service.CompanyDBService;
-import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 public class ComputerDTOConverter {
-
-	private static CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
 	
 	private static final String ID = "id";
 	private static final String NAME = "name";
@@ -28,7 +25,7 @@ public class ComputerDTOConverter {
 	 * @param dto The ComputerDTO to be converted
 	 * @return A Computer corresponding to the ComputerDTO or null if the ComputerDTO wasn't valid
 	 */
-	public static Computer fromDTO(final ComputerDTO dto) {
+	public static Computer fromDTO(final ComputerDTO dto, final CompanyDBService companyDBService) {
 		final Computer.Builder builder = Computer.builder();
 		builder.id(dto.getId())
 				.name(dto.getName());
@@ -51,9 +48,9 @@ public class ComputerDTOConverter {
 	 * @param dto The List of ComputerDTO to be converted
 	 * @return The List of Computer corresponding to the List of ComputerDTO who are valid or an empty List if none were valid
 	 */
-	public static List<Computer> fromDTO(final List<ComputerDTO> dtos) {
+	public static List<Computer> fromDTO(final List<ComputerDTO> dtos, final CompanyDBService companyDBService) {
 		final List<Computer> computers = dtos.stream().map(dto -> {
-			final Computer computer = ComputerDTOConverter.fromDTO(dto);
+			final Computer computer = ComputerDTOConverter.fromDTO(dto, companyDBService);
 			if (computer != null) {
 				return computer;
 			}

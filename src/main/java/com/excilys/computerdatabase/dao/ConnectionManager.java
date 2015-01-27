@@ -1,15 +1,16 @@
 package com.excilys.computerdatabase.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.jolbox.bonecp.BoneCP;
@@ -18,45 +19,56 @@ import com.jolbox.bonecp.BoneCPConfig;
 /**
  * Manage the connection to the MySQL database
  */
-public enum ConnectionManager {
-
-	INSTANCE;
+@Component
+public class ConnectionManager {
 
 	private Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 	private BoneCP connectionPool = null;
 	private ThreadLocal<Connection> connection;
-
+	
+	@Value("${DB_DRIVER_CLASS}")
+	private String driverClass;
+	
+	@Value("${DB_URL}")
+	private String url;
+	
+	@Value("${DB_USERNAME}")
+	private String username;
+	
+	@Value("${DB_PASSWORD}")
+	private String password;
+	
+	@Value("${DB_MIN_CONNECTION_PER_PART}")
+	private int minConnection;
+	
+	@Value("${DB_MAX_CONNECTION_PER_PART}")
+	private int maxConnection;
+	
+	@Value("${DB_PARTITION_COUNT}")
+	private int nbPartition;
+	
 	/**
-	 * Constructor. Load the MySQL JDBC Driver
+	 * Create the BoneCP with data from the database.properties file after it was created by Spring
 	 */
-	private ConnectionManager() {
-		final Properties properties = new Properties();
-		InputStream input = null;
+	@PostConstruct
+	public void init() {
 		try {
-			// Get the database.properties file
-			input = ConnectionManager.class.getClassLoader()
-					.getResourceAsStream("database.properties");
-			properties.load(input);
-
 			final BoneCPConfig config = new BoneCPConfig();
 
 			// Load the Driver class
-			Class.forName(properties.getProperty("DB_DRIVER_CLASS"));
+			Class.forName(driverClass);
 
 			//Configure the Pool
-			config.setJdbcUrl(properties.getProperty("DB_URL"));
-			config.setUser(properties.getProperty("DB_USERNAME"));
-			config.setPassword(properties.getProperty("DB_PASSWORD"));
-			config.setMinConnectionsPerPartition(Integer.valueOf(properties.getProperty("DB_MIN_CONNECTION_PER_PART").trim()));
-			config.setMaxConnectionsPerPartition(Integer.valueOf(properties.getProperty("DB_MAX_CONNECTION_PER_PART").trim()));
-			config.setPartitionCount(Integer.valueOf(properties.getProperty("DB_PARTITION_COUNT").trim()));
+			config.setJdbcUrl(url);
+			config.setUser(username);
+			config.setPassword(password);
+			config.setMinConnectionsPerPartition(minConnection);
+			config.setMaxConnectionsPerPartition(maxConnection);
+			config.setPartitionCount(nbPartition);
 
 			connectionPool = new BoneCP(config);
 		} catch (final SQLException e) {
 			logger.error("Error while creating the connection pool");
-			throw new PersistenceException(e.getMessage(), e);
-		} catch (final IOException e) {
-			logger.error("Couldn't load the database.properties file");
 			throw new PersistenceException(e.getMessage(), e);
 		} catch (final ClassNotFoundException e) {
 			logger.error("MySQL JDBC driver not found");

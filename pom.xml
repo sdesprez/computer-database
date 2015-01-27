@@ -4,13 +4,14 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>Computer-Database</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.1</version>
+	<version>0.3.2</version>
 	<name>Computer-Database</name>
 
 	<properties>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
 		<jstl.version>1.2</jstl.version>
 		<jsp-api.version>2.3.1</jsp-api.version>
+		<spring.version>4.1.4.RELEASE</spring.version>
 		<mysql.version>5.1.34</mysql.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		<slf4j.version>1.7.10</slf4j.version>
@@ -22,6 +23,19 @@
 		<maven-war.version>2.6</maven-war.version>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- Ensure that all spring dependencies have the same version and allow 
+				to omit to write there version -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -37,12 +51,34 @@
 			<version>${jsp-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
 		</dependency>
 
 
@@ -70,7 +106,14 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-		
+
+		<!-- Link to use slf4j instead of jcl in Spring -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>

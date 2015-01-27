@@ -3,8 +3,10 @@ package com.excilys.computerdatabase.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerdatabase.dao.ComputerDAO;
-import com.excilys.computerdatabase.dao.impl.ComputerDAOImpl;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBService;
@@ -13,17 +15,15 @@ import com.excilys.computerdatabase.service.ComputerDBService;
  * Database Service for the Computer
  * Singleton
  */
-public enum ComputerDBServiceImpl implements ComputerDBService {
+@Service
+public class ComputerDBServiceImpl implements ComputerDBService {
 
-	/**
-	 * Instance of ComputerDBService
-	 */
-	INSTANCE;
 
 	/**
 	 * Instance of the ComputerDAOI
 	 */
-	private ComputerDAO computerDAO = ComputerDAOImpl.INSTANCE;
+	@Autowired
+	private ComputerDAO computerDAO;
 
 
 	/**

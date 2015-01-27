@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 @WebServlet("/dashboard")
@@ -29,7 +31,14 @@ public class DashboardController extends HttpServlet {
 	private static final String ASC = "ASC";
 	private static final String DESC = "DESC";
 	
-	private ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
+	@Autowired
+	private ComputerDBService computerDBService;
+	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
