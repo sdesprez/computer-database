@@ -5,13 +5,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
-import com.excilys.computerdatabase.service.impl.ComputerDBServiceImpl;
 import com.excilys.computerdatabase.utils.Validator;
 
 /**
@@ -26,12 +26,21 @@ public class CLI {
 	/**
 	 * Instance of ComputerDBService for the access to the database
 	 */
-	private static ComputerDBService computerDBService = ComputerDBServiceImpl.INSTANCE;
+
+	private ComputerDBService computerDBService;
 	/**
 	 * Instance of CompanyDBService for the access to the database
 	 */
-	private static CompanyDBService companyDBService = CompanyDBServiceImpl.INSTANCE;
 
+	private CompanyDBService companyDBService;
+
+	public CLI() {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+		computerDBService = (ComputerDBService) context.getBean("computerDBServiceImpl");
+		companyDBService = (CompanyDBService) context.getBean("companyDBServiceImpl");
+		context.close();
+	}
+	
 	
 	/**
 	 * Main menu of the CLI
