@@ -1,25 +1,24 @@
-package com.excilys.computerdatabase.mapper.impl;
+package com.excilys.computerdatabase.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.mapper.RowMapper;
 
-public class ComputerRowMapperImpl implements RowMapper<Computer> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerRowMapperImpl.class);
+public class ComputerRowMapper implements RowMapper<Computer> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerRowMapper.class);
 	
 	@Override
-	public Computer mapRow(final ResultSet rs) {
+	public Computer mapRow(final ResultSet rs, final int rowNum) {
 		if (rs == null) {
 			return null;
 		}
@@ -44,22 +43,4 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
 			throw new PersistenceException(e.getMessage(), e);
 		}
 	}
-
-	@Override
-	public List<Computer> mapRowList(final ResultSet rs) {
-		if (rs == null) {
-			return null;
-		}
-		try {
-			final List<Computer> computers = new ArrayList<Computer>();
-			while (rs.next()) {
-				computers.add(mapRow(rs));
-			}
-			return computers;
-		} catch (final SQLException e) {
-			LOGGER.error("SQLException while mapping a list of computers");
-			throw new PersistenceException(e.getMessage(), e);
-		}
-	}
-
 }

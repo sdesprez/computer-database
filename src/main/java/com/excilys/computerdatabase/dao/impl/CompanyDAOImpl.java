@@ -1,10 +1,5 @@
 package com.excilys.computerdatabase.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -12,7 +7,8 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
@@ -20,12 +16,10 @@ import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.mapper.RowMapper;
-import com.excilys.computerdatabase.mapper.impl.CompanyRowMapperImpl;
+import com.excilys.computerdatabase.mapper.CompanyRowMapper;
 
 /**
  * Data Access Object for the Computer
- * Singleton
  */
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
@@ -39,37 +33,26 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
+	private static final String SELECT_BY_ID = SELECT_QUERY + " WHERE company.id=?;";
 	private static final String COUNT_QUERY = "SELECT COUNT(id) AS total FROM company";
 	private static final String DELETE_QUERY = "DELETE company FROM company WHERE id = ?";
-	private RowMapper<Company> companyMapper = new CompanyRowMapperImpl();
+	private RowMapper<Company> companyMapper = new CompanyRowMapper();
 
-
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+    public void setDataSource(final DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+	
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Company> getAll() {
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet results = null;
-		try {
-			//Get the connection
-			conn = DataSourceUtils.getConnection(dataSource);
-			
-			//Create & execute the query
-			stmt = conn.createStatement();
-			results = stmt.executeQuery(SELECT_QUERY);
-			//Create companies with the results
-			return companyMapper.mapRowList(results);
-		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getAll()");
-			throw new PersistenceException(e.getMessage(), e);
-		} finally {
-			cm.close(results);
-			cm.close(stmt);
-			//Close the connection
-			cm.close(conn);
-		}
+		return jdbcTemplate.query(SELECT_QUERY, companyMapper);
 	}
 
 	/**
@@ -77,30 +60,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 	 */
 	@Override
 	public Company getById(final long id) {
-		Connection conn = null;
-		Company company = null;
-		Statement stmt = null;
-		ResultSet results = null;
-		try {
-			//Get a connection to the database
-			conn = DataSourceUtils.getConnection(dataSource);
-			
-			//Create & execute the query
-			stmt = conn.createStatement();
-			results = stmt.executeQuery(SELECT_QUERY + " WHERE company.id=" + id + ";");
-			//Create a company if there is a result
-			if (results.next()) {
-				company = companyMapper.mapRow(results);
-			}
-			return company;
-		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getById() with id = {}", id);
-			throw new PersistenceException(e.getMessage(), e);
-		} finally {
-			cm.close(results);
-			cm.close(stmt);
-			//Close the connection
-			cm.close(conn);
+		final List<Company> companies = jdbcTemplate.query(SELECT_BY_ID, new Long[]{id} , companyMapper);
+		if (companies.size() == 1) {
+			return companies.get(0);
+		} else if (companies.size() == 0) {
+			return null;
+		} else {
+			LOGGER.error("There was more than 1 company with id={} in the database", id);
+			throw new PersistenceException("There was more than 1 company with id=" + id + " in the database");
 		}
 	}
 	
@@ -112,45 +79,27 @@ public class CompanyDAOImpl implements CompanyDAO {
 		if (page == null) {
 			return null;
 		}
-		Connection conn = null;
-		Statement countStmt = null;
-		PreparedStatement stmt = null;
-		ResultSet countResult = null;
-		ResultSet results = null;
-		try {
-			//Get a connection to the database
-			conn = DataSourceUtils.getConnection(dataSource);
-			
-			//Create & execute the counting query
-			countStmt = conn.createStatement();
-			countResult = countStmt.executeQuery(COUNT_QUERY);
-			//Set the number of results of the page with the result
-			countResult.next();
-			page.setNbResults(countResult.getInt("total"));
-			
-			page.refreshNbPages();
-			
-			//Create the SELECT query
-			stmt = conn.prepareStatement(SELECT_QUERY + " LIMIT ? OFFSET ?;");
-			stmt.setInt(1, page.getNbResultsPerPage());
-			stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
-			//Execute the SELECT query
-			results = stmt.executeQuery();
-			//Create the computers with the results
-			page.setList(companyMapper.mapRowList(results));
-			return page;
-			
-		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getCompany() with {}", page);
-			throw new PersistenceException(e.getMessage(), e);
-		} finally {
-			cm.close(countResult);
-			cm.close(results);
-			cm.close(countStmt);
-			cm.close(stmt);
-			//Close the connection
-			cm.close(conn);
-		}
+		
+		final String search = "%" + page.getSearch() + "%";
+		
+		page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, new String[]{search, search}, Integer.class));
+		page.refreshNbPages();
+
+		//Create the SELECT query
+		final String query = new StringBuilder(SELECT_QUERY).append(" WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY ")
+				.append(page.getSort())
+				.append(" ").append(page.getOrder())
+				.append(" LIMIT ? OFFSET ?;").toString();
+		
+		final Object[] args = new Object[] {
+				search,
+				search,
+				page.getNbResultsPerPage(),
+				(page.getPageNumber() - 1) * page.getNbResultsPerPage()
+		};
+		
+		page.setList(jdbcTemplate.query(query, args, companyMapper));
+		return page;
 	}
 
 	
@@ -159,18 +108,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 	 */
 	@Override
 	public void delete(final long id) {
-		PreparedStatement statement = null;
-		final Connection connection = DataSourceUtils.getConnection(dataSource);
-		try {
-			statement = connection.prepareStatement(DELETE_QUERY);
-			statement.setLong(1, id);
-			statement.executeUpdate();
-		} catch (final SQLException e) {
-			LOGGER.error("SQLError while deleting Company with id={}", id);
-			cm.rollback(connection);
-			throw new PersistenceException(e.getMessage(), e);
-		} finally {
-			cm.close(statement);
-		}
+		jdbcTemplate.update(DELETE_QUERY, id);
 	}
 }

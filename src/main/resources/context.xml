@@ -20,10 +20,13 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="${DB_DRIVER_CLASS}"></property>
-		<property name="url" value="${DB_URL}"></property>
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+		<property name="driverClass" value="${DB_DRIVER_CLASS}"></property>
+		<property name="jdbcUrl" value="${DB_URL}"></property>
 		<property name="username" value="${DB_USERNAME}"></property>
 		<property name="password" value="${DB_PASSWORD}"></property>
+		<property name="maxConnectionsPerPartition" value="${DB_MAX_CONNECTION_PER_PART}"/>
+   		<property name="minConnectionsPerPartition" value="${DB_MIN_CONNECTION_PER_PART}"/>
+   		<property name="partitionCount" value="${DB_PARTITION_COUNT}"/>
 	</bean>
 </beans>

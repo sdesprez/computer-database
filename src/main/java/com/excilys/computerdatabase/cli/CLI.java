@@ -338,7 +338,7 @@ public class CLI {
 		//Get the input
 		String name = sc.nextLine();
 		//Ask a new input while the name is empty or null
-		while (Validator.isName(name)) {
+		while (!Validator.isName(name)) {
 			System.out.println("Computer name can't be empty or spaces only");
 			System.out.println("Enter computer name");
 			name = sc.nextLine();
@@ -355,10 +355,16 @@ public class CLI {
 	private LocalDate inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
+		if (date == null || date.trim().isEmpty()) {
+			return null;
+		}
 		while (!Validator.isDate(date)) {
 			System.out.println("Incorrect date format");
 			System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
 			date = sc.nextLine();
+			if (date == null || date.trim().isEmpty()) {
+				return null;
+			}
 		}
 		return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
 	}
