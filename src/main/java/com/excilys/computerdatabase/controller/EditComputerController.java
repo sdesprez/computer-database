@@ -1,19 +1,15 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
@@ -23,10 +19,9 @@ import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
 import com.excilys.computerdatabase.utils.Validator;
 
-@WebServlet("/edit-computer")
-public class EditComputerController extends HttpServlet {
+@Controller
+public class EditComputerController {
 
-	private static final long serialVersionUID = 1L;
 	
 	@Autowired
 	private ComputerDBService computerDBService;
@@ -42,15 +37,9 @@ public class EditComputerController extends HttpServlet {
 	private static final String COMPANY_ID = "companyId";
 	private static final String ERROR = "error";
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
 	
-	@Override
-	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {
+	@RequestMapping(value = "/edit-computer", method = RequestMethod.GET)
+	protected String doGet(final HttpServletRequest req) {
 		long id = 0;
 		final String idString = req.getParameter(ID);
 		if (Validator.isPositiveLong(idString)) {
@@ -63,15 +52,11 @@ public class EditComputerController extends HttpServlet {
 		final List<Company> companies = companyDBService.getAll();
 		req.setAttribute(COMPANIES, companies);
 		
-		// Get the JSP dispatcher
-		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/editComputer.jsp");
-		// Forward the request
-		dispatcher.forward(req, resp);
+		return "editComputer";
 	}
 
-	@Override
-	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {		
+	@RequestMapping(value = "/edit-computer", method = RequestMethod.POST)
+	protected String doPost(final HttpServletRequest req) {		
 		final Map<String, String> error = new HashMap<String, String>();
 		final ComputerDTO.Builder builder = ComputerDTO.builder().name(req.getParameter(COMPUTER_NAME))
 																.introduced(req.getParameter(INTRODUCED_DATE))
@@ -95,10 +80,10 @@ public class EditComputerController extends HttpServlet {
 		
 		if (error.isEmpty()) {
 			computerDBService.update(ComputerDTOConverter.fromDTO(dto, companyDBService));
-			resp.sendRedirect("dashboard");
+			return "redirect:/dashboard";
 		} else {
 			req.setAttribute(ERROR, error);
-			doGet(req, resp);
+			return "editComputer";
 		}
 	}
 	

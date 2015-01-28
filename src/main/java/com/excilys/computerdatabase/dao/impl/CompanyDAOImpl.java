@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
-import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -23,9 +22,6 @@ import com.excilys.computerdatabase.mapper.CompanyRowMapper;
  */
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
-
-	@Autowired
-	private ConnectionManager cm;
 	
 	@Autowired
 	private DataSource dataSource;

@@ -1,28 +1,22 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerdatabase.service.ComputerDBService;
 
-@WebServlet("/delete")
-public class DeleteComputerController extends HttpServlet {
-
-	private static final long serialVersionUID = 1L;
+@Controller
+public class DeleteComputerController {
 
 	@Autowired
 	private ComputerDBService computerDBService;
@@ -31,19 +25,8 @@ public class DeleteComputerController extends HttpServlet {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerController.class);
 	
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-	
-	@Override
-	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {
-
-		//Get the String containing the Ids of the computers to delete
-		final String selection = req.getParameter("selection");
-		
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	protected String doPost(@RequestParam("selection") final String selection) {
 		//Create a matcher to find the positives longs in the String
 		final Matcher m = PATTERN.matcher(selection);
 		
@@ -55,8 +38,7 @@ public class DeleteComputerController extends HttpServlet {
 		computerDBService.delete(list);
 		LOGGER.info("Deletion of Computer with ids ={}", list);
 		
-		
-		resp.sendRedirect("dashboard");
+		return "redirect:/dashboard";
 	}
 
 	

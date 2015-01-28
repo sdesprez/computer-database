@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
-import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBService;
@@ -29,9 +28,6 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 
 	@Autowired
 	private ComputerDAO computerDAO;
-	
-	@Autowired
-	private ConnectionManager cm;
 	
 
 	/**

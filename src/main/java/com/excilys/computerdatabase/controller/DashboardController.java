@@ -1,16 +1,11 @@
 package com.excilys.computerdatabase.controller;
 
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
@@ -18,10 +13,9 @@ import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBService;
 import com.excilys.computerdatabase.utils.Validator;
 
-@WebServlet("/dashboard")
-public class DashboardController extends HttpServlet {
+@Controller
+public class DashboardController {
 
-	private static final long serialVersionUID = 1L;
 	
 	private static final String PAGE = "page";
 	private static final String NB_RESULTS = "nbResults";
@@ -34,15 +28,9 @@ public class DashboardController extends HttpServlet {
 	@Autowired
 	private ComputerDBService computerDBService;
 	
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
 
-	@Override
-	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-			throws ServletException, IOException {		
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	protected String doGet(final HttpServletRequest req) {		
 		Page<Computer> page = new Page<Computer>();
 		
 		final String intString = req.getParameter(PAGE);
@@ -91,10 +79,7 @@ public class DashboardController extends HttpServlet {
 		
 		req.setAttribute(PAGE, page);
 		
-		// Get the JSP dispatcher
-		final RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
-		// Forward the request
-		dispatcher.forward(req, resp);
+		return "dashboard";
 	}
 
 	

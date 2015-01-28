@@ -15,7 +15,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.ComputerDAO;
-import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -27,9 +26,6 @@ import com.excilys.computerdatabase.mapper.ComputerRowMapper;
  */
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
-
-	@Autowired
-	private ConnectionManager cm;
 	
 	@Autowired
 	private DataSource dataSource;
