@@ -53,7 +53,7 @@ public class DeleteComputerController extends HttpServlet {
 			list.add(Long.valueOf(m.group()));
 		}
 		computerDBService.delete(list);
-		LOGGER.info("Deletion of Computer with ids =" + list);
+		LOGGER.info("Deletion of Computer with ids ={}", list);
 		
 		
 		resp.sendRedirect("dashboard");

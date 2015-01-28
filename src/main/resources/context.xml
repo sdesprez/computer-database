@@ -13,4 +13,17 @@
 	<context:property-placeholder location="classpath:database.properties" />
 
 	<context:annotation-config />
+	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${DB_DRIVER_CLASS}"></property>
+		<property name="url" value="${DB_URL}"></property>
+		<property name="username" value="${DB_USERNAME}"></property>
+		<property name="password" value="${DB_PASSWORD}"></property>
+	</bean>
 </beans>

@@ -35,7 +35,7 @@ public class CLI {
 	private CompanyDBService companyDBService;
 
 	public CLI() {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+		final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 		computerDBService = (ComputerDBService) context.getBean("computerDBServiceImpl");
 		companyDBService = (CompanyDBService) context.getBean("companyDBServiceImpl");
 		context.close();

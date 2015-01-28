@@ -9,9 +9,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.ComputerDAO;
@@ -32,6 +35,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Autowired
 	private ConnectionManager cm;
+	
+	@Autowired
+	private DataSource dataSource;
 	
 	/**
 	 * Base Query for all the Select queries
@@ -61,7 +67,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Query the database to get all the computers
 			
@@ -91,7 +97,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		ResultSet results = null;
 		try {
 			//Get the connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Query the database
 			final String query = SELECT_QUERY + " WHERE c.id=" + id;
@@ -104,7 +110,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			}
 			return computer;
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getById() with id = " + id);
+			LOGGER.error("SQLError in getById() with id ={}", id);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(results);
@@ -124,7 +130,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create the query to get the computers of a Company
 			final String query = SELECT_QUERY + " WHERE company_id =" + id;
@@ -136,7 +142,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			//Create computers with the result
 			return computerMapper.mapRowList(results);
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getByCompanyId() with company_id = " + id);
+			LOGGER.error("SQLError in getByCompanyId() with company_id ={}", id);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(results);
@@ -159,7 +165,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		final Company company = computer.getCompany();
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create the query
 			stmt = conn.prepareStatement(INSERT_QUERY);
@@ -185,9 +191,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			
 			//Execute the query
 			stmt.executeUpdate();
-			LOGGER.info(computer + " Added to database");
+			LOGGER.info("{} Added to database", computer);
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in create() with " + computer);
+			LOGGER.error("SQLError in create() with {}", computer);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(stmt);
@@ -209,7 +215,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		final Company company = computer.getCompany();
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create the query
 			stmt = conn.prepareStatement(UPDATE_QUERY);
@@ -236,9 +242,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			stmt.setLong(5, computer.getId());
 			//Execute the query
 			stmt.executeUpdate();
-			LOGGER.info(computer + " Updated in the database");
+			LOGGER.info("{} Updated in the database", computer);
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in update() with " + computer);
+			LOGGER.error("SQLError in update() with {}", computer);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(stmt);
@@ -256,7 +262,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement stmt = null;
 		try {
 			//Get a connection
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create the query
 			stmt = conn.prepareStatement(DELETE_QUERY);
@@ -266,7 +272,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			stmt.executeUpdate();
 			
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in delete() with id = " + id);
+			LOGGER.error("SQLError in delete() with id ={}", id);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(stmt);
@@ -284,7 +290,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		PreparedStatement stmt = null;
 		try {
 			//Get a connection
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			for (long id : list) {
 				//Create the query
@@ -295,7 +301,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 				stmt.executeUpdate();
 			}
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in delete() with id List = " + list);
+			LOGGER.error("SQLError in delete() with id List = {}", list);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			//Close the Statement and the connection
@@ -320,10 +326,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		final String search = "%" + page.getSearch() + "%";
 		try {
 			//Get a connection
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Execute the counting query
-			
 			countStmt = conn.prepareStatement(COUNT_QUERY);
 			countStmt.setString(1, search);
 			countStmt.setString(2, search);
@@ -350,7 +355,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			return page;
 			
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getCompany() with " + page);
+			LOGGER.error("SQLError in getCompany() with {}", page);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(countResult);
@@ -367,13 +372,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public void deleteByCompanyId(final long id) {
 		PreparedStatement statement = null;
-		final Connection connection = cm.getTransactionnalConnection();
+		final Connection connection = DataSourceUtils.getConnection(dataSource);
 		try {
 			statement = connection.prepareStatement(DELETE_COMPANY_QUERY);
 			statement.setLong(1, id);
 			statement.executeUpdate();
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError while deleting Computers of Company " + id);
+			LOGGER.error("SQLError while deleting Computers of Company {}", id);
 			cm.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {

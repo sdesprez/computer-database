@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
@@ -61,19 +62,11 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void delete(final long id) {
-		try {
-			//Get a transactional connection
-			cm.startTransactionalConnection();
-			
-			//Delete the Computers of the Company
-			computerDAO.deleteByCompanyId(id);
-			//Delete the Company
-			companyDAO.delete(id);
-			//Commit the transaction
-			cm.commit();
-		} finally {
-			cm.closeConnection();
-		}
+		//Delete the Computers of the Company
+		computerDAO.deleteByCompanyId(id);
+		//Delete the Company
+		companyDAO.delete(id);
 	}
 }

@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
@@ -29,6 +32,10 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Autowired
 	private ConnectionManager cm;
+	
+	@Autowired
+	private DataSource dataSource;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
@@ -47,7 +54,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get the connection
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create & execute the query
 			stmt = conn.createStatement();
@@ -76,7 +83,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create & execute the query
 			stmt = conn.createStatement();
@@ -87,7 +94,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			}
 			return company;
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getById() with id = " + id);
+			LOGGER.error("SQLError in getById() with id = {}", id);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(results);
@@ -112,7 +119,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		ResultSet results = null;
 		try {
 			//Get a connection to the database
-			conn = cm.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			//Create & execute the counting query
 			countStmt = conn.createStatement();
@@ -134,7 +141,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			return page;
 			
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError in getCompany() with " + page);
+			LOGGER.error("SQLError in getCompany() with {}", page);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
 			cm.close(countResult);
@@ -153,13 +160,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public void delete(final long id) {
 		PreparedStatement statement = null;
-		final Connection connection = cm.getTransactionnalConnection();
+		final Connection connection = DataSourceUtils.getConnection(dataSource);
 		try {
 			statement = connection.prepareStatement(DELETE_QUERY);
 			statement.setLong(1, id);
 			statement.executeUpdate();
 		} catch (final SQLException e) {
-			LOGGER.error("SQLError while deleting Company with id=" + id);
+			LOGGER.error("SQLError while deleting Company with id={}", id);
 			cm.rollback(connection);
 			throw new PersistenceException(e.getMessage(), e);
 		} finally {
