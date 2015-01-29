@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
-	<artifactId>Computer-Database</artifactId>
+	<artifactId>computer-database</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.6</version>
-	<name>Computer-Database</name>
+	<version>0.3.7</version>
+	<name>computer-database</name>
 
 	<properties>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
