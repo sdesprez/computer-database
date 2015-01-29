@@ -1,10 +1,12 @@
 package com.excilys.computerdatabase.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Utilitary class to Validate the format of Strings
  */
-public class Validator {
+public final class Validator {
 
 	/**
 	 * Regex expression for date with yyyy-MM-dd format
@@ -29,6 +31,10 @@ public class Validator {
 	 */
 	private static final String POSITIVE_INT_PATTERN = "\\d{1,9}";
 
+	
+	private Validator() { }
+	
+	
 	/**
 	 * Check if a String as the format of a date
 	 * 
@@ -37,7 +43,7 @@ public class Validator {
 	 * @return true if the format if correct
 	 */
 	public static boolean isDate(final String date) {
-		if (date == null || date.trim().isEmpty()) {
+		if (StringUtils.isEmpty(date)) {
 			return false;
 		}
 		if (!date.matches(DATE_PATTERN)) {
@@ -67,7 +73,7 @@ public class Validator {
 	 * @return true if the format if correct
 	 */
 	public static boolean isPositiveLong(final String string) {
-		if (string == null || string.trim().isEmpty()) {
+		if (StringUtils.isEmpty(string)) {
 			return false;
 		}
 		if (!string.matches(POSITIVE_LONG_PATTERN)) {
@@ -85,10 +91,7 @@ public class Validator {
 	 * @return true if it's a valid name
 	 */
 	public static boolean isName(final String name) {
-		if (name == null) {
-			return false;
-		}
-		if (name.trim().isEmpty()) {
+		if (StringUtils.isEmpty(name)) {
 			return false;
 		}
 		return true;
@@ -102,7 +105,7 @@ public class Validator {
 	 * @return true if the format if correct
 	 */
 	public static boolean isPositiveInt(final String integer) {
-		if (integer == null || integer.trim().isEmpty()) {
+		if (StringUtils.isEmpty(integer)) {
 			return false;
 		}
 		if (!integer.matches(POSITIVE_INT_PATTERN)) {

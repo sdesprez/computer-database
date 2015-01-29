@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="com.excilys.computerdatabase.domain.*"%>
 <jsp:include page="includes/header.jsp" />
 <script type="text/javascript" src="js/jquery.min.js"></script>	
@@ -20,30 +21,29 @@ pageEncoding="UTF-8"%>
                         id: ${computer.id}
                     </div>
                     <h1>Edit Computer</h1>
-
-					<span class="error">${error.get("id")}</span>
 					      
-                    <form id="form" action="edit-computer" method="POST">
-                        <input type="hidden" name="id" value="${computer.id}"/>
+                    <form:form id="form" action="edit-computer" method="POST" commandName="computerDTO">
+                        <form:input type="hidden" path="id" value="${computer.id}"/>
+                        <form:errors path="id" cssClass="error"/>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="name" value="${computer.name}" required="required">
-                            	<span class="error">${error.get("name")}</span>
+                                <form:input path="name" type="text" class="form-control" id="computerName"  placeholder="name" value="${computer.name}" required="required"/>
+                            	<form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="introducedDate" placeholder="yyyy-MM-dd" value="${computer.introducedDate}">
-                            	<span class="error">${error.get("iDate")}</span>
+                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="yyyy-MM-dd" value="${computer.introducedDate}"/>
+                            	<form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="discontinuedDate" placeholder="yyyy-MM-dd" value="${computer.discontinuedDate}">
-                            	<span class="error">${error.get("dDate")}</span>
+                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="yyyy-MM-dd" value="${computer.discontinuedDate}"/>
+                            	<form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" name="companyId">
+                                <label for="company">Company</label>
+                                <form:select path="company" class="form-control" id="company">
                                     <option value="0">--</option>
                                    	<c:forEach items="${companies}" var="company">
                                    	<c:choose>
@@ -55,8 +55,8 @@ pageEncoding="UTF-8"%>
                                    		</c:otherwise>
                                   	</c:choose>
                                    	</c:forEach>
-                                </select>
-                                <span class="error">${error.get("companyId")}</span>
+                                </form:select>
+                                <form:errors path="company" cssClass="error"/>
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
@@ -64,7 +64,7 @@ pageEncoding="UTF-8"%>
                             or
                             <a href="dashboard" class="btn btn-default">Cancel</a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>

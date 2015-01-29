@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	 */
 	@Override
 	public void create(final Computer computer) {
-		if (computer == null || computer.getName() == null || computer.getName().trim().isEmpty()) {
+		if (computer == null || StringUtils.isEmpty(computer.getName())) {
 			return;
 		}
 		
@@ -131,7 +132,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	 */
 	@Override
 	public void update(final Computer computer) {
-		if (computer == null || computer.getName() == null || computer.getName().trim().isEmpty()) {
+		if (computer == null || StringUtils.isEmpty(computer.getName())) {
 			return;
 		}
 		

@@ -1,23 +1,19 @@
 package com.excilys.computerdatabase.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.computerdatabase.domain.Company;
-import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerDTOConverter;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.utils.Validator;
 
 @Controller
 public class EditComputerController {
@@ -31,59 +27,24 @@ public class EditComputerController {
 	private static final String ID = "id";
 	private static final String COMPUTER = "computer";
 	private static final String COMPANIES = "companies";
-	private static final String COMPUTER_NAME = "computerName";
-	private static final String INTRODUCED_DATE = "introducedDate";
-	private static final String DISCONTINUED_DATE = "discontinuedDate";
-	private static final String COMPANY_ID = "companyId";
-	private static final String ERROR = "error";
 
 	
 	@RequestMapping(value = "/edit-computer", method = RequestMethod.GET)
-	protected String doGet(final HttpServletRequest req) {
-		long id = 0;
-		final String idString = req.getParameter(ID);
-		if (Validator.isPositiveLong(idString)) {
-			id = Long.valueOf(idString);
-			
-			final Computer computer = computerDBService.getById(id);		
-			req.setAttribute(COMPUTER, computer);
-		}
-		
-		final List<Company> companies = companyDBService.getAll();
-		req.setAttribute(COMPANIES, companies);
-		
+	protected String getEdit(final Model model, @RequestParam(ID) final long id) {
+		model.addAttribute(COMPUTER, computerDBService.getById(id));
+		model.addAttribute(COMPANIES, companyDBService.getAll());
+		model.addAttribute("computerDTO", new ComputerDTO());
 		return "editComputer";
 	}
 
 	@RequestMapping(value = "/edit-computer", method = RequestMethod.POST)
-	protected String doPost(final HttpServletRequest req) {		
-		final Map<String, String> error = new HashMap<String, String>();
-		final ComputerDTO.Builder builder = ComputerDTO.builder().name(req.getParameter(COMPUTER_NAME))
-																.introduced(req.getParameter(INTRODUCED_DATE))
-																.discontinued(req.getParameter(DISCONTINUED_DATE));
-		
-		if (Validator.isPositiveLong(req.getParameter(ID))) {
-			builder.id(Long.valueOf(req.getParameter(ID)));
-		} else {
-			error.put(ID, "Incorrect id : an id should be a long");
-		}
-		
-		if (Validator.isPositiveLong(req.getParameter(COMPANY_ID))) {
-			builder.company(Long.valueOf(req.getParameter(COMPANY_ID)));
-		} else {
-			error.put(COMPANY_ID, "Incorrect Company identifier");
-		}
-		
-		final ComputerDTO dto = builder.build();
-		
-		ComputerDTOConverter.validate(dto, error);
-		
-		if (error.isEmpty()) {
-			computerDBService.update(ComputerDTOConverter.fromDTO(dto, companyDBService));
+	protected String updateComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {		
+		if (!result.hasErrors()) {
+			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, companyDBService));
 			return "redirect:/dashboard";
 		} else {
-			req.setAttribute(ERROR, error);
-			return "editComputer";
+			model.addAttribute(COMPANIES, companyDBService.getAll());
+			return "addComputer";
 		}
 	}
 	

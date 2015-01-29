@@ -22,11 +22,12 @@ public class DeleteComputerController {
 	private ComputerDBService computerDBService;
 	
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
+	private static final String SELECT = "selection";
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteComputerController.class);
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	protected String doPost(@RequestParam("selection") final String selection) {
+	protected String deleteComputers(@RequestParam(SELECT) final String selection) {
 		//Create a matcher to find the positives longs in the String
 		final Matcher m = PATTERN.matcher(selection);
 		
@@ -35,8 +36,10 @@ public class DeleteComputerController {
 		while (m.find()) {
 			list.add(Long.valueOf(m.group()));
 		}
-		computerDBService.delete(list);
-		LOGGER.info("Deletion of Computer with ids ={}", list);
+		if (list.size() != 0) {
+			computerDBService.delete(list);
+			LOGGER.info("Deletion of Computer with ids ={}", list);
+		}
 		
 		return "redirect:/dashboard";
 	}

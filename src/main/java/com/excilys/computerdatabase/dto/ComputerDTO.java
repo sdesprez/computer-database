@@ -1,15 +1,45 @@
 package com.excilys.computerdatabase.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class ComputerDTO {
 
+	@Min(value = 0, message = "Incorrect Computer identifier")
 	private long id;
 
+	@NotNull(message = "Incorrect name : a name can't be empty or only spaces")
+	@NotBlank(message = "Incorrect name : a name can't be empty or only spaces")
 	private String name;
-
+	
+	@Pattern(regexp = "(" + "^\\s*$"
+			+ "|((\\d{4})([-])(0[13578]|10|12)([-])(0[1-9]|[12][0-9]|3[01]))"
+			+ "|((\\d{4})([-])(0[469]|11)([-])([0][1-9]|[12][0-9]|30))"
+			+ "|((\\d{4})([-])(02)([-])(0[1-9]|1[0-9]|2[0-8]))"
+			+ "|(([02468][048]00)([-])(02)([-])(29))"
+			+ "|(([13579][26]00)([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
+			message = "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy")
 	private String introduced;
 
+	@Pattern(regexp = "(" + "^\\s*$"
+			+ "|((\\d{4})([-])(0[13578]|10|12)([-])(0[1-9]|[12][0-9]|3[01]))"
+			+ "|((\\d{4})([-])(0[469]|11)([-])([0][1-9]|[12][0-9]|30))"
+			+ "|((\\d{4})([-])(02)([-])(0[1-9]|1[0-9]|2[0-8]))"
+			+ "|(([02468][048]00)([-])(02)([-])(29))"
+			+ "|(([13579][26]00)([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
+			+ "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
+			message = "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy")
 	private String discontinued;
 
+	@Min(value = 0, message = "Incorrect Company identifier")
 	private long company;
 
 	public ComputerDTO() {
