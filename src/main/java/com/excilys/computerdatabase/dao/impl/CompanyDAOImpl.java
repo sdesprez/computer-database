@@ -23,9 +23,6 @@ import com.excilys.computerdatabase.mapper.CompanyRowMapper;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
 	
-	@Autowired
-	private DataSource dataSource;
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
@@ -76,20 +73,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 			return null;
 		}
 		
-		final String search = "%" + page.getSearch() + "%";
-		
-		page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, new String[]{search, search}, Integer.class));
+		page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class));
 		page.refreshNbPages();
 
 		//Create the SELECT query
-		final String query = new StringBuilder(SELECT_QUERY).append(" WHERE c.name LIKE ? OR company.name LIKE ? ORDER BY ")
-				.append(page.getSort())
-				.append(" ").append(page.getOrder())
+		final String query = new StringBuilder(SELECT_QUERY)
 				.append(" LIMIT ? OFFSET ?;").toString();
 		
 		final Object[] args = new Object[] {
-				search,
-				search,
 				page.getNbResultsPerPage(),
 				(page.getPageNumber() - 1) * page.getNbResultsPerPage()
 		};

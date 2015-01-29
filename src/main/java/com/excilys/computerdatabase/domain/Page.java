@@ -42,19 +42,6 @@ public class Page<T> {
 		order = "ASC";
 	}
 
-	public Page(final int pageNumber, final List<T> list, final int nbResultsPerPage,
-			final int nbResults, final int nbPages, final String search,
-			final ColumnNames sort, final String order) {
-		this.pageNumber = pageNumber;
-		this.list = list;
-		this.nbResultsPerPage = nbResultsPerPage;
-		this.nbResults = nbResults;
-		this.nbPages = nbPages;
-		this.search = search;
-		this.sort = sort;
-		this.order = order;
-	}
-
 	public int getPageNumber() {
 		return pageNumber;
 	}

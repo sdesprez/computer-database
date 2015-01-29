@@ -22,7 +22,6 @@ import org.mockito.stubbing.Answer;
 
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
-import com.excilys.computerdatabase.dao.ConnectionManager;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
@@ -39,7 +38,6 @@ public class CompanyDBServiceTest {
 
 	CompanyDAO companyDAO;
 	ComputerDAO computerDAO;
-	ConnectionManager cm;
 	
 	Page<Company> page;
 	Page<Company> pageReturned;
@@ -54,7 +52,6 @@ public class CompanyDBServiceTest {
 	public void init() {
 		companyDAO = mock(CompanyDAO.class);
 		computerDAO = mock(ComputerDAO.class);
-		cm = mock(ConnectionManager.class);
 		
 		companyList = new ArrayList<Company>();
 		c1 = new Company(1L, "company 1");

@@ -12,33 +12,46 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.computerdatabase.dao.impl.ComputerDAOImpl;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/context-test.xml"})
 public class ComputerDAOTest {
-
+	
+	
+	@Autowired
 	ComputerDAO computerDAO;
+	
+	@Autowired
+	DataSource dataSource;
+	
 	List<Computer> list;
 	Company apple = new Company(1L, "Apple Inc.");
 	Company thinking = new Company(2L, "Thinking Machines");
 	
 	@Before
 	public void init() throws SQLException {
-		computerDAO = ComputerDAOImpl.INSTANCE;
 		list = new ArrayList<Computer>();
 		list.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, apple));
 		list.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, apple));
 		list.add(new Computer(3L, "CM-2a", null, null, thinking));
 		list.add(new Computer(4L, "CM-200", null, null, thinking));
 		
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
+		final Connection connection = DataSourceUtils.getConnection(dataSource);
 		
 		final Statement stmt = connection.createStatement();
 		stmt.execute("drop table if exists computer;");  
@@ -60,7 +73,7 @@ public class ComputerDAOTest {
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  3,'CM-2a',null,null,2);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  4,'CM-200',null,null,2);");
-		cm.close(connection);
+		connection.close();
 		
 	}
 	
@@ -132,21 +145,21 @@ public class ComputerDAOTest {
 		assertNull(computerDAO.getPagedList(null));
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidOrder() {
 		final Page<Computer> page = new Page<Computer>();
 		page.setOrder("x");
 		computerDAO.getPagedList(page);
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidPageNumber() {
 		final Page<Computer> page = new Page<Computer>();
 		page.setPageNumber(-1);
 		computerDAO.getPagedList(page);
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidResultsPerPage() {
 		final Page<Computer> page = new Page<Computer>();
 		page.setNbResultsPerPage(-1);
@@ -205,12 +218,13 @@ public class ComputerDAOTest {
 		assertEquals(list, computerDAO.getAll());
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test
 	public void updateInvalidCompanyId() {
 		final Computer computer = new Computer();
 		computer.setId(1L);
 		computer.setCompany(new Company(-1L, ""));
 		computerDAO.update(computer);
+		assertEquals(list, computerDAO.getAll());
 	}
 	
 	
@@ -237,22 +251,14 @@ public class ComputerDAOTest {
 	 */
 	@Test
 	public void deleteByCompanyId() throws SQLException {
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		cm.startTransactionalConnection();
 		computerDAO.deleteByCompanyId(2L);
-		cm.commit();
-		cm.closeConnection();
 		
 		assertTrue(computerDAO.getByCompanyId(2L).isEmpty());
 	}
 	
 	@Test
 	public void DeleteCompanyInvalid() throws SQLException {
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		cm.startTransactionalConnection();
 		computerDAO.deleteByCompanyId(-2L);
-		cm.commit();
-		cm.closeConnection();
 		
 		assertEquals(list, computerDAO.getAll());
 	}

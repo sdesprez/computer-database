@@ -27,10 +27,7 @@ import com.excilys.computerdatabase.mapper.ComputerRowMapper;
  */
 @Repository
 public class ComputerDAOImpl implements ComputerDAO {
-	
-	@Autowired
-	private DataSource dataSource;
-	
+		
 	/**
 	 * Base Query for all the Select queries
 	 */

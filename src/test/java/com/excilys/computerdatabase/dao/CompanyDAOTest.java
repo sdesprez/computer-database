@@ -9,28 +9,38 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.computerdatabase.dao.impl.CompanyDAOImpl;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/context-test.xml"})
 public class CompanyDAOTest {
 
+	@Autowired
 	CompanyDAO companyDAO;
 	List<Company> list;
+	@Autowired
+	DataSource dataSource;
 	
 	@Before
 	public void init() throws SQLException {
-		companyDAO = CompanyDAOImpl.INSTANCE;
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
 		list.add(new Company(2L, "Thinking Machines"));
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		final Connection connection = cm.getConnection();
+
+		final Connection connection = DataSourceUtils.getConnection(dataSource);
 		
 		final Statement stmt = connection.createStatement();
 		stmt.execute("drop table if exists computer;");  
@@ -50,8 +60,7 @@ public class CompanyDAOTest {
 		
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
 		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
-		
-		cm.close(connection);
+		connection.close();
 	}
 	
 	
@@ -104,14 +113,14 @@ public class CompanyDAOTest {
 		assertNull(companyDAO.getPagedList(null));
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidPageNumber() {
 		final Page<Company> page = new Page<Company>();
 		page.setPageNumber(-1);
 		companyDAO.getPagedList(page);
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidResultsPerPage() {
 		final Page<Company> page = new Page<Company>();
 		page.setNbResultsPerPage(-1);
@@ -125,30 +134,18 @@ public class CompanyDAOTest {
 	 */
 	@Test
 	public void delete() {
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		cm.startTransactionalConnection();
 		companyDAO.delete(2L);
-		cm.commit();
-		cm.closeConnection();
 		assertNull(companyDAO.getById(2L));
 	}
 	
 	@Test
 	public void deleteInvalidId() {
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		cm.startTransactionalConnection();
 		companyDAO.delete(-1L);
-		cm.commit();
-		cm.closeConnection();
 		assertEquals(list, companyDAO.getAll());
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void deleteComputerLeft() {
-		final ConnectionManager cm = ConnectionManager.INSTANCE;
-		cm.startTransactionalConnection();
 		companyDAO.delete(1L);
-		cm.commit();
-		cm.closeConnection();
 	}
 }
