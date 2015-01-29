@@ -91,7 +91,7 @@ public final class Validator {
 	 * @return true if it's a valid name
 	 */
 	public static boolean isName(final String name) {
-		if (StringUtils.isEmpty(name)) {
+		if (StringUtils.isBlank(name)) {
 			return false;
 		}
 		return true;

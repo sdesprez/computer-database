@@ -4,7 +4,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>Computer-Database</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.5</version>
+	<version>0.3.6</version>
 	<name>Computer-Database</name>
 
 	<properties>
@@ -61,7 +61,6 @@
 			<version>${jstl.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>

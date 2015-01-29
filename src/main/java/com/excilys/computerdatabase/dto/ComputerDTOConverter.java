@@ -20,8 +20,7 @@ public class ComputerDTOConverter {
 	 */
 	public static Computer fromDTO(final ComputerDTO dto, final CompanyDBService companyDBService) {
 		final Computer.Builder builder = Computer.builder();
-		builder.id(dto.getId())
-				.name(dto.getName());
+		builder.id(dto.getId()).name(dto.getName().trim());
 		
 		if (!StringUtils.isEmpty(dto.getIntroduced())) {
 			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));

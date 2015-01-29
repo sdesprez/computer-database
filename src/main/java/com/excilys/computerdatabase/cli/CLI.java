@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.domain.Company;
@@ -355,7 +356,7 @@ public class CLI {
 	private LocalDate inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
-		if (date == null || date.trim().isEmpty()) {
+		if (StringUtils.isEmpty(date)) {
 			return null;
 		}
 		while (!Validator.isDate(date)) {

@@ -1,17 +1,16 @@
 package com.excilys.computerdatabase.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.utils.Validator;
 
 @Controller
 public class DashboardController {
@@ -30,54 +29,42 @@ public class DashboardController {
 	
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	protected String doGet(final HttpServletRequest req) {		
+	protected String doGet(final Model model, 
+							@RequestParam(value = PAGE, required = false, defaultValue = "1") final int pageNumber,
+							@RequestParam(value = NB_RESULTS, required = false, defaultValue = "10") final int nbResults,
+							@RequestParam(value = SORT, required = false, defaultValue = "1") final String sort,
+							@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search,
+							@RequestParam(value = ORDER, required = false, defaultValue = "ASC") final String order) {	
 		Page<Computer> page = new Page<Computer>();
 		
-		final String intString = req.getParameter(PAGE);
-		int pageNumber = 0;
-		if (Validator.isPositiveInt(intString)) {
-			pageNumber = Integer.valueOf(intString);
-		}
+
 		if (pageNumber < 1) {
 			page.setPageNumber(1);
 		} else {
 			page.setPageNumber(pageNumber);
 		}
-		
-		final String nbResultsString = req.getParameter(NB_RESULTS);
-		int nbResults = 0;
-		if (Validator.isPositiveInt(nbResultsString)) {
-			nbResults = Integer.valueOf(nbResultsString);
-		}
+
 		if (nbResults < 10) {
 			page.setNbResultsPerPage(10);
 		} else {
 			page.setNbResultsPerPage(nbResults);
 		}
 		
-		final String search = req.getParameter(SEARCH);
-		if (search == null) {
-			page.setSearch("");
-		} else {
-			page.setSearch(search.trim());
-		}
+		page.setSearch(search.trim());
 		
-		final String sort = req.getParameter(SORT);
 		ColumnNames cName = ColumnNames.getInstance(sort);
-		
 		if (cName == null) {
 			cName = ColumnNames.ID;
 		}
 		page.setSort(cName);
 		
-		final String order = req.getParameter(ORDER);
-		if (order != null && (order.compareToIgnoreCase(ASC) == 0 || order.compareToIgnoreCase(DESC) == 0)) {
+		if (order.compareToIgnoreCase(ASC) == 0 || order.compareToIgnoreCase(DESC) == 0) {
 			page.setOrder(order.toUpperCase());
 		}
 		
 		page = computerDBService.getPagedList(page);
 		
-		req.setAttribute(PAGE, page);
+		model.addAttribute(PAGE, page);
 		
 		return "dashboard";
 	}
