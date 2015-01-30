@@ -102,7 +102,6 @@ public class CompanyDBServiceTest {
 			}
 		}).when(computerDAO).deleteByCompanyId(anyLong());
 		
-		//companyDBService = new CompanyDBServiceMock(companyDAO, computerDAO);
 		MockitoAnnotations.initMocks(this);
 	}
 	

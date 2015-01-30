@@ -30,8 +30,9 @@ pageEncoding="UTF-8"%>
                     <form:form id="form" action="add-computer" method="POST" commandName="computerDTO">
                         <fieldset>
                             <div class="form-group">
+                            	<spring:message code="placeholder.name" var="placeholder"/>
                                 <label for="computerName"><spring:message code="label.name"/></label>
-                                <form:input path="name" type="text" class="form-control" id="computerName" placeholder="Computer Name" required="required"/>
+                                <form:input path="name" type="text" class="form-control" id="computerName" placeholder="${placeholder}" required="required"/>
                             	<form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">

@@ -250,14 +250,14 @@ public class ComputerDAOTest {
 	 * Tests of the deleteByCompanyId function
 	 */
 	@Test
-	public void deleteByCompanyId() throws SQLException {
+	public void deleteByCompanyId() {
 		computerDAO.deleteByCompanyId(2L);
 		
 		assertTrue(computerDAO.getByCompanyId(2L).isEmpty());
 	}
 	
 	@Test
-	public void DeleteCompanyInvalid() throws SQLException {
+	public void DeleteCompanyInvalid() {
 		computerDAO.deleteByCompanyId(-2L);
 		
 		assertEquals(list, computerDAO.getAll());

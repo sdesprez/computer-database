@@ -23,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.jdbc.BadSqlGrammarException;
 
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
@@ -97,7 +98,6 @@ public class ComputerDBServiceTest {
 		}).when(computerDAO).getById(anyLong());
 
 		doAnswer(new Answer<Computer>() {
-
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final Computer computer = (Computer) invocation.getArguments()[0];
@@ -109,7 +109,6 @@ public class ComputerDBServiceTest {
 		}).when(computerDAO).create(any(Computer.class));
 		
 		doAnswer(new Answer<Computer>() {
-
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final Computer computer = (Computer) invocation.getArguments()[0];
@@ -126,7 +125,6 @@ public class ComputerDBServiceTest {
 		
 		
 		doAnswer(new Answer<Computer>() {
-
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
@@ -137,7 +135,6 @@ public class ComputerDBServiceTest {
 		}).when(computerDAO).delete(anyLong());
 		
 		doAnswer(new Answer<Computer>() {
-
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				@SuppressWarnings("unchecked")
@@ -149,8 +146,8 @@ public class ComputerDBServiceTest {
 		}).when(computerDAO).delete(Matchers.anyListOf(Long.class));
 		
 		when(computerDAO.getPagedList(page)).thenReturn(pageReturned);
-		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongPNumber);
-		doThrow(PersistenceException.class).when(computerDAO).getPagedList(wrongRPP);
+		doThrow(BadSqlGrammarException.class).when(computerDAO).getPagedList(wrongPNumber);
+		doThrow(BadSqlGrammarException.class).when(computerDAO).getPagedList(wrongRPP);
 
 
 		MockitoAnnotations.initMocks(this);
@@ -208,12 +205,12 @@ public class ComputerDBServiceTest {
 		assertNull(computerDBService.getPagedList(null));
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidPageNumber() {
 		computerDBService.getPagedList(wrongPNumber);
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test(expected = BadSqlGrammarException.class)
 	public void invalidResultsPerPage() {
 		computerDBService.getPagedList(wrongRPP);
 	}
@@ -231,13 +228,13 @@ public class ComputerDBServiceTest {
 	
 	@Test
 	public void createNull() {
-		computerDAO.create(null);
+		computerDBService.create(null);
 		assertEquals(list, computerDBService.getAll());
 	}
 	
 	@Test
 	public void createEmptyComputer() {
-		computerDAO.create(new Computer());
+		computerDBService.create(new Computer());
 		assertEquals(list, computerDBService.getAll());
 	}
 
@@ -253,7 +250,7 @@ public class ComputerDBServiceTest {
 	
 	@Test
 	public void updateNull() {
-		computerDAO.update(null);
+		computerDBService.update(null);
 		assertEquals(list, computerDBService.getAll());
 	}
 	
@@ -261,7 +258,7 @@ public class ComputerDBServiceTest {
 	public void updateInvalidId() {
 		final Computer computer = new Computer();
 		computer.setId(-1L);
-		computerDAO.update(computer);
+		computerDBService.update(computer);
 		assertEquals(list, computerDBService.getAll());
 	}
 	
@@ -270,7 +267,8 @@ public class ComputerDBServiceTest {
 		final Computer computer = new Computer();
 		computer.setId(1L);
 		computer.setCompany(new Company(-1L, ""));
-		computerDAO.update(computer);
+		computerDBService.update(computer);
+		assertEquals(list, computerDBService.getAll());
 	}
 	
 	
@@ -287,8 +285,8 @@ public class ComputerDBServiceTest {
 	@Test
 	public void deleteInvalidId() {
 		final int x = computerDBService.getAll().size();
-		computerDAO.delete(-1);
-		computerDAO.delete(4L);
+		computerDBService.delete(-1);
+		computerDBService.delete(4L);
 		assertEquals(x, list.size());
 	}
 	
@@ -301,8 +299,8 @@ public class ComputerDBServiceTest {
 		final List<Long> l = new ArrayList<Long>();
 		l.add(1L);
 		l.add(2L);
-		l.forEach(id -> assertNotNull(computerDAO.getById(id)));
+		l.forEach(id -> assertNotNull(computerDBService.getById(id)));
 		computerDBService.delete(l);
-		l.forEach(id -> assertNull(computerDAO.getById(id)));
+		l.forEach(id -> assertNull(computerDBService.getById(id)));
 	}
 }

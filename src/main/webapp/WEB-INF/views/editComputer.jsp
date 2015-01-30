@@ -31,8 +31,9 @@ pageEncoding="UTF-8"%>
                         <form:errors path="id" cssClass="error"/>
                         <fieldset>
                             <div class="form-group">
+                            	<spring:message code="placeholder.name" var="placeholder"/>
                                 <label for="computerName"><spring:message code="label.name"/></label>
-                                <form:input path="name" type="text" class="form-control" id="computerName"  placeholder="Computer Name" value="${computer.name}" required="required"/>
+                                <form:input path="name" type="text" class="form-control" id="computerName"  placeholder="${placeholder}" value="${computer.name}" required="required"/>
                             	<form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">

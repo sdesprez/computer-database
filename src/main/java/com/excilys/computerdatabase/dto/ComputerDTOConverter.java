@@ -28,7 +28,7 @@ public class ComputerDTOConverter {
 		if (!StringUtils.isEmpty(dto.getDiscontinued())) {
 			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
-		if (dto.getCompany() != 0) {
+		if (dto.getCompany() > 0) {
 			builder.company(companyDBService.getById(dto.getCompany()));
 		}
 		return builder.build();
