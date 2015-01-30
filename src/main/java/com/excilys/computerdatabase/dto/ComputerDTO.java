@@ -8,11 +8,11 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class ComputerDTO {
 
-	@Min(value = 0, message = "Incorrect Computer identifier")
+	@Min(value = 0, message = "{error.id}")
 	private long id;
 
-	@NotNull(message = "Incorrect name : a name can't be empty or only spaces")
-	@NotBlank(message = "Incorrect name : a name can't be empty or only spaces")
+	@NotNull(message = "{error.name")
+	@NotBlank(message = "{error.name}")
 	private String name;
 	
 	@Pattern(regexp = "(" + "^\\s*$"
@@ -24,7 +24,7 @@ public class ComputerDTO {
 			+ "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
 			+ "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
 			+ "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
-			message = "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy")
+			message = "{error.date}")
 	private String introduced;
 
 	@Pattern(regexp = "(" + "^\\s*$"
@@ -36,10 +36,10 @@ public class ComputerDTO {
 			+ "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
 			+ "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
 			+ "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
-			message = "The date is not valid, valid format is yyyy-MM-dd and between 1970-01-01 and 2038-01-18. You can also leave this field emtpy")
+			message = "{error.date}")
 	private String discontinued;
 
-	@Min(value = 0, message = "Incorrect Company identifier")
+	@Min(value = 0, message = "{error.companyId}")
 	private long company;
 
 	public ComputerDTO() {

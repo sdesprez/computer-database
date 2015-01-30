@@ -35,10 +35,7 @@ public class AddComputerController {
 	}
 
 	@RequestMapping(value = "/add-computer", method = RequestMethod.POST)
-	protected String createComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {
-		System.out.println(computerDTO);
-		System.out.println(result.hasErrors());
-		
+	protected String createComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {		
 		if (!result.hasErrors()) {
 			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService));
 			return "redirect:/dashboard";

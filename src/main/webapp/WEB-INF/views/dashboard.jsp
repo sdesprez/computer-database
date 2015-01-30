@@ -8,6 +8,8 @@ pageEncoding="UTF-8"%>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
+<script>var alertString="<spring:message code='alert.confirm' javaScriptEscape='true'/>"</script>
 <script src="js/dashboard.js"></script>
 
 	
@@ -54,19 +56,16 @@ pageEncoding="UTF-8"%>
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<%String[][] columns = {{"name","Computer name"}, {"introduced", "Introduced date"}, 
-								{"discontinued", "Discontinued date"}, {"company_name","Company name"}}; 
+					 	<%String[][] columns = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
+								{"discontinued", "column.discontinued"}, {"company_name", "column.company"}}; 
 							pageContext.setAttribute("columns", columns);%>
 						<c:forEach items="${columns}" var="col">
 							<c:choose>
 							<c:when test="${col[0].equals(page.sort.id) && page.order.equals(\"ASC\") }">
-								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="desc">${col[1]}</h:link></th>
-							</c:when>
-							<c:when test="${col[0].equals(page.sort.id) && page.order.equals(\"DESC\") }">
-								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="asc">${col[1]}</h:link></th>
+								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="desc"><spring:message code="${col[1]}"/></h:link></th>
 							</c:when>
 							<c:otherwise>
-								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="asc">${col[1]}</h:link></th>
+								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="asc"><spring:message code="${col[1]}"/></h:link></th>
 							</c:otherwise>
 							</c:choose>
 						</c:forEach>				

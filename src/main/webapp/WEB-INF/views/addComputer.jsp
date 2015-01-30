@@ -13,8 +13,15 @@ pageEncoding="UTF-8"%>
 }
 </style>
 
+
     <section id="main">
+    
         <div class="container">
+        	<span style="float: right"> 
+				<a href="?lang=en">en</a> 
+				| 
+				<a href="?lang=fr">fr</a>
+			</span>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1><spring:message code="title.add"/></h1>
@@ -59,5 +66,14 @@ pageEncoding="UTF-8"%>
             </div>
         </div>
     </section>
+    <script type="text/javascript">
+    $("#form").validate({
+		messages: {
+            name: "<spring:message code='error.name' javaScriptEscape='true'/>",
+            introduced: "<spring:message code='error.date' javaScriptEscape='true'/>",
+            discontinued: "<spring:message code='error.date' javaScriptEscape='true'/>"
+        }
+	});
+	</script>
 </body>
 </html>

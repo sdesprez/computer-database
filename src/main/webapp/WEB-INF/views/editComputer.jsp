@@ -6,7 +6,6 @@ pageEncoding="UTF-8"%>
 <jsp:include page="includes/header.jsp" />
 <script type="text/javascript" src="js/jquery.min.js"></script>	
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
-<script src="js/formValidation.js"></script>
 <style>
 .error{
 	color: red;
@@ -15,6 +14,11 @@ pageEncoding="UTF-8"%>
 
     <section id="main">
         <div class="container">
+        	<span style="float: right"> 
+				<a href="?lang=en&id=${computer.id}">en</a> 
+				| 
+				<a href="?lang=fr&id=${computer.id}">fr</a>
+			</span>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
@@ -69,5 +73,14 @@ pageEncoding="UTF-8"%>
             </div>
         </div>
     </section>
+    <script type="text/javascript">
+    $("#form").validate({
+		messages: {
+            name: "<spring:message code='error.name' javaScriptEscape='true'/>",
+            introduced: "<spring:message code='error.date' javaScriptEscape='true'/>",
+            discontinued: "<spring:message code='error.date' javaScriptEscape='true'/>"
+        }
+	});
+	</script>
 </body>
 </html>
