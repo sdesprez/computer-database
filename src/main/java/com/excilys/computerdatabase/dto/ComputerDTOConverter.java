@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.validator.GenericValidator;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.service.CompanyDBService;
 
+@Component
 public class ComputerDTOConverter {
 	
 	
@@ -18,15 +20,15 @@ public class ComputerDTOConverter {
 	 * @param dto The ComputerDTO to be converted
 	 * @return A Computer corresponding to the ComputerDTO or null if the ComputerDTO wasn't valid
 	 */
-	public static Computer fromDTO(final ComputerDTO dto, final CompanyDBService companyDBService) {
+	public static Computer fromDTO(final ComputerDTO dto, final CompanyDBService companyDBService, final String dateFormat) {
 		final Computer.Builder builder = Computer.builder();
 		builder.id(dto.getId()).name(dto.getName().trim());
 		
 		if (!GenericValidator.isBlankOrNull(dto.getIntroduced())) {
-			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ofPattern(dateFormat)));
 		}
 		if (!GenericValidator.isBlankOrNull(dto.getDiscontinued())) {
-			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
+			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ofPattern(dateFormat)));
 		}
 		if (dto.getCompany() > 0) {
 			builder.company(companyDBService.getById(dto.getCompany()));
@@ -40,9 +42,9 @@ public class ComputerDTOConverter {
 	 * @param dto The List of ComputerDTO to be converted
 	 * @return The List of Computer corresponding to the List of ComputerDTO who are valid or an empty List if none were valid
 	 */
-	public static List<Computer> fromDTO(final List<ComputerDTO> dtos, final CompanyDBService companyDBService) {
+	public static List<Computer> fromDTO(final List<ComputerDTO> dtos, final CompanyDBService companyDBService, final String dateFormat) {
 		final List<Computer> computers = dtos.stream().map(dto -> {
-			final Computer computer = ComputerDTOConverter.fromDTO(dto, companyDBService);
+			final Computer computer = ComputerDTOConverter.fromDTO(dto, companyDBService, dateFormat);
 			if (computer != null) {
 				return computer;
 			}
