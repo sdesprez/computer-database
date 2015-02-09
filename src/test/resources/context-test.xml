@@ -10,7 +10,8 @@
 
 	<context:component-scan base-package="com.excilys.computerdatabase.dao" />
 	<context:component-scan base-package="com.excilys.computerdatabase.service" />
-	<context:property-placeholder location="classpath:database.properties" />
+	<context:property-placeholder location="classpath:database-example.properties" order="2"/>
+	<context:property-placeholder location="classpath:database.properties" order="1"/>
 
 	<context:annotation-config />
 	<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>

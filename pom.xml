@@ -4,7 +4,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>war</packaging>
-	<version>0.3.7</version>
+	<version>0.4.0</version>
 	<name>computer-database</name>
 
 	<properties>
@@ -14,7 +14,7 @@
 		<jsp-api.version>2.3.1</jsp-api.version>
 		<validation-api.version>1.1.0.Final</validation-api.version>
 		<hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
-		<apache-commons-lang.version>3.3.2</apache-commons-lang.version>
+		<commons-validator.version>1.4.1</commons-validator.version>
 		<spring.version>4.1.4.RELEASE</spring.version>
 		<mysql.version>5.1.34</mysql.version>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
@@ -37,6 +37,12 @@
 				<version>${spring.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>99-empty</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -63,12 +69,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${apache-commons-lang.version}</version>
-		</dependency>
-
 		<!-- Validation dependencies -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -82,28 +82,14 @@
 			<version>${hibernate-validator.version}</version>
 		</dependency>
 
+			<!-- String validation dependency -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${commons-validator.version}</version>
+		</dependency>
+		
 		<!-- Spring dependencies -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -112,11 +98,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
 		</dependency>
 
 		<!-- Driver for MySQL database connection -->
@@ -204,4 +185,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+	<repository>
+		<id>version99</id>
+			<!-- highly available repository serving empty artifacts -->
+			<url>http://version99.qos.ch/</url>
+		</repository>
+	</repositories>
 </project>

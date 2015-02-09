@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.GenericValidator;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.service.CompanyDBService;
@@ -22,10 +22,10 @@ public class ComputerDTOConverter {
 		final Computer.Builder builder = Computer.builder();
 		builder.id(dto.getId()).name(dto.getName().trim());
 		
-		if (!StringUtils.isEmpty(dto.getIntroduced())) {
+		if (!GenericValidator.isBlankOrNull(dto.getIntroduced())) {
 			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
-		if (!StringUtils.isEmpty(dto.getDiscontinued())) {
+		if (!GenericValidator.isBlankOrNull(dto.getDiscontinued())) {
 			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
 		}
 		if (dto.getCompany() > 0) {

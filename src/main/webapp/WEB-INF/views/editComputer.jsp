@@ -15,35 +15,35 @@ pageEncoding="UTF-8"%>
     <section id="main">
         <div class="container">
         	<span style="float: right"> 
-				<a href="?lang=en&id=${computer.id}">en</a> 
+				<a href="?lang=en&id=${computerDTO.id}">en</a> 
 				| 
-				<a href="?lang=fr&id=${computer.id}">fr</a>
+				<a href="?lang=fr&id=${computerDTO.id}">fr</a>
 			</span>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: ${computer.id}
+                        id: ${computerDTO.id}
                     </div>
                     <h1><spring:message code="title.edit"/></h1>
 					      
-                    <form:form id="form" action="edit-computer" method="POST" commandName="computerDTO">
-                        <form:input type="hidden" path="id" value="${computer.id}"/>
+                    <form:form id="form" action="edit" method="POST" commandName="computerDTO">
+                        <form:input type="hidden" path="id" value="${computerDTO.id}"/>
                         <form:errors path="id" cssClass="error"/>
                         <fieldset>
                             <div class="form-group">
                             	<spring:message code="placeholder.name" var="placeholder"/>
                                 <label for="computerName"><spring:message code="label.name"/></label>
-                                <form:input path="name" type="text" class="form-control" id="computerName"  placeholder="${placeholder}" value="${computer.name}" required="required"/>
+                                <form:input path="name" type="text" class="form-control" id="computerName"  placeholder="${placeholder}" value="${computerDTO.name}" required="required"/>
                             	<form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
-                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="yyyy-MM-dd" value="${computer.introducedDate}"/>
+                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="yyyy-MM-dd" value="${computerDTO.introduced}"/>
                             	<form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="label.discontinued"/></label>
-                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="yyyy-MM-dd" value="${computer.discontinuedDate}"/>
+                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="yyyy-MM-dd" value="${computerDTO.discontinued}"/>
                             	<form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
@@ -52,7 +52,7 @@ pageEncoding="UTF-8"%>
                                     <option value="0">--</option>
                                    	<c:forEach items="${companies}" var="company">
                                    	<c:choose>
-                                   		<c:when test="${company.id == computer.company.id}">
+                                   		<c:when test="${company.id == computerDTO.company}">
                                    			<option value="${company.id}" selected="selected">${company.name}</option>
                                  		</c:when>
                                    		<c:otherwise>

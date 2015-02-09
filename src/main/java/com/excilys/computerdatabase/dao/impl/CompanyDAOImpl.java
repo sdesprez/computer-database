@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.CompanyRowMapper;
 
 /**
@@ -22,8 +19,6 @@ import com.excilys.computerdatabase.mapper.CompanyRowMapper;
  */
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 	
 	private static final String SELECT_QUERY = "SELECT * FROM company";
 	private static final String SELECT_BY_ID = SELECT_QUERY + " WHERE company.id=?;";
@@ -54,25 +49,18 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public Company getById(final long id) {
 		final List<Company> companies = jdbcTemplate.query(SELECT_BY_ID, new Long[]{id} , companyMapper);
-		if (companies.size() == 1) {
-			return companies.get(0);
-		} else if (companies.size() == 0) {
+		if (companies.isEmpty()) {
 			return null;
-		} else {
-			LOGGER.error("There was more than 1 company with id={} in the database", id);
-			throw new PersistenceException("There was more than 1 company with id=" + id + " in the database");
-		}
+		} else  {
+			return companies.get(0);
+		} 
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Page<Company> getPagedList(final Page<Company> page) {
-		if (page == null) {
-			return null;
-		}
-		
+	public Page<Company> getPagedList(final Page<Company> page) {		
 		page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class));
 		page.refreshNbPages();
 

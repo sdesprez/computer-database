@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.validator.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void create(final Computer computer) {
-		computerDAO.create(computer);
+		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
+			computerDAO.create(computer);
+		}
 	}
 
 	/**
@@ -63,7 +66,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void update(final Computer computer) {
-		computerDAO.update(computer);
+		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
+			computerDAO.update(computer);
+		}
 	}
 
 	/**
@@ -87,6 +92,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public Page<Computer> getPagedList(final Page<Computer> page) {
-		return computerDAO.getPagedList(page);
+		if (page != null) {
+			return computerDAO.getPagedList(page);
+		}
+		return null;
 	}
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.GenericValidator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.excilys.computerdatabase.domain.Company;
@@ -13,7 +13,6 @@ import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
-import com.excilys.computerdatabase.utils.Validator;
 
 /**
  * Command Line Interface
@@ -339,7 +338,7 @@ public class CLI {
 		//Get the input
 		String name = sc.nextLine();
 		//Ask a new input while the name is empty or null
-		while (!Validator.isName(name)) {
+		while (GenericValidator.isBlankOrNull(name)) {
 			System.out.println("Computer name can't be empty or spaces only");
 			System.out.println("Enter computer name");
 			name = sc.nextLine();
@@ -356,10 +355,10 @@ public class CLI {
 	private LocalDate inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
-		if (StringUtils.isEmpty(date)) {
+		if (GenericValidator.isBlankOrNull(date)) {
 			return null;
 		}
-		while (!Validator.isDate(date)) {
+		while (!GenericValidator.isDate(date, "yyyy-MM-dd", false)) {
 			System.out.println("Incorrect date format");
 			System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
 			date = sc.nextLine();
@@ -379,7 +378,7 @@ public class CLI {
 		//Get the input
 		String stringLong = sc.nextLine();
 		//Check the input and ask a new one as long as the input isn't a long
-		while (!Validator.isPositiveLong(stringLong)) {
+		while (!GenericValidator.isLong(stringLong)) {
 			System.out.println("Input is not a Long, enter a new input :");
 			stringLong = sc.nextLine();
 		}

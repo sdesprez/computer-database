@@ -262,7 +262,7 @@ public class ComputerDBServiceTest {
 		assertEquals(list, computerDBService.getAll());
 	}
 	
-	@Test(expected = PersistenceException.class)
+	@Test
 	public void updateInvalidCompanyId() {
 		final Computer computer = new Computer();
 		computer.setId(1L);

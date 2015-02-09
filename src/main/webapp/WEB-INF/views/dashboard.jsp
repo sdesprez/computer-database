@@ -32,8 +32,8 @@ pageEncoding="UTF-8"%>
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="add-computer" href="add-computer"><spring:message code="button.addComputer"/></a> 
-					<a class="btn btn-default" id="edit-computer" href="#"	onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
+					<a class="btn btn-success" id="add" href="add"><spring:message code="button.addComputer"/></a> 
+					<a class="btn btn-default" id="edit" href="#"	onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -76,7 +76,7 @@ pageEncoding="UTF-8"%>
 				<c:forEach items="${page.list}" var="computer">
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
-						<td><a href="edit-computer?id=${computer.id}"><c:out value="${computer.name}"/> </a></td>
+						<td><a href="edit?id=${computer.id}"><c:out value="${computer.name}"/> </a></td>
 						<td>${computer.introducedDate}</td>
 						<td>${computer.discontinuedDate}</td>
 						<td>${computer.company.name}</td>

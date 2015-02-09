@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.ContextConfiguration;
@@ -140,9 +141,9 @@ public class ComputerDAOTest {
 		assertEquals(pageReturned, computerDAO.getPagedList(page));
 	}
 	
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void getPagedListNull() {
-		assertNull(computerDAO.getPagedList(null));
+		computerDAO.getPagedList(null);
 	}
 	
 	@Test(expected = BadSqlGrammarException.class)
@@ -180,15 +181,15 @@ public class ComputerDAOTest {
 		assertEquals(computer, computerDAO.getById(5L));
 	}
 	
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void createNull() {
 		computerDAO.create(null);
-		assertEquals(list, computerDAO.getAll());
 	}
 	
 	@Test
 	public void createEmptyComputer() {
 		computerDAO.create(new Computer());
+		list.add(Computer.builder().id(5L).build());
 		assertEquals(list, computerDAO.getAll());
 	}
 	
@@ -204,10 +205,9 @@ public class ComputerDAOTest {
 		assertEquals(computer, computerDAO.getById(2L));
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void updateNull() {
 		computerDAO.update(null);
-		assertEquals(list, computerDAO.getAll());
 	}
 	
 	@Test
@@ -218,13 +218,12 @@ public class ComputerDAOTest {
 		assertEquals(list, computerDAO.getAll());
 	}
 	
-	@Test
+	@Test(expected = DataIntegrityViolationException.class)
 	public void updateInvalidCompanyId() {
 		final Computer computer = new Computer();
 		computer.setId(1L);
 		computer.setCompany(new Company(-1L, ""));
 		computerDAO.update(computer);
-		assertEquals(list, computerDAO.getAll());
 	}
 	
 	

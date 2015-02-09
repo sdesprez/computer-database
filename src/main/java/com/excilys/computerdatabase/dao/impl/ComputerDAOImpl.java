@@ -1,15 +1,10 @@
 package com.excilys.computerdatabase.dao.impl;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,8 +14,8 @@ import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.ComputerRowMapper;
+import com.excilys.computerdatabase.utils.LocalDateConverter;
 
 /**
  * Data Access Object for the Computer
@@ -43,7 +38,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 												+ "FROM computer c "
 												+ "LEFT JOIN company ON company.id=c.company_id "
 												+ "WHERE c.name LIKE ? OR company.name LIKE ?;";
-	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerDAOImpl.class);
 	
 	
 	private RowMapper<Computer> computerMapper = new ComputerRowMapper();
@@ -69,13 +63,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public Computer getById(final long id) {
 		final List<Computer> computers = jdbcTemplate.query(SELECT_BY_ID, new Long[]{id} , computerMapper);
-		if (computers.size() == 1) {
-			return computers.get(0);
-		} else if (computers.size() == 0) {
+		if (computers.isEmpty()) {
 			return null;
 		} else {
-			LOGGER.error("There was more than 1 computer with id={} in the database", id);
-			throw new PersistenceException("There was more than 1 computer with id=" + id + " in the database");
+			return computers.get(0);
 		}
 	}
 
@@ -91,24 +82,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void create(final Computer computer) {
-		if (computer == null || StringUtils.isEmpty(computer.getName())) {
-			return;
-		}
-		
+	public void create(final Computer computer) {		
 		final Company company = computer.getCompany();
 		Long companyId = null;
-		final LocalDate introducedDate = computer.getIntroducedDate();
-		final LocalDate discontinuedDate = computer.getDiscontinuedDate();
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
-		
-		if (introducedDate != null) {
-			introduced = Timestamp.valueOf(introducedDate.atStartOfDay());
-		}
-		if (discontinuedDate != null) {
-			discontinued =  Timestamp.valueOf(discontinuedDate.atStartOfDay());
-		} 		
 		
 		if (company != null) {
 			companyId = company.getId();
@@ -116,8 +92,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		final Object[] args = new Object[] {
 				computer.getName(),
-				introduced,
-				discontinued,
+				LocalDateConverter.toTimestamp(computer.getIntroducedDate()),
+				LocalDateConverter.toTimestamp(computer.getDiscontinuedDate()),
 				companyId
 		};
 		
@@ -129,23 +105,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 	 */
 	@Override
 	public void update(final Computer computer) {
-		if (computer == null || StringUtils.isEmpty(computer.getName())) {
-			return;
-		}
-		
 		final Company company = computer.getCompany();
 		Long companyId = null;
-		final LocalDate introducedDate = computer.getIntroducedDate();
-		final LocalDate discontinuedDate = computer.getDiscontinuedDate();
-		Timestamp introduced = null;
-		Timestamp discontinued = null;
-		
-		if (introducedDate != null) {
-			introduced = Timestamp.valueOf(introducedDate.atStartOfDay());
-		}
-		if (discontinuedDate != null) {
-			discontinued =  Timestamp.valueOf(discontinuedDate.atStartOfDay());
-		} 		
 		
 		if (company != null) {
 			companyId = company.getId();
@@ -153,8 +114,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		final Object[] args = new Object[] {
 				computer.getName(),
-				introduced,
-				discontinued,
+				LocalDateConverter.toTimestamp(computer.getIntroducedDate()),
+				LocalDateConverter.toTimestamp(computer.getDiscontinuedDate()),
 				companyId,
 				computer.getId()
 		};
@@ -184,10 +145,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	 */
 	@Override
 	public Page<Computer> getPagedList(final Page<Computer> page) {
-		if (page == null) {
-			return null;
-		}
-		
 		final String search = "%" + page.getSearch() + "%";
 		
 		page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, new String[]{search, search}, Integer.class));

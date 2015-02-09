@@ -6,7 +6,6 @@ pageEncoding="UTF-8"%>
 <jsp:include page="includes/header.jsp" />
 <script type="text/javascript" src="js/jquery.min.js"></script>	
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
-<script src="js/formValidation.js"></script>
 <style>
 .error{
 	color: red;
@@ -27,7 +26,7 @@ pageEncoding="UTF-8"%>
                     <h1><spring:message code="title.add"/></h1>
 
                     
-                    <form:form id="form" action="add-computer" method="POST" commandName="computerDTO">
+                    <form:form id="form" action="add" method="POST" commandName="computerDTO">
                         <fieldset>
                             <div class="form-group">
                             	<spring:message code="placeholder.name" var="placeholder"/>
@@ -50,7 +49,14 @@ pageEncoding="UTF-8"%>
                                 <form:select path="company" class="form-control" id="company">
                                     <option value="0">--</option>
                                     <c:forEach items="${companies}" var="company">
-                                   	<option value="${company.id}"><c:out value="${company.name}"/></option>
+                                   	<c:choose>
+                                   		<c:when test="${company.id == computerDTO.company}">
+                                   			<option value="${company.id}" selected="selected">${company.name}</option>
+                                 		</c:when>
+                                   		<c:otherwise>
+                                   			<option value="${company.id}"><c:out value="${company.name}"/></option>
+                                   		</c:otherwise>
+                                  	</c:choose>
                                    	</c:forEach>
                                 </form:select>
                                 <form:errors path="company" cssClass="error"/>
