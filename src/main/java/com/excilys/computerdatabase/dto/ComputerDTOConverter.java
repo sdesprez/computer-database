@@ -25,10 +25,10 @@ public class ComputerDTOConverter {
 		builder.id(dto.getId()).name(dto.getName().trim());
 		
 		if (!GenericValidator.isBlankOrNull(dto.getIntroduced())) {
-			builder.introducedDate(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ofPattern(dateFormat)));
+			builder.introduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ofPattern(dateFormat)));
 		}
 		if (!GenericValidator.isBlankOrNull(dto.getDiscontinued())) {
-			builder.discontinuedDate(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ofPattern(dateFormat)));
+			builder.discontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ofPattern(dateFormat)));
 		}
 		if (dto.getCompany() > 0) {
 			builder.company(companyDBService.getById(dto.getCompany()));
@@ -67,11 +67,11 @@ public class ComputerDTOConverter {
 		builder.id(computer.getId())
 				.name(computer.getName());
 		
-		if (computer.getIntroducedDate() != null) {
-			builder.introduced(computer.getIntroducedDate().toString());
+		if (computer.getIntroduced() != null) {
+			builder.introduced(computer.getIntroduced().toString());
 		}
-		if (computer.getDiscontinuedDate() != null) {
-			builder.discontinued(computer.getDiscontinuedDate().toString());
+		if (computer.getDiscontinued() != null) {
+			builder.discontinued(computer.getDiscontinued().toString());
 		}		
 		if (computer.getCompany() != null) {
 			builder.company(computer.getCompany().getId());

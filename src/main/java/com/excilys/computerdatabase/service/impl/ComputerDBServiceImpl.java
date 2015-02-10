@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.repositories.ComputerRepository;
 import com.excilys.computerdatabase.service.ComputerDBService;
 
 /**
@@ -26,13 +27,15 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	@Autowired
 	private ComputerDAO computerDAO;
 
+	@Autowired
+	private ComputerRepository computerRepository;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Computer> getAll() {
-		return computerDAO.getAll();
+		return computerRepository.findAll();
 	}
 	
 	/**
@@ -40,15 +43,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public Computer getById(final long id) {
-		return computerDAO.getById(id);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Computer> getByCompanyId(final long id) {
-		return computerDAO.getByCompanyId(id);
+		return computerRepository.findOne(id);
 	}
 
 	/**
@@ -57,7 +52,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	@Override
 	public void create(final Computer computer) {
 		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
-			computerDAO.create(computer);
+			computerRepository.save(computer);
 		}
 	}
 
@@ -67,7 +62,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	@Override
 	public void update(final Computer computer) {
 		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
-			computerDAO.update(computer);
+			computerRepository.save(computer);
 		}
 	}
 
@@ -76,7 +71,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final long id) {
-		computerDAO.delete(id);
+		computerRepository.delete(id);
 	}
 	
 	/**
@@ -84,7 +79,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final List<Long> list) {
-		computerDAO.delete(list);
+		list.forEach(id -> computerRepository.delete(id));		
 	}
 
 	/**

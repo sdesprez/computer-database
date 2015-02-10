@@ -108,9 +108,9 @@ public class CompanyDAOTest {
 		assertEquals(pageReturned, companyDAO.getPagedList(page));
 	}
 	
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void getPagedListNull() {
-		assertNull(companyDAO.getPagedList(null));
+		companyDAO.getPagedList(null);
 	}
 	
 	@Test(expected = BadSqlGrammarException.class)

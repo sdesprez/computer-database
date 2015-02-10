@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -77,14 +76,6 @@ public class ComputerDBServiceTest {
 
 		when(computerDAO.getAll()).thenReturn(list);
 		when(computerDAO.getPagedList(page)).thenReturn(pageReturned);
-
-		doAnswer(new Answer<List<Computer>>() {
-			@Override
-			public List<Computer> answer(final InvocationOnMock invocation) {
-				final long l = (Long) invocation.getArguments()[0];
-				return list.stream().filter(c -> c.getCompany().getId() == l).collect(Collectors.toList());
-			}
-		}).when(computerDAO).getByCompanyId(anyLong());
 
 		doAnswer(new Answer<Computer>() {
 			@Override
@@ -175,20 +166,6 @@ public class ComputerDBServiceTest {
 	public void getByIdInvalid() {
 		assertNull(computerDBService.getById(-1L));
 		assertNull(computerDBService.getById(5L));
-	}
-
-	/*
-	 * Tests getByCompanyId function
-	 */
-	@Test
-	public void getByCompanyId() {
-		assertEquals(list.subList(0, 2), computerDBService.getByCompanyId(1L));
-	}
-	
-	@Test
-	public void getByCompanyIdInvalid() {
-		assertEquals(new ArrayList<Computer>(), computerDBService.getByCompanyId(-1L));
-		assertEquals(new ArrayList<Computer>(), computerDBService.getByCompanyId(5L));
 	}
 
 	

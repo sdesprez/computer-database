@@ -23,13 +23,6 @@ public interface ComputerDBService {
 	Computer getById(long id);
 
 	/**
-	 * Get the list of computers corresponding to the id of a company
-	 * @param id : id of the company in the database
-	 * @return the list of computers
-	 */
-	List<Computer> getByCompanyId(long id);
-
-	/**
 	 * Create a new computer in the database
 	 * @param computer : computer to add in the database
 	 */

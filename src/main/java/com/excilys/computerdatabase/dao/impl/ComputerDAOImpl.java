@@ -92,8 +92,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		final Object[] args = new Object[] {
 				computer.getName(),
-				LocalDateConverter.toTimestamp(computer.getIntroducedDate()),
-				LocalDateConverter.toTimestamp(computer.getDiscontinuedDate()),
+				LocalDateConverter.toTimestamp(computer.getIntroduced()),
+				LocalDateConverter.toTimestamp(computer.getDiscontinued()),
 				companyId
 		};
 		
@@ -114,8 +114,8 @@ public class ComputerDAOImpl implements ComputerDAO {
 		
 		final Object[] args = new Object[] {
 				computer.getName(),
-				LocalDateConverter.toTimestamp(computer.getIntroducedDate()),
-				LocalDateConverter.toTimestamp(computer.getDiscontinuedDate()),
+				LocalDateConverter.toTimestamp(computer.getIntroduced()),
+				LocalDateConverter.toTimestamp(computer.getDiscontinued()),
 				companyId,
 				computer.getId()
 		};

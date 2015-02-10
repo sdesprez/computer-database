@@ -27,10 +27,10 @@ public class ComputerRowMapper implements RowMapper<Computer> {
 			final Timestamp introduced = rs.getTimestamp("introduced");
 			final Timestamp discontinued = rs.getTimestamp("discontinued");
 			if (introduced != null) {
-				builder.introducedDate(introduced.toLocalDateTime().toLocalDate());
+				builder.introduced(introduced.toLocalDateTime().toLocalDate());
 			}
 			if (discontinued != null) {
-				builder.discontinuedDate(discontinued.toLocalDateTime().toLocalDate());
+				builder.discontinued(discontinued.toLocalDateTime().toLocalDate());
 			}
 			final Long companyId = rs.getLong("company_Id");
 			if (companyId != null) {

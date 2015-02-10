@@ -200,8 +200,8 @@ public class CLI {
 		//Show the detail of the computer
 		if (computer != null) {
 			System.out.println("Name : " + computer.getName());
-			System.out.println("Introduced date : " + computer.getIntroducedDate());
-			System.out.println("Discontinued date : " + computer.getDiscontinuedDate());
+			System.out.println("Introduced date : " + computer.getIntroduced());
+			System.out.println("Discontinued date : " + computer.getDiscontinued());
 			System.out.println("Company : " + computer.getCompany());
 		} else {
 			System.out.println("No computer found for this id");
@@ -221,11 +221,11 @@ public class CLI {
 
 		//Get the date of introduction. If the user enter nothing, the date is null
 		System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
-		builder.introducedDate(inputDate());
+		builder.introduced(inputDate());
 		
 		//Get the date of discontinuation. If the user enter nothing, the date is null
 		System.out.println("Enter discontinued date (yyyy-MM-dd) or nothing if you don't know");
-		builder.discontinuedDate(inputDate());
+		builder.discontinued(inputDate());
 
 		//Get the id of the company. If it's 0, then company = null
 		companyLabel : while (company == null) {
@@ -265,19 +265,19 @@ public class CLI {
 			}
 			
 			//Change the introducedDate if the user wants
-			System.out.println("Current introduced date : " + computer.getIntroducedDate());
+			System.out.println("Current introduced date : " + computer.getIntroduced());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new introduced Date (yyyy-MM-dd)");
-				computer.setIntroducedDate(inputDate());
+				computer.setIntroduced(inputDate());
 			}
 			
 			//Change the discontinuedDate if the user wants
-			System.out.println("Current discontinued date : " + computer.getDiscontinuedDate());
+			System.out.println("Current discontinued date : " + computer.getDiscontinued());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new dicontinued date (yyyy-MM-dd)");
-				computer.setDiscontinuedDate(inputDate());
+				computer.setDiscontinued(inputDate());
 			}
 			
 			//Change the company if the user wants

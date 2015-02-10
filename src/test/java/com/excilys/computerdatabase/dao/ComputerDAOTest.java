@@ -174,7 +174,7 @@ public class ComputerDAOTest {
 	 */
 	@Test
 	public void create() {
-		final Computer computer = Computer.builder().name("test").introducedDate(LocalDate.parse("1993-01-10")).company(apple).build();
+		final Computer computer = Computer.builder().name("test").introduced(LocalDate.parse("1993-01-10")).company(apple).build();
 		
 		computerDAO.create(computer);
 		computer.setId(5L);
@@ -200,7 +200,7 @@ public class ComputerDAOTest {
 	 */
 	@Test
 	public void update() {
-		final Computer computer = Computer.builder().id(2L).name("test").introducedDate(LocalDate.parse("1993-01-12")).build();
+		final Computer computer = Computer.builder().id(2L).name("test").introduced(LocalDate.parse("1993-01-12")).build();
 		computerDAO.update(computer);
 		assertEquals(computer, computerDAO.getById(2L));
 	}

@@ -77,8 +77,8 @@ pageEncoding="UTF-8"%>
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
 						<td><a href="edit?id=${computer.id}"><c:out value="${computer.name}"/> </a></td>
-						<td>${computer.introducedDate}</td>
-						<td>${computer.discontinuedDate}</td>
+						<td>${computer.introduced}</td>
+						<td>${computer.discontinued}</td>
 						<td>${computer.company.name}</td>
 					</tr>
 				</c:forEach>
