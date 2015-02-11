@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,9 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.computerdatabase.dao.impl.ColumnNames;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.Page;
+import com.excilys.computerdatabase.domain.OrderBy;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerDTOConverter;
 import com.excilys.computerdatabase.service.CompanyDBService;
@@ -36,12 +37,9 @@ public class ComputerController {
 
 	private static final String ID = "id";
 	private static final String PAGE = "page";
-	private static final String NB_RESULTS = "nbResults";
-	private static final String SORT = "sort";
+	private static final String DIRECTION = "direction";
 	private static final String SEARCH = "search";
-	private static final String ORDER = "order";
-	private static final String ASC = "ASC";
-	private static final String DESC = "DESC";
+	private static final String SORT = "sort";
 	private static final String COMPANIES = "companies";
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	private static final String SELECT = "selection";
@@ -70,43 +68,16 @@ public class ComputerController {
 	
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	protected String dashboard(final Model model, 
-							@RequestParam(value = PAGE, required = false, defaultValue = "1") final int pageNumber,
-							@RequestParam(value = NB_RESULTS, required = false, defaultValue = "10") final int nbResults,
-							@RequestParam(value = SORT, required = false, defaultValue = "1") final String sort,
-							@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search,
-							@RequestParam(value = ORDER, required = false, defaultValue = "ASC") final String order) {	
-		Page<Computer> page = new Page<Computer>();
+	protected String dashboard(final Model model, final Pageable pageable, 
+								@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search) {
+		final Page<Computer> page = computerDBService.getPagedList(search, pageable);
 		
-
-		if (pageNumber < 1) {
-			page.setPageNumber(1);
-		} else {
-			page.setPageNumber(pageNumber);
-		}
-
-		if (nbResults < 10) {
-			page.setNbResultsPerPage(10);
-		} else {
-			page.setNbResultsPerPage(nbResults);
-		}
-		
-		page.setSearch(search.trim());
-		
-		ColumnNames cName = ColumnNames.getInstance(sort);
-		if (cName == null) {
-			cName = ColumnNames.ID;
-		}
-		page.setSort(cName);
-		
-		if (order.compareToIgnoreCase(ASC) == 0 || order.compareToIgnoreCase(DESC) == 0) {
-			page.setOrder(order.toUpperCase());
-		}
-		
-		page = computerDBService.getPagedList(page);
-		
+		model.addAttribute(SEARCH, search);
 		model.addAttribute(PAGE, page);
-		
+		if (page.getSort() != null && OrderBy.getOrderByFromSort(page.getSort()) != null) {
+			model.addAttribute(SORT, OrderBy.getOrderByFromSort(page.getSort()).getColName());
+			model.addAttribute(DIRECTION, OrderBy.getOrderByFromSort(page.getSort()).getDir());
+		}
 		return "dashboard";
 	}
 	

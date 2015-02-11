@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -24,8 +23,6 @@ import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.Page;
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.service.impl.CompanyDBServiceImpl;
 
 
@@ -39,10 +36,6 @@ public class CompanyDBServiceTest {
 	CompanyDAO companyDAO;
 	ComputerDAO computerDAO;
 	
-	Page<Company> page;
-	Page<Company> pageReturned;
-	Page<Company> wrongPNumber;
-	Page<Company> wrongRPP;
 	List<Computer> computerList;
 	List<Company> companyList;
 	Company c1;
@@ -65,24 +58,8 @@ public class CompanyDBServiceTest {
 		computerList.add(new Computer(3L, "ordi 3", null, null, c2));
 		
 		
-		page = new Page<Company>();
-		
-		pageReturned = new Page<Company>();
-		page.setNbResults(2);
-		page.setList(companyList);
-		
-		wrongPNumber = new Page<Company>();
-		wrongPNumber.setPageNumber(-1);
-		
-		wrongRPP = new Page<Company>();
-		wrongRPP.setNbResultsPerPage(-1);
-		
 		when(companyDAO.getAll()).thenReturn(companyList);
 		when(companyDAO.getById(1L)).thenReturn(c1);
-		when(companyDAO.getPagedList(page)).thenReturn(pageReturned);
-		
-		doThrow(PersistenceException.class).when(companyDAO).getPagedList(wrongPNumber);
-		doThrow(PersistenceException.class).when(companyDAO).getPagedList(wrongRPP);
 		
 		doAnswer(new Answer<List<Computer>>() {
 			@Override
@@ -128,30 +105,6 @@ public class CompanyDBServiceTest {
 	@Test
 	public void getByIdInvalid() {
 		assertNull(companyDBService.getById(-1L));
-	}
-	
-	
-	/*
-	 * Tests getPagedList function
-	 */
-	@Test
-	public void getPagedList() {
-		assertEquals(pageReturned, companyDBService.getPagedList(page));
-	}
-	
-	@Test
-	public void getPagedListNull() {
-		assertNull(companyDBService.getPagedList(null));
-	}
-	
-	@Test(expected = PersistenceException.class)
-	public void invalidPageNumber() {
-		companyDBService.getPagedList(wrongPNumber);
-	}
-	
-	@Test(expected = PersistenceException.class)
-	public void invalidResultsPerPage() {
-		companyDBService.getPagedList(wrongRPP);
 	}
 	
 	

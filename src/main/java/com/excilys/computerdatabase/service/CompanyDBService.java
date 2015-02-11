@@ -3,7 +3,6 @@ package com.excilys.computerdatabase.service;
 import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
-import com.excilys.computerdatabase.domain.Page;
 
 public interface CompanyDBService {
 
@@ -19,13 +18,6 @@ public interface CompanyDBService {
 	 * @return the company that was found or null if there is no company for this id
 	 */
 	Company getById(long id);
-	
-	/**
-	 * Get a Page of companies in the database.
-	 * @param Page : A page containing the pageNumber and the max number of results
-	 * @return A Page containing the list of companies 
-	 */
-	Page<Company> getPagedList(Page<Company> page);
 	
 	/**
 	 * Delete a Company from the database and all associated Computers

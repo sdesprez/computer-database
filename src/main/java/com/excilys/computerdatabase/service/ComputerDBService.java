@@ -2,8 +2,10 @@ package com.excilys.computerdatabase.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.Page;
 
 public interface ComputerDBService {
 
@@ -51,5 +53,5 @@ public interface ComputerDBService {
 	 * @param Page : A page containing the pageNumber and the max number of results
 	 * @return A Page containing the list of computers 
 	 */
-	Page<Computer> getPagedList(Page<Computer> page);
+	Page<Computer> getPagedList(String search, Pageable pageable);
 }

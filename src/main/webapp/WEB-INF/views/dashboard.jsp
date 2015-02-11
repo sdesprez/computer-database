@@ -20,11 +20,12 @@ pageEncoding="UTF-8"%>
 				| 
 				<a href="?lang=fr">fr</a>
 			</span>
-			<h1 id="homeTitle">${page.nbResults} <spring:message code="title.dashboard"/></h1>
+			<h1 id="homeTitle">${page.totalElements} <spring:message code="title.dashboard"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
-						<input type="hidden" name="nbResults" value="${page.nbResultsPerPage}">
+						<input type="hidden" name="size" value="${page.size}">
+						<input type="hidden" name="page" value="1">
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="<spring:message code="placeholder.search"/>" /> <input
 							type="submit" id="searchsubmit" value="<spring:message code="button.filter"/>"
@@ -57,15 +58,15 @@ pageEncoding="UTF-8"%>
 							</a>
 						</span></th>
 					 	<%String[][] columns = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
-								{"discontinued", "column.discontinued"}, {"company_name", "column.company"}}; 
+								{"discontinued", "column.discontinued"}, {"company.name", "column.company"}}; 
 							pageContext.setAttribute("columns", columns);%>
 						<c:forEach items="${columns}" var="col">
 							<c:choose>
-							<c:when test="${col[0].equals(page.sort.id) && page.order.equals(\"ASC\") }">
-								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="desc"><spring:message code="${col[1]}"/></h:link></th>
+							<c:when test="${col[0].equals(sort) && direction.equalsIgnoreCase(\"ASC\") }">${col[0].equals(sort)}
+								<th><h:link target="dashboard" size="${page.size}" search="${search}" sort="${col[0]}" direction="desc"><spring:message code="${col[1]}"/></h:link></th>
 							</c:when>
 							<c:otherwise>
-								<th><h:link target="dashboard" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${col[0]}" order="asc"><spring:message code="${col[1]}"/></h:link></th>
+								<th><h:link target="dashboard" size="${page.size}" search="${search}" sort="${col[0]}" direction="asc"><spring:message code="${col[1]}"/></h:link></th>
 							</c:otherwise>
 							</c:choose>
 						</c:forEach>				
@@ -73,7 +74,7 @@ pageEncoding="UTF-8"%>
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-				<c:forEach items="${page.list}" var="computer">
+				<c:forEach items="${page.content}" var="computer">
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
 						<td><a href="edit?id=${computer.id}"><c:out value="${computer.name}"/> </a></td>
@@ -89,9 +90,8 @@ pageEncoding="UTF-8"%>
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<h:pagination target="dashboard" pages="${page.nbPages}" pageNumber="${page.pageNumber}" limit="${page.nbResultsPerPage}" search="${page.search}" sort="${page.sort.id}" order="${page.order}"/>
+			<h:pagination target="dashboard" pages="${page.totalPages}" pageNumber="${page.number}" size="${page.size}" search="${search}" sort="${sort}" direction="${direction}"/>
 		</div>
 	</footer>
-
 </body>
 </html>

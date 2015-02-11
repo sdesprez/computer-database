@@ -9,7 +9,7 @@
 				        http://www.springframework.org/schema/mvc
 						http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<mvc:annotation-driven />
+	
 	<!-- Scan of the controller package -->
 	<context:component-scan base-package="com.excilys.computerdatabase.controller" />
 	<context:component-scan base-package="com.excilys.computerdatabase.dto" />
@@ -23,6 +23,14 @@
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
 	<mvc:resources mapping="/fonts/**" location="/fonts/" />
+
+	<!-- Argument resolvers -->
+	<mvc:annotation-driven >
+		<mvc:argument-resolvers> 
+			<bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver"/> 
+			<bean class="org.springframework.data.web.SortHandlerMethodArgumentResolver"/> 
+		</mvc:argument-resolvers> 
+	</mvc:annotation-driven>
 
 	<!-- Source of the i18n messages -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

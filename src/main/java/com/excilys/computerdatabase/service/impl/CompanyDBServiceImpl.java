@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.computerdatabase.dao.CompanyDAO;
 import com.excilys.computerdatabase.domain.Company;
-import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.repositories.CompanyRepository;
 import com.excilys.computerdatabase.repositories.ComputerRepository;
 import com.excilys.computerdatabase.service.CompanyDBService;
@@ -19,13 +17,6 @@ import com.excilys.computerdatabase.service.CompanyDBService;
  */
 @Service
 public class CompanyDBServiceImpl implements CompanyDBService {
-
-
-	/**
-	 * Instance of the CompanyDAOI
-	 */
-	@Autowired
-	private CompanyDAO companyDAO;
 	
 	@Autowired
 	private CompanyRepository companyRepository;
@@ -48,17 +39,6 @@ public class CompanyDBServiceImpl implements CompanyDBService {
 	@Override
 	public Company getById(final long id) {
 		return companyRepository.findOne(id);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Page<Company> getPagedList(final Page<Company> page) {
-		if (page == null) {
-			return null;
-		}
-		return companyDAO.getPagedList(page);
 	}
 	
 	/**

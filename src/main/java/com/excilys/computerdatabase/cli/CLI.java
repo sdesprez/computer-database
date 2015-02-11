@@ -7,10 +7,12 @@ import java.util.Scanner;
 
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
 
@@ -33,12 +35,13 @@ public class CLI {
 	 */
 
 	private CompanyDBService companyDBService;
+	
+	final ClassPathXmlApplicationContext context;
 
 	public CLI() {
-		final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+		context = new ClassPathXmlApplicationContext("context.xml");
 		computerDBService = (ComputerDBService) context.getBean("computerDBServiceImpl");
 		companyDBService = (CompanyDBService) context.getBean("companyDBServiceImpl");
-		context.close();
 	}
 	
 	
@@ -95,7 +98,8 @@ public class CLI {
 			
 		} while (sc.nextLine().toLowerCase().equals("y"));
 		
-		//Close the scanner 
+		context.close();
+		//Close the scanner
 		sc.close();
 	}
 	
@@ -103,18 +107,16 @@ public class CLI {
 	 * List the computers of the database by pages of 20 computers
 	 * You can navigate to the next page or the previous page
 	 */
-	public void listComputers() {
-		//Create a Page
-		Page<Computer> page = new Page<Computer>();
-		
+	public void listComputers() {		
+		final Pageable pageable = new PageRequest(0, 20);
 		//Get the first Page of computers from the database
-		page = computerDBService.getPagedList(page);
+		Page<Computer> page = computerDBService.getPagedList("", pageable);
 		
 		//Show the content of the page
-		System.out.println("Total : " + page.getNbResults());
-		page.getList().forEach(System.out::println);
-		
-		while (true) {
+		do {
+			System.out.println("Total : " + page.getTotalElements());
+			page.getContent().forEach(System.out::println);
+
 			System.out.println("e:Exit\np:Previous page\nn:Next page");
 			
 			switch(sc.nextLine().toLowerCase()) {
@@ -123,70 +125,32 @@ public class CLI {
 				return;
 			//Show the next Page
 			case "n":
-				if (page.nextPage()) {
-					page = computerDBService.getPagedList(page);
+				if (page.hasNext()) {
+					page = computerDBService.getPagedList("", page.nextPageable());
 				}
-				System.out.println("Total : " + page.getNbResults());
-				page.getList().forEach(System.out::println);
+				System.out.println("Total : " + page.getTotalElements());
+				page.getContent().forEach(System.out::println);
 				break;
 			//Show the previous Page
 			case "p":
-				if (page.previousPage()) {
-					page = computerDBService.getPagedList(page);
+				if (page.hasPrevious()) {
+					page = computerDBService.getPagedList("", page.previousPageable());
 				}
-				System.out.println("Total : " + page.getNbResults());
-				page.getList().forEach(System.out::println);
+				System.out.println("Total : " + page.getTotalElements());
+				page.getContent().forEach(System.out::println);
 				break;
 			default:
 				System.out.println("Invalid input");
 				break;
 			}
-		}
+		} while (true);
 	}
 	
 	/**
-	 * List the companies of the database by pages of 20 computers
-	 * You can navigate to the next page or the previous page
+	 * List all the companies of the database
 	 */
 	public void listCompanies() {
-		//Create a Page
-		Page<Company> page = new Page<Company>();
-		
-		//Get the first Page of companies from the database
-		page = companyDBService.getPagedList(page);
-		
-		//Show the content of the page
-		System.out.println("Total : " + page.getNbResults());
-		page.getList().forEach(System.out::println);
-		
-		while (true) {
-			System.out.println("e:Exit\np:Previous page\nn:Next page");
-			
-			switch(sc.nextLine().toLowerCase()) {
-			//Exit the listComputer() function
-			case "e":
-				return;
-			//Show the next Page
-			case "n":
-				if (page.nextPage()) {
-					page = companyDBService.getPagedList(page);
-				}
-				System.out.println("Total : " + page.getNbResults());
-				page.getList().forEach(System.out::println);
-				break;
-			//Show the previous Page
-			case "p":
-				if (page.previousPage()) {
-					page = companyDBService.getPagedList(page);
-				}
-				System.out.println("Total : " + page.getNbResults());
-				page.getList().forEach(System.out::println);
-				break;
-			default:
-				System.out.println("Invalid input");
-				break;
-			}
-		}
+		companyDBService.getAll().forEach(System.out::println);
 	}
 	
 	/**

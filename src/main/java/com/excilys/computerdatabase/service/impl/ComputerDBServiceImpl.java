@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computerdatabase.dao.ComputerDAO;
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.Page;
 import com.excilys.computerdatabase.repositories.ComputerRepository;
 import com.excilys.computerdatabase.service.ComputerDBService;
 
@@ -20,12 +20,6 @@ import com.excilys.computerdatabase.service.ComputerDBService;
 @Service
 public class ComputerDBServiceImpl implements ComputerDBService {
 
-
-	/**
-	 * Instance of the ComputerDAOI
-	 */
-	@Autowired
-	private ComputerDAO computerDAO;
 
 	@Autowired
 	private ComputerRepository computerRepository;
@@ -86,10 +80,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Page<Computer> getPagedList(final Page<Computer> page) {
-		if (page != null) {
-			return computerDAO.getPagedList(page);
-		}
-		return null;
+	public Page<Computer> getPagedList(final String search, final Pageable pageable) {
+		return computerRepository.findByNameContainingOrCompanyNameContaining(search, search,pageable);
 	}
 }
