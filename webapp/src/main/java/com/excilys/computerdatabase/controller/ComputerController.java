@@ -44,6 +44,9 @@ public class ComputerController {
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	private static final String SELECT = "selection";
 	
+	private static final String[][] COLUMNS = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
+												{"discontinued", "column.discontinued"}, {"company.name", "column.company"}}; 
+	
 	@Autowired
 	private CompanyDBService companyDBService;
 	@Autowired
@@ -74,6 +77,7 @@ public class ComputerController {
 		
 		model.addAttribute(SEARCH, search);
 		model.addAttribute(PAGE, page);
+		model.addAttribute("columns", COLUMNS);
 		if (page.getSort() != null && OrderBy.getOrderByFromSort(page.getSort()) != null) {
 			model.addAttribute(SORT, OrderBy.getOrderByFromSort(page.getSort()).getColName());
 			model.addAttribute(DIRECTION, OrderBy.getOrderByFromSort(page.getSort()).getDir());

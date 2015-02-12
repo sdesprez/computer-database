@@ -13,6 +13,8 @@ public class ComputerDTOValidator implements Validator {
 
 	private MessageSourceAccessor messageSourceAccessor;
 	
+	private static final String FORMAT_CODE = "dateFormat";
+	
 	@Override
 	public boolean supports(final Class<?> classz) {
 		return ComputerDTO.class.equals(classz);
@@ -31,7 +33,7 @@ public class ComputerDTOValidator implements Validator {
 			e.rejectValue("name", "error.name");
 		}
 		
-		final String dateFormat = messageSourceAccessor.getMessage("dateFormat");
+		final String dateFormat = messageSourceAccessor.getMessage(FORMAT_CODE);
 		if (!GenericValidator.isBlankOrNull(dto.getIntroduced()) && !GenericValidator.isDate(dto.getIntroduced(), dateFormat, false)) {
 			e.rejectValue("introduced",	"error.date");
 		}

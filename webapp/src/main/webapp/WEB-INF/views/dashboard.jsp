@@ -50,16 +50,12 @@ pageEncoding="UTF-8"%>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
-					 	<%String[][] columns = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
-								{"discontinued", "column.discontinued"}, {"company.name", "column.company"}}; 
-							pageContext.setAttribute("columns", columns);%>
+						<th class="editMode" style="width: 60px; height: 22px;">
+							<input type="checkbox" id="selectall" /> 
+							<span style="vertical-align: top;"> - 
+								<a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"><i class="fa fa-trash-o fa-lg"></i></a>
+							</span>
+						</th>
 						<c:forEach items="${columns}" var="col">
 							<c:choose>
 							<c:when test="${col[0].equals(sort) && direction.equalsIgnoreCase(\"ASC\") }">

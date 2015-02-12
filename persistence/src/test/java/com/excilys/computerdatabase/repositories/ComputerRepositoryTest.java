@@ -103,6 +103,7 @@ public class ComputerRepositoryTest {
 		assertEquals(list.get(0), computerRepository.findOne(1L));
 		}
 	
+	@Test
 	public void findOneInvalid() {
 		assertNull(computerRepository.findOne(5L));
 		assertNull(computerRepository.findOne(0L));
@@ -218,6 +219,7 @@ public class ComputerRepositoryTest {
 	/*
 	 * Tests of the deleteByCompanyId function
 	 */
+	@Test
 	public void deleteByCompanyId() {
 		computerRepository.deleteByCompanyId(2L);
 		assertNull(computerRepository.findOne(3L));
