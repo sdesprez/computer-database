@@ -7,7 +7,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,9 +22,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.BadSqlGrammarException;
 
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
@@ -38,9 +37,6 @@ public class ComputerDBServiceTest {
 	@InjectMocks
 	ComputerDBServiceImpl computerDBService;
 	Page<Computer> page;
-	Page<Computer> pageReturned;
-	Page<Computer> wrongPNumber;
-	Page<Computer> wrongRPP;
 	Pageable pageable;
 	
 	ComputerRepository computerRepository;
@@ -65,8 +61,9 @@ public class ComputerDBServiceTest {
 
 		computer = new Computer(4L, "ordi 4", null, null, c1);
 
+		page = new PageImpl<Computer>(list, pageable, list.size());
 		when(computerRepository.findAll()).thenReturn(list);
-		when(computerRepository.findByNameContainingOrCompanyNameContaining(anyString(), anyString(), pageable)).thenReturn(pageReturned);
+		when(computerRepository.findByNameContainingOrCompanyNameContaining(anyString(), anyString(), any(Pageable.class))).thenReturn(page);
 
 		doAnswer(new Answer<Computer>() {
 			@Override
@@ -84,27 +81,15 @@ public class ComputerDBServiceTest {
 			public Computer answer(final InvocationOnMock invocation) {
 				final Computer computer = (Computer) invocation.getArguments()[0];
 				if (computer != null) {
-					list.add(computer);
-				}
-				return null;
-			}
-		}).when(computerRepository).save(any(Computer.class));
-		
-		doAnswer(new Answer<Computer>() {
-			@Override
-			public Computer answer(final InvocationOnMock invocation) {
-				final Computer computer = (Computer) invocation.getArguments()[0];
-				if (computer != null && computer.getId() > 0 && computer.getId() < list.size()) {
-					if (computer.getCompany() != null && (computer.getCompany().getId() < 0 || computer.getCompany().getId() > 2)) {
-						throw new RuntimeException();
+					if (computer.getId() < 1 || computer.getId() >= list.size()) {
+						list.add(computer);
+					} else {
+						list.set((int) computer.getId() - 1, computer);
 					}
-					list.set((int) computer.getId() - 1, computer);
 				}
 				return null;
 			}
-			
 		}).when(computerRepository).save(any(Computer.class));
-		
 		
 		doAnswer(new Answer<Computer>() {
 			@Override
@@ -116,11 +101,11 @@ public class ComputerDBServiceTest {
 			
 		}).when(computerRepository).delete(anyLong());
 		
-		
+		/*
 		when(computerRepository.getPagedList(page)).thenReturn(pageReturned);
 		doThrow(BadSqlGrammarException.class).when(computerRepository).getPagedList(wrongPNumber);
 		doThrow(BadSqlGrammarException.class).when(computerRepository).getPagedList(wrongRPP);
-
+*/
 
 		MockitoAnnotations.initMocks(this);
 	}
@@ -155,24 +140,13 @@ public class ComputerDBServiceTest {
 	 */
 	@Test
 	public void getPagedList() {
-		assertEquals(pageReturned, computerDBService.getPagedList(page));
+		assertEquals(page, computerDBService.getPagedList("" ,pageable));
 	}
 
 	@Test
 	public void getPagedListNull() {
-		assertNull(computerDBService.getPagedList(null));
+		assertNull(computerDBService.getPagedList("" ,null));
 	}
-	
-	@Test(expected = BadSqlGrammarException.class)
-	public void invalidPageNumber() {
-		computerDBService.getPagedList(wrongPNumber);
-	}
-	
-	@Test(expected = BadSqlGrammarException.class)
-	public void invalidResultsPerPage() {
-		computerDBService.getPagedList(wrongRPP);
-	}
-	
 	
 	
 	/*

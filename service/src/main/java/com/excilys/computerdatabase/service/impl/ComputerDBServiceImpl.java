@@ -81,6 +81,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public Page<Computer> getPagedList(final String search, final Pageable pageable) {
-		return computerRepository.findByNameContainingOrCompanyNameContaining(search, search,pageable);
+		if (pageable != null) {
+			return computerRepository.findByNameContainingOrCompanyNameContaining(search, search,pageable);
+		}
+		return null;
 	}
 }

@@ -3,7 +3,6 @@ package com.excilys.computerdatabase.repositories;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,10 +17,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
-import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -109,45 +115,23 @@ public class ComputerRepositoryTest {
 	 * Tests of the getPagedList function
 	 */
 	@Test
-	public void getPagedList() {
-		final Page<Computer> page = new Page<Computer>();
-		page.setNbResultsPerPage(20);
-		page.setPageNumber(1);
+	public void pagedResult() {
+		Pageable pageable = new PageRequest(0, 20);
+		Page<Computer> page = new PageImpl<Computer>(list, pageable, list.size());
 		
-		final Page<Computer> pageReturned = new Page<Computer>();
-		pageReturned.setNbResultsPerPage(20);
-		pageReturned.setPageNumber(1);
-		pageReturned.setNbResults(list.size());
-		pageReturned.setNbPages(1);
-		pageReturned.setList(list);
-		
-		assertEqual(pageReturned, computerRepository.getPagedList(page));
+		assertEquals(page, computerRepository.findByNameContainingOrCompanyNameContaining("" ,"" ,pageable));
 	}
 	
-	@Test(expected = NullPointerException.class)
-	public void getPagedListNull() {
-		computerRepository.getPagedList(null);
+	@Test
+	public void pagedResultNull() {
+		Page<Computer> page = new PageImpl<Computer>(list);
+		assertEquals(page, computerRepository.findByNameContainingOrCompanyNameContaining("" ,"" ,null));
 	}
 	
-	@Test(expected = BadSqlGrammarException.class)
-	public void invalidOrder() {
-		final Page<Computer> page = new Page<Computer>();
-		page.setOrder("x");
-		computerRepository.getPagedList(page);
-	}
-	
-	@Test(expected = BadSqlGrammarException.class)
-	public void invalidPageNumber() {
-		final Page<Computer> page = new Page<Computer>();
-		page.setPageNumber(-1);
-		computerRepository.getPagedList(page);
-	}
-	
-	@Test(expected = BadSqlGrammarException.class)
-	public void invalidResultsPerPage() {
-		final Page<Computer> page = new Page<Computer>();
-		page.setNbResultsPerPage(-1);
-		computerRepository.getPagedList(page);
+	@Test(expected = PropertyReferenceException.class)
+	public void invalidSort() {
+		Pageable pageable = new PageRequest(0, 20, new Sort(Direction.ASC, "x"));
+		computerRepository.findByNameContainingOrCompanyNameContaining("" ,"", pageable);
 	}
 	
 	
@@ -164,7 +148,7 @@ public class ComputerRepositoryTest {
 		assertEquals(computer, computerRepository.findOne(5L));
 	}
 	
-	@Test(expected = NullPointerException.class)
+	@Test(expected = InvalidDataAccessApiUsageException.class)
 	public void createNull() {
 		Computer computer = null;
 		computerRepository.save(computer);
@@ -189,7 +173,7 @@ public class ComputerRepositoryTest {
 		assertEquals(computer, computerRepository.findOne(2L));
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = InvalidDataAccessApiUsageException.class)
 	public void updateNull() {
 		Computer computer = null;
 		computerRepository.save(computer);
@@ -205,7 +189,7 @@ public class ComputerRepositoryTest {
 		assertEquals(list, computerRepository.findAll());
 	}
 	
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = JpaObjectRetrievalFailureException.class)
 	public void updateInvalidCompanyId() {
 		final Computer computer = new Computer();
 		computer.setId(1L);
@@ -225,27 +209,24 @@ public class ComputerRepositoryTest {
 		assertNull(computerRepository.findOne(2L));
 	}
 	
-	@Test
+	@Test(expected = EmptyResultDataAccessException.class)
 	public void deleteInvalidId() {
 		computerRepository.delete(-1L);
-		assertEquals(list, computerRepository.findAll());
 	}
 	
 	
 	/*
 	 * Tests of the deleteByCompanyId function
 	 */
-	@Test
 	public void deleteByCompanyId() {
 		computerRepository.deleteByCompanyId(2L);
-		
-		assertTrue(computerRepository.getByCompanyId(2L).isEmpty());
+		assertNull(computerRepository.findOne(3L));
+		assertNull(computerRepository.findOne(4L));
 	}
 	
 	@Test
 	public void DeleteCompanyInvalid() {
 		computerRepository.deleteByCompanyId(-2L);
-		
 		assertEquals(list, computerRepository.findAll());
 	}
 	
