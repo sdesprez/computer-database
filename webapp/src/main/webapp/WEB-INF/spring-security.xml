@@ -5,19 +5,28 @@
 						http://www.springframework.org/schema/security
 						http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<http auto-config="true">
-		<intercept-url pattern="/**" access="ROLE_ADMIN" />
+
+	<beans:bean id="digestFilter"
+      class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+        <beans:property name="userDetailsService" ref="userDBServiceImpl" />
+        <beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+    </beans:bean>
+    
+    <beans:bean id="digestEntryPoint" 
+      class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+        <beans:property name="realmName" value="Contacts Realm via Digest Authentication" />
+        <beans:property name="key" value="acegi" />
+    </beans:bean>
+    
+	<http use-expressions="true" entry-point-ref="digestEntryPoint">
+		<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
 	</http>
 
 	<authentication-manager>
-		<authentication-provider>
-			<password-encoder hash="sha" />
-			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="select username,password,enabled from user where username=?"
-				authorities-by-username-query="select u1.username, u2.role from user u1, user_role u2 where u1.user_id = u2.user_id and u1.username =?" />
-		</authentication-provider>
+		<authentication-provider user-service-ref="userDBServiceImpl"/>
 	</authentication-manager>
 
-
+	
 
 </beans:beans>
