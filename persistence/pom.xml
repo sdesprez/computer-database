@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.1</version>
+		<version>0.5.2</version>
 	</parent>
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
@@ -45,6 +45,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- API to convert SQL Date to LocalDate -->
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.extended</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

@@ -35,6 +35,13 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 		<property name="jpaDialect" ref="jpaDialect" />
+		<property name="mappingResources">
+			<list>
+				<value>mapping/computer.hbm.xml</value>
+				<value>mapping/company.hbm.xml</value>
+				<value>mapping/user.hbm.xml</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="jpaVendorAdapter"	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
