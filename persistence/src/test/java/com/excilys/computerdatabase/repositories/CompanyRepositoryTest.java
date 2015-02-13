@@ -3,14 +3,16 @@ package com.excilys.computerdatabase.repositories;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,8 @@ import com.excilys.computerdatabase.domain.Company;
 @ContextConfiguration(locations = {"/context-test.xml"})
 public class CompanyRepositoryTest {
 
+	private static final String FILE = "src/test/resources/scripts/setDBCompanyTest.sql";
+	
 	@Autowired
 	CompanyRepository companyRepository;
 	List<Company> list;
@@ -34,31 +38,17 @@ public class CompanyRepositoryTest {
 	DataSource dataSource;
 	
 	@Before
-	public void init() throws SQLException {
+	public void init() throws SQLException, FileNotFoundException {
 		list = new ArrayList<Company>();
 		list.add(new Company(1L, "Apple Inc."));
 		list.add(new Company(2L, "Thinking Machines"));
 
+		FileReader reader = new FileReader(FILE);
+		
 		final Connection connection = DataSourceUtils.getConnection(dataSource);
+		ScriptRunner scriptRunner = new ScriptRunner(connection);
+		scriptRunner.runScript(reader);
 		
-		final Statement stmt = connection.createStatement();
-		stmt.execute("drop table if exists computer;");  
-		stmt.execute("drop table if exists company;");
-		stmt.execute("create table company (id bigint not null auto_increment, name varchar(255), "
-				+ "constraint pk_company primary key (id));");
-		stmt.execute("create table computer (id bigint not null auto_increment,name varchar(255), "
-				+ "introduced timestamp NULL, discontinued timestamp NULL,"
-				+ "company_id bigint default NULL,"
-				+ "constraint pk_computer primary key (id));");
-		stmt.execute("alter table computer add constraint fk_computer_company_1 foreign key (company_id)"
-				+ " references company (id) on delete restrict on update restrict;");
-		stmt.execute("create index ix_computer_company_1 on computer (company_id);");
-		
-		stmt.execute("insert into company (id,name) values (  1,'Apple Inc.');");
-		stmt.execute("insert into company (id,name) values (  2,'Thinking Machines');");
-		
-		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
-		stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
 		connection.close();
 	}
 	
