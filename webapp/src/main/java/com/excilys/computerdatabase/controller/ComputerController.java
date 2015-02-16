@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -71,7 +72,8 @@ public class ComputerController {
 	
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	protected String dashboard(final Model model, final Pageable pageable, 
+	protected String dashboard(final Model model, 
+								@PageableDefault(page = 0, size = 20) final Pageable pageable, 
 								@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search) {
 		final Page<Computer> page = computerDBService.getPagedList(search, pageable);
 		

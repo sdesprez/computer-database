@@ -11,6 +11,8 @@ public class ComputerDTO {
 	private String discontinued;
 
 	private long company;
+	
+	private String companyName;
 
 	public ComputerDTO() {
 
@@ -55,20 +57,15 @@ public class ComputerDTO {
 	public void setCompany(final long company) {
 		this.company = company;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (company ^ (company >>> 32));
-		result = prime * result
-				+ ((discontinued == null) ? 0 : discontinued.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result
-				+ ((introduced == null) ? 0 : introduced.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	
+	public String getCompanyName() {
+		return companyName;
 	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
 
 	@Override
 	public String toString() {
@@ -76,12 +73,22 @@ public class ComputerDTO {
 		builder.append("ComputerDTO [id=").append(id).append(", name=")
 				.append(name).append(", introduced=").append(introduced)
 				.append(", discontinued=").append(discontinued)
-				.append(", company=").append(company).append("]");
+				.append(", company=").append(company)
+				.append(" ,company name=").append(companyName).append("]");
 		return builder.toString();
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -91,25 +98,8 @@ public class ComputerDTO {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final ComputerDTO other = (ComputerDTO) obj;
-		if (company != other.company) {
-			return false;
-		}
-		if (discontinued == null) {
-			if (other.discontinued != null) {
-				return false;
-			}
-		} else if (!discontinued.equals(other.discontinued)) {
-			return false;
-		}
+		ComputerDTO other = (ComputerDTO) obj;
 		if (id != other.id) {
-			return false;
-		}
-		if (introduced == null) {
-			if (other.introduced != null) {
-				return false;
-			}
-		} else if (!introduced.equals(other.introduced)) {
 			return false;
 		}
 		if (name == null) {
@@ -122,10 +112,12 @@ public class ComputerDTO {
 		return true;
 	}
 
+	
 	public static Builder builder() {
 		return new Builder();
 	}
 
+	
 	public static final class Builder {
 		private ComputerDTO computerDTO;
 
@@ -155,6 +147,11 @@ public class ComputerDTO {
 
 		public Builder company(final long company) {
 			computerDTO.company = company;
+			return this;
+		}
+		
+		public Builder companyName(final String companyName) {
+			computerDTO.companyName = companyName;
 			return this;
 		}
 

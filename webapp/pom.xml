@@ -5,17 +5,13 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.2</version>
+		<version>0.5.3</version>
 	</parent>
 	<artifactId>webapp</artifactId>
 	<packaging>war</packaging>
 
 	<dependencies>
 		<!-- Sister's modules requirements -->
-		<dependency>
-			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>core</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>service</artifactId>

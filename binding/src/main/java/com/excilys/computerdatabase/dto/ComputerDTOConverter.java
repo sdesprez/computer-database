@@ -75,6 +75,7 @@ public class ComputerDTOConverter {
 		}		
 		if (computer.getCompany() != null) {
 			builder.company(computer.getCompany().getId());
+			builder.companyName(computer.getCompany().getName());
 		} else {
 			builder.company(0);
 		}

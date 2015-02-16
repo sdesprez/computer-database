@@ -1,11 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.5.2</version>
+	<version>0.5.3</version>
 	<name>computer-database</name>
 
 	<modules>
@@ -15,7 +15,8 @@
 		<module>binding</module>
 		<module>console</module>
 		<module>webapp</module>
-	</modules>
+    	<module>webservice</module>
+  </modules>
 
 	<properties>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
@@ -46,32 +47,32 @@
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>core</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>service</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>binding</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>console</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>persistence</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>webapp</artifactId>
-				<version>${parent.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 
 

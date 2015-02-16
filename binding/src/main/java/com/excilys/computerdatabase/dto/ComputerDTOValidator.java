@@ -1,5 +1,8 @@
 package com.excilys.computerdatabase.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -46,5 +49,27 @@ public class ComputerDTOValidator implements Validator {
 		if (dto.getCompany() < 0) {
 			e.rejectValue("company", "error.company");
 		}
+	}
+	
+	public List<String> validate(final ComputerDTO computerDTO) {
+		List<String> errors = new ArrayList<String>();
+		if (GenericValidator.isBlankOrNull(computerDTO.getName()) || computerDTO.getName().length() > 255) {
+			errors.add("Incorrect name : a name can't be empty or only spaces");
+		}
+		
+		if (!GenericValidator.isBlankOrNull(computerDTO.getIntroduced()) && !GenericValidator.isDate(computerDTO.getIntroduced(), "yyyy-MM-dd", false)) {
+			errors.add("The introduced date is not valid, valid format is yyyy-MM-dd. You can also leave this field emtpy");
+		}
+		if (!GenericValidator.isBlankOrNull(computerDTO.getDiscontinued()) && !GenericValidator.isDate(computerDTO.getDiscontinued(), "yyyy-MM-dd", false)) {
+			errors.add("The discontinued date is not valid, valid format is yyyy-MM-dd. You can also leave this field emtpy");
+		}
+		if (computerDTO.getId() < 0) {
+			errors.add("Incorrect Computer identifier");
+		}
+		if (computerDTO.getCompany() < 0) {
+			errors.add("Incorrect Company identifier");
+		}
+		
+		return errors;
 	}
 }

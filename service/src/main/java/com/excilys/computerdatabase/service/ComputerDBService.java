@@ -14,8 +14,6 @@ public interface ComputerDBService {
 	 * @return List of all the computers in the database
 	 */
 	List<Computer> getAll();
-
-	
 	
 	/**
 	 * Get the computer in the database corresponding to the id in parameter

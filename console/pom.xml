@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.2</version>
+		<version>0.5.3</version>
 	</parent>
 	<artifactId>console</artifactId>
 	<packaging>jar</packaging>
@@ -14,11 +14,13 @@
 		<!-- Sister's modules requirements -->
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>binding</artifactId>
 		</dependency>
+		
 		<dependency>
-			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>service</artifactId>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.10</version>
 		</dependency>
 		
 		<dependency>

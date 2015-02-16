@@ -1,20 +1,16 @@
 package com.excilys.computerdatabase.cli;
 
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.validator.GenericValidator;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.excilys.computerdatabase.domain.Company;
-import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.service.CompanyDBService;
-import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.dto.ComputerDTO;
+import com.excilys.computerdatabase.webservice.CompanyWebService;
+import com.excilys.computerdatabase.webservice.ComputerWebService;
+import com.excilys.computerdatabase.wrapper.PageWrapper;
 
 /**
  * Command Line Interface
@@ -25,23 +21,16 @@ public class CLI {
 	 * Scanner for the inputs of the user
 	 */
 	private static Scanner sc;
-	/**
-	 * Instance of ComputerDBService for the access to the database
-	 */
-
-	private ComputerDBService computerDBService;
-	/**
-	 * Instance of CompanyDBService for the access to the database
-	 */
-
-	private CompanyDBService companyDBService;
 	
-	final ClassPathXmlApplicationContext context;
+	private static final int PAGE_SIZE = 20;
+	
+	private ComputerWebService computerWebService;
+	
+	private CompanyWebService companyWebService;
 
-	public CLI() {
-		context = new ClassPathXmlApplicationContext("service-context.xml");
-		computerDBService = (ComputerDBService) context.getBean("computerDBServiceImpl");
-		companyDBService = (CompanyDBService) context.getBean("companyDBServiceImpl");
+	public CLI(ComputerWebService computerWebService, CompanyWebService companyWebService) {
+		this.computerWebService = computerWebService;
+		this.companyWebService = companyWebService;
 	}
 	
 	
@@ -98,7 +87,6 @@ public class CLI {
 			
 		} while (sc.nextLine().toLowerCase().equals("y"));
 		
-		context.close();
 		//Close the scanner
 		sc.close();
 	}
@@ -107,15 +95,14 @@ public class CLI {
 	 * List the computers of the database by pages of 20 computers
 	 * You can navigate to the next page or the previous page
 	 */
-	public void listComputers() {		
-		final Pageable pageable = new PageRequest(0, 20);
+	public void listComputers() {
 		//Get the first Page of computers from the database
-		Page<Computer> page = computerDBService.getPagedList("", pageable);
+		PageWrapper<ComputerDTO> page = computerWebService.getPagedList(0, PAGE_SIZE);
 		
 		//Show the content of the page
 		do {
 			System.out.println("Total : " + page.getTotalElements());
-			page.getContent().forEach(System.out::println);
+			page.getContent().getItems().forEach(System.out::println);
 
 			System.out.println("e:Exit\np:Previous page\nn:Next page");
 			
@@ -126,18 +113,15 @@ public class CLI {
 			//Show the next Page
 			case "n":
 				if (page.hasNext()) {
-					page = computerDBService.getPagedList("", page.nextPageable());
+					page = computerWebService.getPagedList(page.getNextPage(), PAGE_SIZE);
 				}
-				System.out.println("Total : " + page.getTotalElements());
-				page.getContent().forEach(System.out::println);
 				break;
 			//Show the previous Page
 			case "p":
+				System.out.println(page.hasPrevious());
 				if (page.hasPrevious()) {
-					page = computerDBService.getPagedList("", page.previousPageable());
+					page = computerWebService.getPagedList(page.getPreviousPage(), PAGE_SIZE);
 				}
-				System.out.println("Total : " + page.getTotalElements());
-				page.getContent().forEach(System.out::println);
 				break;
 			default:
 				System.out.println("Invalid input");
@@ -150,7 +134,7 @@ public class CLI {
 	 * List all the companies of the database
 	 */
 	public void listCompanies() {
-		companyDBService.getAll().forEach(System.out::println);
+		companyWebService.getCompanies().getItems().forEach(System.out::println);
 	}
 	
 	/**
@@ -160,13 +144,14 @@ public class CLI {
 		System.out.println("Enter the computer id");
 		
 		//Get the computer corresponding to the id
-		final Computer computer = computerDBService.getById(inputLong());
+		final ComputerDTO computerDTO = computerWebService.getById(inputLong());
 		//Show the detail of the computer
-		if (computer != null) {
-			System.out.println("Name : " + computer.getName());
-			System.out.println("Introduced date : " + computer.getIntroduced());
-			System.out.println("Discontinued date : " + computer.getDiscontinued());
-			System.out.println("Company : " + computer.getCompany());
+		if (computerDTO.getId() != 0) {
+			System.out.println("Name : " + computerDTO.getName());
+			System.out.println("Introduced date : " + computerDTO.getIntroduced());
+			System.out.println("Discontinued date : " + computerDTO.getDiscontinued());
+			System.out.println("Company Id : " + computerDTO.getCompany());
+			System.out.println("Company name : " + computerDTO.getCompanyName());
 		} else {
 			System.out.println("No computer found for this id");
 		}
@@ -176,38 +161,47 @@ public class CLI {
 	 * Interface for creating a new computer
 	 */
 	public void createComputer() {
-		final Computer.Builder builder = Computer.builder();
+		ComputerDTO computerDTO = new ComputerDTO();
 		Company company = null;
 		
 		//Get the name of the computer, it can't be null or empty
 		System.out.println("Enter computer name");
-		builder.name(inputName());
+		computerDTO.setName(inputName());
 
 		//Get the date of introduction. If the user enter nothing, the date is null
 		System.out.println("Enter introduction date (yyyy-MM-dd) or nothing if you don't know");
-		builder.introduced(inputDate());
+		computerDTO.setIntroduced(inputDate());
 		
 		//Get the date of discontinuation. If the user enter nothing, the date is null
 		System.out.println("Enter discontinued date (yyyy-MM-dd) or nothing if you don't know");
-		builder.discontinued(inputDate());
+		computerDTO.setDiscontinued(inputDate());
 
 		//Get the id of the company. If it's 0, then company = null
-		companyLabel : while (company == null) {
+		//companyLabel : while (company == null) {
+		long companyId = 0;
+		do {
 			System.out.println("Enter company id (0 if you don't have one)");
-			final Long id = inputLong();
-			if (id == 0) {
-				break companyLabel;
+			companyId = inputLong();
+			if (companyId != 0) {
+				company = companyWebService.getById(companyId);
+				if (company == null) {
+					System.out.println("This id doesn't correspond to any company in the database.");
+				}
 			}
-			company = companyDBService.getById(id);
-			if (company == null) {
-				System.out.println("This id doesn't correspond to any company in the database.");
-			}
+		} while (companyId != 0 && company == null);
+		
+		if (companyId != 0) {
+			computerDTO.setCompany(companyId);
 		}
-		builder.company(company);
 		
 		//Add the computer to the database
-		computerDBService.create(builder.build());
-		System.out.println("The computer was added to the database");
+		List<String> errors = computerWebService.create(computerDTO).getItems();
+		if (errors == null || errors.isEmpty()) {
+			System.out.println("The computer was added to the database");
+		} else {
+			System.out.println("Couldn't create the computer :");
+			errors.forEach(System.out::println);
+		}
 		
 	}
 
@@ -216,56 +210,65 @@ public class CLI {
 	 */
 	public void updateComputer() {
 		System.out.println("Enter the id of the computer you wish to update");
+		
 		//Get the computer to update from the database
-		final Computer computer = computerDBService.getById(inputLong());
+		final ComputerDTO computerDTO = computerWebService.getById(inputLong());
 		Company company = null;
-		if (computer != null) {
+		
+		if (computerDTO != null) {
 			//Change the name if the user wants
-			System.out.println("Current name : " + computer.getName());
+			System.out.println("Current name : " + computerDTO.getName());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new name");
-				computer.setName(inputName());
+				computerDTO.setName(inputName());
 			}
 			
 			//Change the introducedDate if the user wants
-			System.out.println("Current introduced date : " + computer.getIntroduced());
+			System.out.println("Current introduced date : " + computerDTO.getIntroduced());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new introduced Date (yyyy-MM-dd)");
-				computer.setIntroduced(inputDate());
+				computerDTO.setIntroduced(inputDate());
 			}
 			
 			//Change the discontinuedDate if the user wants
-			System.out.println("Current discontinued date : " + computer.getDiscontinued());
+			System.out.println("Current discontinued date : " + computerDTO.getDiscontinued());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
 				System.out.println("Enter the new dicontinued date (yyyy-MM-dd)");
-				computer.setDiscontinued(inputDate());
+				computerDTO.setDiscontinued(inputDate());
 			}
 			
 			//Change the company if the user wants
-			System.out.println("Current company id : " + computer.getCompany());
+			System.out.println("Current company id : " + computerDTO.getCompany());
 			System.out.println("Do you wish to change it?(y,n)");
 			if (sc.nextLine().toLowerCase().compareTo("y") == 0) {
-				System.out.println("Enter the new company id (0 if you don't have one)");
-				companyLabel : while (company == null) {
-					System.out.println("Enter company id (0 if you don't have one)");
-					final Long id = inputLong();
-					if (id == 0) {
-						break companyLabel;
+				long companyId = 0;
+				do {
+					System.out.println("Enter the new company id (0 if you don't have one)");
+					companyId = inputLong();
+					if (companyId != 0) {
+						company = companyWebService.getById(companyId);
+						if (company == null) {
+							System.out.println("This id doesn't correspond to any company in the database.");
+						}
 					}
-					company = companyDBService.getById(id);
-					if (company == null) {
-						System.out.println("This id doesn't correspond to any company in the database.");
-					}
+				} while (companyId != 0 && company == null);
+				
+				if (companyId != 0) {
+					computerDTO.setCompany(companyId);
 				}
-				computer.setCompany(company);
 			}
 			
 			//Update the computer in the database
-			computerDBService.update(computer);
-			System.out.println("The computer was updated");
+			List<String> errors = computerWebService.update(computerDTO).getItems();
+			if (errors == null || errors.isEmpty()) {
+				System.out.println("The computer was updated");
+			} else {
+				System.out.println("Couldn't update the computer :");
+				errors.forEach(System.out::println);
+			}
 		} else {
 			System.out.println("Incorrect id");
 		}
@@ -278,7 +281,7 @@ public class CLI {
 		Long id;
 		System.out.println("Enter the id of the computer you wish to delete");
 		id = inputLong();
-		computerDBService.delete(id);
+		computerWebService.delete(id);
 		System.out.println("The computer has been deleted");
 	}
 	
@@ -289,7 +292,7 @@ public class CLI {
 		Long id;
 		System.out.println("Enter the id of the company you wish to delete");
 		id = inputLong();
-		companyDBService.delete(id);
+		companyWebService.delete(id);
 		System.out.println("The company and it's computers have been deleted");
 	}
 	
@@ -316,7 +319,7 @@ public class CLI {
 	 * If the input is null or an empty String, return null;
 	 * @return LocalDate : a valid LocalDate 
 	 */
-	private LocalDate inputDate() {
+	private String inputDate() {
 		String date = sc.nextLine();
 		//Check if the input is an empty chain or null
 		if (GenericValidator.isBlankOrNull(date)) {
@@ -330,7 +333,7 @@ public class CLI {
 				return null;
 			}
 		}
-		return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+		return date;
 	}
 	
 	/**
