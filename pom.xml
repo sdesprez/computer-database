@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.excilys.computerdatabase</groupId>
@@ -15,8 +16,8 @@
 		<module>binding</module>
 		<module>console</module>
 		<module>webapp</module>
-    	<module>webservice</module>
-  </modules>
+		<module>webservice</module>
+	</modules>
 
 	<properties>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
@@ -24,6 +25,7 @@
 		<hibernate.version>4.3.8.Final</hibernate.version>
 		<jadira.version>3.2.0.GA</jadira.version>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
+		<jaxws-rt.version>2.2.10</jaxws-rt.version>
 		<jsp-api.version>2.3.1</jsp-api.version>
 		<jstl.version>1.2</jstl.version>
 		<junit.version>4.12</junit.version>
@@ -80,6 +82,12 @@
 				<groupId>com.jolbox</groupId>
 				<artifactId>bonecp</artifactId>
 				<version>${bonecp.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-rt</artifactId>
+				<version>${jaxws-rt.version}</version>
 			</dependency>
 
 			<dependency>
@@ -187,7 +195,7 @@
 				<artifactId>mybatis</artifactId>
 				<version>${mybatis.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>

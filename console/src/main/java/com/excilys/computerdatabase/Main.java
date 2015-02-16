@@ -13,8 +13,8 @@ import com.excilys.computerdatabase.webservice.ComputerWebService;
 public class Main {
 
 	public static void main(final String[] args) throws MalformedURLException {
-		URL computerUrl = new URL("http://localhost:8888/computer-database/webservice/computer?wsdl");
-		URL companyUrl = new URL("http://localhost:8888/computer-database/webservice/company?wsdl");
+		URL computerUrl = new URL("http://localhost:8080/computer-database/webservice/computer?wsdl");
+		URL companyUrl = new URL("http://localhost:8080/computer-database/webservice/company?wsdl");
 		
 		QName qname = new QName("http://impl.webservice.computerdatabase.excilys.com/", "CompanyWebServiceImplService");
 		Service service = Service.create(companyUrl, qname);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
+	version="2.0">
+	<endpoint name="ComputerWebServiceImpl"
+		implementation="com.excilys.computerdatabase.webservice.impl.ComputerWebServiceImpl"
+		url-pattern="/webservice/computer" />
+	<endpoint name="CompanyWebServiceImpl"
+		implementation="com.excilys.computerdatabase.webservice.impl.CompanyWebServiceImpl"
+		url-pattern="/webservice/company" />
+</endpoints>
