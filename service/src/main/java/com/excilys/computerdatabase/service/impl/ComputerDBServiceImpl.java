@@ -65,7 +65,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final long id) {
-		computerRepository.delete(id);
+		if (computerRepository.findOne(id) != null) {
+			computerRepository.delete(id);
+		}
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final List<Long> list) {
-		list.forEach(id -> computerRepository.delete(id));		
+		list.forEach(id -> {if (computerRepository.findOne(id) != null) {computerRepository.delete(id); }});		
 	}
 
 	/**

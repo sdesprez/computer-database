@@ -33,7 +33,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:service-context.xml;
-					/WEB-INF/spring-security.xml
+					/WEB-INF/spring-security.xml;
+					classpath:binding-context.xml
 		</param-value>
 	</context-param>
 

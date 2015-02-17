@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.commons.validator.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,6 +13,7 @@ import org.springframework.validation.Validator;
 @Component
 public class ComputerDTOValidator implements Validator {
 
+	@Autowired
 	private MessageSourceAccessor messageSourceAccessor;
 	
 	private static final String FORMAT_CODE = "dateFormat";
@@ -21,13 +21,7 @@ public class ComputerDTOValidator implements Validator {
 	@Override
 	public boolean supports(final Class<?> classz) {
 		return ComputerDTO.class.equals(classz);
-	}
-
-	@Autowired
-    public void setMessageSource(final MessageSource messageSource) {
-        this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
-    }
-	
+	}	
 	
 	@Override
 	public void validate(final Object obj, final Errors e) {

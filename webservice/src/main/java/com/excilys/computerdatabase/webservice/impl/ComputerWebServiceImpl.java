@@ -71,7 +71,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 
 	@Override
 	public ListWrapper<String> update(ComputerDTO computerDTO) {
-List<String> errors = computerDTOValidator.validate(computerDTO);
+		List<String> errors = computerDTOValidator.validate(computerDTO);
 		
 		if (computerDTO.getCompany() != 0 && companyDBService.getById(computerDTO.getCompany()) == null) {
 			errors.add("The company " + computerDTO.getCompany() + " doesn't exist");

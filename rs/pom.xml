@@ -8,28 +8,32 @@
 		<artifactId>computer-database</artifactId>
 		<version>0.5.5</version>
 	</parent>
-	<artifactId>webservice</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>rest</artifactId>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>binding</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>service</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
+			<artifactId>spring-webmvc</artifactId>
 		</dependency>
-	
+
 		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
 		</dependency>
 	</dependencies>
+
 </project>

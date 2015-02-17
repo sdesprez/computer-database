@@ -6,7 +6,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.5.4</version>
+	<version>0.5.5</version>
 	<name>computer-database</name>
 
 	<modules>
@@ -17,12 +17,15 @@
 		<module>console</module>
 		<module>webapp</module>
 		<module>webservice</module>
+		<module>rest</module>
 	</modules>
 
 	<properties>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 		<commons-validator.version>1.4.1</commons-validator.version>
 		<hibernate.version>4.3.8.Final</hibernate.version>
+		<jackson-databind.version>2.5.1</jackson-databind.version>
+		<jackson-mapper.version>1.9.13</jackson-mapper.version>
 		<jadira.version>3.2.0.GA</jadira.version>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
 		<jaxws-rt.version>2.2.10</jaxws-rt.version>
@@ -114,6 +117,18 @@
 				<version>${jadira.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson-databind.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson-mapper.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
