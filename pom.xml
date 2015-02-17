@@ -79,6 +79,16 @@
 				<artifactId>webapp</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.excilys.computerdatabase</groupId>
+				<artifactId>rest</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.excilys.computerdatabase</groupId>
+				<artifactId>webservice</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 
 			<dependency>

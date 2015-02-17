@@ -103,8 +103,8 @@ public class Computer implements Serializable {
 			return false;
 		}
 		final Computer other = (Computer) obj;
-		if (id != other.id) {
-			return false;
+		if (id == other.id) {
+			return true;
 		}
 		if (name == null) {
 			if (other.name != null) {

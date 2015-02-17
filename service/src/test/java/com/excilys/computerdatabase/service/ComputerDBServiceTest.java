@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,10 +70,13 @@ public class ComputerDBServiceTest {
 			@Override
 			public Computer answer(final InvocationOnMock invocation) {
 				final long l = (Long) invocation.getArguments()[0];
-				if (l > 0 && l < list.size()) {
-					return list.get((int) l - 1);
+				List<Computer> comp = list.stream().filter(c -> c.getId()==l).collect(Collectors.toList());
+				if (comp.isEmpty()) {
+					return null;
 				}
-				return null;
+				else {
+					return comp.get(0);
+				}
 			}
 		}).when(computerRepository).findOne(anyLong());
 
@@ -101,11 +105,6 @@ public class ComputerDBServiceTest {
 			
 		}).when(computerRepository).delete(anyLong());
 		
-		/*
-		when(computerRepository.getPagedList(page)).thenReturn(pageReturned);
-		doThrow(BadSqlGrammarException.class).when(computerRepository).getPagedList(wrongPNumber);
-		doThrow(BadSqlGrammarException.class).when(computerRepository).getPagedList(wrongRPP);
-*/
 
 		MockitoAnnotations.initMocks(this);
 	}
