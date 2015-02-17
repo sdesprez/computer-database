@@ -3,8 +3,6 @@ package com.excilys.computerdatabase.webservice.impl;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.webservice.CompanyWebService;
@@ -16,9 +14,8 @@ public class CompanyWebServiceImpl implements CompanyWebService {
 	private CompanyDBService companyDBService;
 	
 	
-	public CompanyWebServiceImpl() {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("service-context.xml");
-		this.companyDBService = (CompanyDBService) context.getBean(CompanyDBService.class);
+	public CompanyWebServiceImpl(CompanyDBService companyDBService) {
+		this.companyDBService = companyDBService;
 	}
 	
 	@Override

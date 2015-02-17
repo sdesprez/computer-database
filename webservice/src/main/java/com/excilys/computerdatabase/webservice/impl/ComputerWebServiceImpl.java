@@ -5,7 +5,6 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +29,9 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	
-	public ComputerWebServiceImpl() {
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("service-context.xml");
-		this.computerDBService = (ComputerDBService) context.getBean(ComputerDBService.class);
-		this.companyDBService = (CompanyDBService) context.getBean(CompanyDBService.class);
+	public ComputerWebServiceImpl(ComputerDBService computerDBService, CompanyDBService companyDBService) {
+		this.computerDBService = computerDBService;
+		this.companyDBService = companyDBService;
 		this.computerDTOValidator = new ComputerDTOValidator();
 	}
 

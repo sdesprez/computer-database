@@ -6,16 +6,12 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.3</version>
+		<version>0.5.4</version>
 	</parent>
 	<artifactId>webservice</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>core</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>binding</artifactId>
