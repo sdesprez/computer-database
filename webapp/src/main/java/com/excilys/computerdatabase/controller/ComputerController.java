@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -76,9 +77,9 @@ public class ComputerController {
 								@PageableDefault(page = 0, size = 20) final Pageable pageable, 
 								@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search) {
 		final Page<Computer> page = computerDBService.getPagedList(search, pageable);
-		
+		final Page<ComputerDTO> pageDTO = new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(page.getContent(), messageSourceAccessor.getMessage("dateFormat")), pageable, page.getTotalElements());
 		model.addAttribute(SEARCH, search);
-		model.addAttribute(PAGE, page);
+		model.addAttribute(PAGE, pageDTO);
 		model.addAttribute("columns", COLUMNS);
 		if (page.getSort() != null && OrderBy.getOrderByFromSort(page.getSort()) != null) {
 			model.addAttribute(SORT, OrderBy.getOrderByFromSort(page.getSort()).getColName());
@@ -113,7 +114,7 @@ public class ComputerController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	protected String getEdit(final Model model, @RequestParam(ID) final long id) {
 		model.addAttribute(COMPANIES, companyDBService.getAll());
-		model.addAttribute("computerDTO", ComputerDTOConverter.toDTO(computerDBService.getById(id)));
+		model.addAttribute("computerDTO", ComputerDTOConverter.toDTO(computerDBService.getById(id), messageSourceAccessor.getMessage("dateFormat")));
 		return "editComputer";
 	}
 

@@ -13,4 +13,8 @@
 	<context:component-scan base-package="com.excilys.computerdatabase.rest" />
 	<mvc:annotation-driven />
      
+     <!-- Cookie resolver for the i18n -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="en"/>
+	</bean>
 </beans>

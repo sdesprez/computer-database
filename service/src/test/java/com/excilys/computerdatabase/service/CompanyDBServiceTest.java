@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,20 @@ public class CompanyDBServiceTest {
 		
 		
 		when(companyRepository.findAll()).thenReturn(companyList);
-		when(companyRepository.findOne(1L)).thenReturn(c1);
+		
+		doAnswer(new Answer<Company>() {
+			@Override
+			public Company answer(final InvocationOnMock invocation) {
+				final long l = (Long) invocation.getArguments()[0];
+				List<Company> comp = companyList.stream().filter(c -> c.getId()==l).collect(Collectors.toList());
+				if (comp.isEmpty()) {
+					return null;
+				}
+				else {
+					return comp.get(0);
+				}
+			}
+		}).when(companyRepository).findOne(anyLong());
 		
 		doAnswer(new Answer<List<Computer>>() {
 			@Override
@@ -121,11 +135,10 @@ public class CompanyDBServiceTest {
 	
 	@Test
 	public void deleteInvalidId() {
-		final int x = companyList.size();
-		final int y = computerList.size();
-		companyDBService.delete(3L);
-		
-		assertEquals(x, companyList.size());
-		assertEquals(y, computerList.size());
+		final long id = 3L;
+		final int computerCount = computerList.size();
+		companyDBService.delete(id);
+		assertNull(companyRepository.findOne(id));
+		assertEquals(computerCount, computerList.size());
 	}
 }

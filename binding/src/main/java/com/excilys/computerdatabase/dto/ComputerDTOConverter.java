@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.validator.GenericValidator;
-import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.service.CompanyDBService;
 
-@Component
+
 public class ComputerDTOConverter {
 	
 	
@@ -59,7 +58,7 @@ public class ComputerDTOConverter {
 	 * @param computer to be converted
 	 * @return The ComputerDTO corresponding to the Computer or null if the computer was null
 	 */
-	public static ComputerDTO toDTO(final Computer computer) {
+	public static ComputerDTO toDTO(final Computer computer, String dateFormat) {
 		if (computer == null) {
 			return null;
 		}
@@ -68,10 +67,10 @@ public class ComputerDTOConverter {
 				.name(computer.getName());
 		
 		if (computer.getIntroduced() != null) {
-			builder.introduced(computer.getIntroduced().toString());
+			builder.introduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern(dateFormat)).toString());
 		}
 		if (computer.getDiscontinued() != null) {
-			builder.discontinued(computer.getDiscontinued().toString());
+			builder.discontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern(dateFormat)).toString());
 		}		
 		if (computer.getCompany() != null) {
 			builder.company(computer.getCompany().getId());
@@ -88,9 +87,9 @@ public class ComputerDTOConverter {
 	 * @param List of Computer to be converted
 	 * @return The List ComputerDTO corresponding to the List Computer of computers who are valid or an empty List if none were valid
 	 */
-	public static List<ComputerDTO> toDTO(final List<Computer> computers) {
+	public static List<ComputerDTO> toDTO(final List<Computer> computers, String dateFormat) {
 		final List<ComputerDTO> dtos = computers.stream().map(computer -> {
-			final ComputerDTO dto = ComputerDTOConverter.toDTO(computer);
+			final ComputerDTO dto = ComputerDTOConverter.toDTO(computer, dateFormat);
 			if (dto != null) {
 				return dto;
 			}

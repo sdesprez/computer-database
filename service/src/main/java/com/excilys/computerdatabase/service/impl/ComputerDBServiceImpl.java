@@ -55,7 +55,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void update(final Computer computer) {
-		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
+		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName()) && getById(computer.getId()) != null) {
 			computerRepository.save(computer);
 		}
 	}

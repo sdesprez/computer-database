@@ -109,6 +109,7 @@ public class ComputerRepositoryTest {
 	
 	/*
 	 * Tests of the getPagedList function
+	 * PageRequest cannot have negative page or size attribute so it's not tested
 	 */
 	@Test
 	public void pagedResult() {
@@ -125,7 +126,7 @@ public class ComputerRepositoryTest {
 	}
 	
 	@Test(expected = PropertyReferenceException.class)
-	public void invalidSort() {
+	public void pagedInvalidSort() {
 		Pageable pageable = new PageRequest(0, 20, new Sort(Direction.ASC, "x"));
 		computerRepository.findByNameContainingOrCompanyNameContaining("" ,"", pageable);
 	}
@@ -133,7 +134,7 @@ public class ComputerRepositoryTest {
 	
 	
 	/*
-	 * Tests of the create function
+	 * Tests of the save function
 	 */
 	@Test
 	public void create() {
@@ -156,12 +157,7 @@ public class ComputerRepositoryTest {
 		list.add(Computer.builder().id(5L).build());
 		assertEquals(list, computerRepository.findAll());
 	}
-	
-	
-	
-	/*
-	 * Tests of the update function
-	 */
+
 	@Test
 	public void update() {
 		final Computer computer = Computer.builder().id(2L).name("test").introduced(LocalDate.parse("1993-01-12")).build();

@@ -41,13 +41,13 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		if (computer == null) {
 			return new ComputerDTO();
 		}
-		return ComputerDTOConverter.toDTO(computer);
+		return ComputerDTOConverter.toDTO(computer, DATE_FORMAT);
 	}
 	
 	@Override
 	public @WebMethod ListWrapper<ComputerDTO> getAll() {
 		ListWrapper<ComputerDTO> list = new ListWrapper<ComputerDTO>();
-		list.setItems(ComputerDTOConverter.toDTO(computerDBService.getAll()));
+		list.setItems(ComputerDTOConverter.toDTO(computerDBService.getAll(), DATE_FORMAT));
 		return list;
 	}
 
@@ -93,7 +93,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		Page<Computer> p = computerDBService.getPagedList("", pageable);
 		
 		PageWrapper<ComputerDTO> pageWrapper = new PageWrapper<ComputerDTO>();
-		pageWrapper.setContent(ComputerDTOConverter.toDTO(p.getContent()));
+		pageWrapper.setContent(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT));
 		pageWrapper.setPage(p.getNumber());
 		pageWrapper.setSize(p.getSize());
 		pageWrapper.setTotalElements(p.getTotalElements());

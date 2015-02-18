@@ -90,7 +90,6 @@ public class CompanyRepositoryTest {
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void deleteInvalidId() {
 		companyRepository.delete(-1L);
-		assertEquals(list, companyRepository.findAll());
 	}
 	
 	@Test(expected = DataIntegrityViolationException.class)

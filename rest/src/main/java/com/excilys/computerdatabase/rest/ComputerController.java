@@ -49,7 +49,7 @@ public class ComputerController {
 											@PathVariable final int size) {
 		Pageable pageable = new PageRequest(page, size);
 		Page<Computer> p = computerDBService.getPagedList("", pageable);
-		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent()), pageable, p.getTotalElements());
+		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT), pageable, p.getTotalElements());
 	}
 	
 	@RequestMapping(value = "/page/{page}/size/{size}/search/{search}", method = RequestMethod.GET)
@@ -58,12 +58,12 @@ public class ComputerController {
 											@PathVariable final String search ) {
 		Pageable pageable = new PageRequest(page, size);
 		Page<Computer> p = computerDBService.getPagedList(search, pageable);
-		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent()), pageable, p.getTotalElements());
+		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT), pageable, p.getTotalElements());
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ComputerDTO getComputerById(@PathVariable final int id) {
-		return ComputerDTOConverter.toDTO(computerDBService.getById(id));
+		return ComputerDTOConverter.toDTO(computerDBService.getById(id), DATE_FORMAT);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT)
@@ -72,6 +72,7 @@ public class ComputerController {
 			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT));
 			return "Computer added";
 		}
+		System.out.println(results);
 		return "Error in the computer";
 	}
 	

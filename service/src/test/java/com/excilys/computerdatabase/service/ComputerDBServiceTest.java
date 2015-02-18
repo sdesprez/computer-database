@@ -44,6 +44,7 @@ public class ComputerDBServiceTest {
 	List<Computer> list;
 	Company c1;
 	Company c2;
+	Computer computer1;
 	Computer computer;
 
 	@Before
@@ -54,7 +55,8 @@ public class ComputerDBServiceTest {
 		c2 = new Company(2L, "company 2");
 
 		list = new ArrayList<Computer>();
-		list.add(new Computer(1L, "ordi 1", null, null, c1));
+		computer1 = new Computer(1L, "ordi 1", null, null, c1);
+		list.add(computer1);
 		list.add(new Computer(2L, "ordi 2", null, null, c1));
 		list.add(new Computer(3L, "ordi 3", null, null, c2));
 
@@ -124,7 +126,7 @@ public class ComputerDBServiceTest {
 	 */
 	@Test
 	public void getById() {
-		assertEquals(list.get(0), computerDBService.getById(1L));
+		assertEquals(computerRepository.findOne(1L), computerDBService.getById(1L));
 	}
 
 	@Test
@@ -159,14 +161,16 @@ public class ComputerDBServiceTest {
 	
 	@Test
 	public void createNull() {
+		List<Computer> l = new ArrayList<Computer>(list);
 		computerDBService.create(null);
-		assertEquals(list, computerDBService.getAll());
+		assertEquals(l, list);
 	}
 	
 	@Test
 	public void createEmptyComputer() {
+		List<Computer> l = new ArrayList<Computer>(list);
 		computerDBService.create(new Computer());
-		assertEquals(list, computerDBService.getAll());
+		assertEquals(l, list);
 	}
 
 	
@@ -175,31 +179,35 @@ public class ComputerDBServiceTest {
 	 */
 	@Test
 	public void update() {
-		computerDBService.update(computer);
-		assertEquals(list, computerDBService.getAll());
+		computer1.setName("Updated");
+		computerDBService.update(computer1);
+		assertEquals(computer1, computerRepository.findOne(computer1.getId()));
 	}
 	
 	@Test
 	public void updateNull() {
+		List<Computer> l = new ArrayList<Computer>(list);
 		computerDBService.update(null);
-		assertEquals(list, computerDBService.getAll());
+		assertEquals(l, list);
 	}
 	
 	@Test
 	public void updateInvalidId() {
 		final Computer computer = new Computer();
+		List<Computer> l = new ArrayList<Computer>(list);
 		computer.setId(-1L);
 		computerDBService.update(computer);
-		assertEquals(list, computerDBService.getAll());
+		assertEquals(l, list);
 	}
 	
 	@Test
 	public void updateInvalidCompanyId() {
 		final Computer computer = new Computer();
+		List<Computer> l = new ArrayList<Computer>(list);
 		computer.setId(1L);
 		computer.setCompany(new Company(-1L, ""));
 		computerDBService.update(computer);
-		assertEquals(list, computerDBService.getAll());
+		assertEquals(l, list);
 	}
 	
 	
@@ -208,9 +216,9 @@ public class ComputerDBServiceTest {
 	 */
 	@Test
 	public void delete() {
-		final int x = computerDBService.getAll().size();
-		computerDBService.delete(3L);
-		assertEquals(x - 1, list.size());
+		final long id = 3L;
+		computerDBService.delete(id);
+		assertNull(computerRepository.findOne(id));
 	}
 	
 	@Test
@@ -230,8 +238,8 @@ public class ComputerDBServiceTest {
 		final List<Long> l = new ArrayList<Long>();
 		l.add(1L);
 		l.add(2L);
-		l.forEach(id -> assertNotNull(computerDBService.getById(id)));
+		l.forEach(id -> assertNotNull(computerRepository.findOne(id)));
 		computerDBService.delete(l);
-		l.forEach(id -> assertNull(computerDBService.getById(id)));
+		l.forEach(id -> assertNull(computerRepository.findOne(id)));
 	}
 }
