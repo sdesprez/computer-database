@@ -22,15 +22,18 @@ public class UserDBServiceImpl implements UserDBService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//Find a user with the Username
 		User user = userRepository.findByUsername(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
 
+		//Create a GrantedAuthority list based on the role String from the database
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
+		//return a springframework user
 		return new org.springframework.security.core.userdetails.User(
 				user.getUsername(), user.getPassword(), user.isEnabled(), true,
 				true, true, authorities);

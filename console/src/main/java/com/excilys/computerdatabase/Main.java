@@ -11,21 +11,26 @@ import com.excilys.computerdatabase.webservice.CompanyWebService;
 import com.excilys.computerdatabase.webservice.ComputerWebService;
 
 public class Main {
+	
+	private static final String COMPUTER_WSDL_URL = "http://localhost:8888/computer-database/webservice/computer?wsdl";
+	private static final String COMPANY_WSDL_URL = "http://localhost:8888/computer-database/webservice/company?wsdl";
+	private static final String QNAME_URL = "http://impl.webservice.computerdatabase.excilys.com/";
 
 	public static void main(final String[] args) throws MalformedURLException {
-		URL computerUrl = new URL("http://localhost:8888/computer-database/webservice/computer?wsdl");
-		URL companyUrl = new URL("http://localhost:8888/computer-database/webservice/company?wsdl");
+		URL computerUrl = new URL(COMPUTER_WSDL_URL);
+		URL companyUrl = new URL(COMPANY_WSDL_URL);
 		
-		QName qname = new QName("http://impl.webservice.computerdatabase.excilys.com/", "CompanyWebServiceImplService");
+		//Get the CompanyWebService proxy
+		QName qname = new QName(QNAME_URL, "CompanyWebServiceImplService");
 		Service service = Service.create(companyUrl, qname);
-		
 		CompanyWebService companyWebService = service.getPort(CompanyWebService.class);
 		
-		qname = new QName("http://impl.webservice.computerdatabase.excilys.com/", "ComputerWebServiceImplService");
+		//Get the ComputerWebService proxy
+		qname = new QName(QNAME_URL, "ComputerWebServiceImplService");
 		service = Service.create(computerUrl, qname);
-		
 		ComputerWebService computerWebService = service.getPort(ComputerWebService.class);
 		
+		//Create and launch the CLI
 		final CLI cli = new CLI(computerWebService, companyWebService);
 		cli.mainMenu();
 		

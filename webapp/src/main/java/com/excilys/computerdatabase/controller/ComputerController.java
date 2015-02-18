@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +45,9 @@ public class ComputerController {
 	private static final Pattern PATTERN = Pattern.compile("\\d{1,19}");
 	private static final String SELECT = "selection";
 	
+	/**
+	 * Array for the sort order of the dashboard
+	 */
 	private static final String[][] COLUMNS = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
 												{"discontinued", "column.discontinued"}, {"company.name", "column.company"}}; 
 	
@@ -57,6 +59,7 @@ public class ComputerController {
 	@Autowired
 	private Validator computerDTOValidator;
 	
+	@Autowired
 	private MessageSourceAccessor messageSourceAccessor;
 	
 	@InitBinder("computerDTO")
@@ -64,20 +67,19 @@ public class ComputerController {
 		binder.setValidator(computerDTOValidator);
 	}
 	
-	@Autowired
-    public void setMessageSource(final MessageSource messageSource) {
-        this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
-    }
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerController.class);
 	
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	protected String dashboard(final Model model, 
-								@PageableDefault(page = 0, size = 20) final Pageable pageable, 
+	protected String dashboard(final Model model,
+								@PageableDefault(page = 0, size = 20) final Pageable pageable,
 								@RequestParam(value = SEARCH, required = false, defaultValue = "") final String search) {
+		//Get a Page from the pageable send by the user
 		final Page<Computer> page = computerDBService.getPagedList(search, pageable);
+		//Convert the Page<Computer> to a Page<ComputerDTO>
 		final Page<ComputerDTO> pageDTO = new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(page.getContent(), messageSourceAccessor.getMessage("dateFormat")), pageable, page.getTotalElements());
+		
+		//Add attributes to the model
 		model.addAttribute(SEARCH, search);
 		model.addAttribute(PAGE, pageDTO);
 		model.addAttribute("columns", COLUMNS);
@@ -85,6 +87,7 @@ public class ComputerController {
 			model.addAttribute(SORT, OrderBy.getOrderByFromSort(page.getSort()).getColName());
 			model.addAttribute(DIRECTION, OrderBy.getOrderByFromSort(page.getSort()).getDir());
 		}
+		
 		return "dashboard";
 	}
 	
@@ -99,9 +102,11 @@ public class ComputerController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	protected String addComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {		
+	protected String addComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {	
+		//If there was no errors, convert the computerDTO to a Computer and add it to the database, then redirect the user to the dashboard
 		if (!result.hasErrors()) {
 			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, messageSourceAccessor.getMessage("dateFormat")));
+			LOGGER.info("Add of the Computer {}", computerDTO);
 			return "redirect:/dashboard";
 		} else {
 			model.addAttribute(COMPANIES, companyDBService.getAll());
@@ -114,14 +119,17 @@ public class ComputerController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	protected String getEdit(final Model model, @RequestParam(ID) final long id) {
 		model.addAttribute(COMPANIES, companyDBService.getAll());
+		//Get the computer corresponding to the id, and convert it to a ComputerDTO before adding it to the model
 		model.addAttribute("computerDTO", ComputerDTOConverter.toDTO(computerDBService.getById(id), messageSourceAccessor.getMessage("dateFormat")));
 		return "editComputer";
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	protected String updateComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {		
+	protected String updateComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {
+		//If there was no errors, convert the computerDTO to a Computer and update the database with it, then redirect the user to the dashboard
 		if (!result.hasErrors()) {
 			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, messageSourceAccessor.getMessage("dateFormat")));
+			LOGGER.info("Update of Computer {}", computerDTO);
 			return "redirect:/dashboard";
 		} else {
 			model.addAttribute(COMPANIES, companyDBService.getAll());

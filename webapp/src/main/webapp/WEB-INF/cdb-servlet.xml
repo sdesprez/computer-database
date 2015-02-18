@@ -34,6 +34,13 @@
 		</mvc:argument-resolvers> 
 	</mvc:annotation-driven>
 
+
+	<bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+		<constructor-arg>
+			<ref bean="messageSource"/>
+		</constructor-arg>
+	</bean>
+	
 	<!-- Source of the i18n messages -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:ValidationMessages"/>

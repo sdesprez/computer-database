@@ -36,6 +36,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 
 	@Override
+	@WebMethod
 	public ComputerDTO getById(long id) {
 		Computer computer = computerDBService.getById(id);
 		if (computer == null) {
@@ -45,13 +46,15 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 	
 	@Override
-	public @WebMethod ListWrapper<ComputerDTO> getAll() {
+	@WebMethod
+	public ListWrapper<ComputerDTO> getAll() {
 		ListWrapper<ComputerDTO> list = new ListWrapper<ComputerDTO>();
 		list.setItems(ComputerDTOConverter.toDTO(computerDBService.getAll(), DATE_FORMAT));
 		return list;
 	}
 
 	@Override
+	@WebMethod
 	public ListWrapper<String> create(ComputerDTO computerDTO) {
 		List<String> errors = computerDTOValidator.validate(computerDTO);
 		
@@ -70,6 +73,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 
 	@Override
+	@WebMethod
 	public ListWrapper<String> update(ComputerDTO computerDTO) {
 		List<String> errors = computerDTOValidator.validate(computerDTO);
 		
@@ -88,6 +92,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 
 	@Override
+	@WebMethod
 	public PageWrapper<ComputerDTO> getPagedList(int page, int size) {
 		Pageable pageable = new PageRequest(page, size);
 		Page<Computer> p = computerDBService.getPagedList("", pageable);
@@ -101,6 +106,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 
 	@Override
+	@WebMethod
 	public void delete(long id) {
 		computerDBService.delete(id);
 	}

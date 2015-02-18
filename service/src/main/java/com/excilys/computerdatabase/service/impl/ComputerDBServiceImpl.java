@@ -45,7 +45,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void create(final Computer computer) {
-		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName())) {
+		//Check if the computer has a correct name before adding it and check that the id isn't already used is the database
+		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName()) && getById(computer.getId()) == null) {
 			computerRepository.save(computer);
 		}
 	}
@@ -55,6 +56,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void update(final Computer computer) {
+		//Check if the computer has a correct name before adding it and check that there is a computer with the same id in de database
 		if (computer != null && !GenericValidator.isBlankOrNull(computer.getName()) && getById(computer.getId()) != null) {
 			computerRepository.save(computer);
 		}
@@ -65,7 +67,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final long id) {
-		if (computerRepository.findOne(id) != null) {
+		//Check that the computer exist before deleting it
+		if (getById(id) != null) {
 			computerRepository.delete(id);
 		}
 	}
@@ -75,7 +78,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	 */
 	@Override
 	public void delete(final List<Long> list) {
-		list.forEach(id -> {if (computerRepository.findOne(id) != null) {computerRepository.delete(id); }});		
+		//for each id of the list, check if the computer exist before deleting it
+		list.forEach(id -> {if (computerRepository.findOne(id) != null) {computerRepository.delete(id);}});		
 	}
 
 	/**
@@ -84,7 +88,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 	@Override
 	public Page<Computer> getPagedList(final String search, final Pageable pageable) {
 		if (pageable != null) {
-			return computerRepository.findByNameContainingOrCompanyNameContaining(search, search,pageable);
+			return computerRepository.findByNameContainingOrCompanyNameContaining(search, search, pageable);
 		}
 		return null;
 	}
