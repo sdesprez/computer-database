@@ -6,7 +6,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.5.5</version>
+	<version>0.6.0</version>
 	<name>computer-database</name>
 
 	<modules>
@@ -28,7 +28,6 @@
 		<jackson-mapper.version>1.9.13</jackson-mapper.version>
 		<jadira.version>3.2.0.GA</jadira.version>
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
-		<jaxws-rt.version>2.2.10</jaxws-rt.version>
 		<jsp-api.version>2.3.1</jsp-api.version>
 		<jstl.version>1.2</jstl.version>
 		<junit.version>4.12</junit.version>
@@ -95,12 +94,6 @@
 				<groupId>com.jolbox</groupId>
 				<artifactId>bonecp</artifactId>
 				<version>${bonecp.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.sun.xml.ws</groupId>
-				<artifactId>jaxws-rt</artifactId>
-				<version>${jaxws-rt.version}</version>
 			</dependency>
 
 			<dependency>

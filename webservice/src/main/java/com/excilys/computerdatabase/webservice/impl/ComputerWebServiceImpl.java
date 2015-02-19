@@ -5,9 +5,11 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.dto.ComputerDTO;
@@ -20,18 +22,19 @@ import com.excilys.computerdatabase.wrapper.ListWrapper;
 import com.excilys.computerdatabase.wrapper.PageWrapper;
 
 @WebService(endpointInterface="com.excilys.computerdatabase.webservice.ComputerWebService")
+@Service
 public class ComputerWebServiceImpl implements ComputerWebService {
 
+	@Autowired
 	private ComputerDBService computerDBService;
+	@Autowired
 	private CompanyDBService companyDBService;
 	
 	private ComputerDTOValidator computerDTOValidator;
 	
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	
-	public ComputerWebServiceImpl(ComputerDBService computerDBService, CompanyDBService companyDBService) {
-		this.computerDBService = computerDBService;
-		this.companyDBService = companyDBService;
+	public ComputerWebServiceImpl() {
 		this.computerDTOValidator = new ComputerDTOValidator();
 	}
 

@@ -8,7 +8,7 @@
 						http://www.springframework.org/schema/data/jpa
 						http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-	<!-- Scan of the dao and service packages -->
+
 	<context:property-placeholder location="classpath:database-example.properties" order="2" />
 	<context:property-placeholder location="classpath:database.properties" order="1" />
 

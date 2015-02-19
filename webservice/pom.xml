@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.5</version>
+		<version>0.6.0</version>
 	</parent>
 	<artifactId>webservice</artifactId>
 	<packaging>jar</packaging>
@@ -25,11 +25,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-		</dependency>
-	
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
 		</dependency>
 	</dependencies>
 </project>

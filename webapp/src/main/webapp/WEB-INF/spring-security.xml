@@ -10,6 +10,7 @@
       class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
         <beans:property name="userDetailsService" ref="userDBServiceImpl" />
         <beans:property name="authenticationEntryPoint" ref="digestEntryPoint" />
+        <beans:property name="passwordAlreadyEncoded" value="true"/>
     </beans:bean>
     
     <beans:bean id="digestEntryPoint" 
@@ -19,7 +20,9 @@
     </beans:bean>
     
 	<http use-expressions="true" entry-point-ref="digestEntryPoint">
-		<intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/delete" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/add" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/edit" access="hasRole('ROLE_ADMIN')" />
 		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
 	</http>
 

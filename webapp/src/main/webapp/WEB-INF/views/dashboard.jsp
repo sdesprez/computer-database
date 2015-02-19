@@ -25,7 +25,6 @@ pageEncoding="UTF-8"%>
 				<div class="pull-left">
 					<form id="searchForm" action="dashboard" method="GET" class="form-inline">
 						<input type="hidden" name="size" value="${page.size}">
-						<input type="hidden" name="page" value="1">
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="<spring:message code="placeholder.search"/>" /> <input
 							type="submit" id="searchsubmit" value="<spring:message code="button.filter"/>"

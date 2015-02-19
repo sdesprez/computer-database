@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.5.5</version>
+		<version>0.6.0</version>
 	</parent>
 	<artifactId>console</artifactId>
 	<packaging>jar</packaging>
@@ -15,11 +15,6 @@
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>binding</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
 		</dependency>
 	</dependencies>
 </project>

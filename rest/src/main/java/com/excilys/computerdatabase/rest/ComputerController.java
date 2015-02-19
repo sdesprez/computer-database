@@ -72,7 +72,6 @@ public class ComputerController {
 			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT));
 			return "Computer added";
 		}
-		System.out.println(results);
 		return "Error in the computer";
 	}
 	

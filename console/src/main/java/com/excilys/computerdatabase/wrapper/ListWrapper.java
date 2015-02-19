@@ -19,5 +19,11 @@ public class ListWrapper<E> implements Serializable{
 	public void setItems(List<E> items) {
 		this.items = items;
 	}
-
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ListWrapper [items=").append(items).append("]");
+		return builder.toString();
+	}
 }

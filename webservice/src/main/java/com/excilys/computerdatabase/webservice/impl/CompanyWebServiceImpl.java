@@ -3,20 +3,21 @@ package com.excilys.computerdatabase.webservice.impl;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.webservice.CompanyWebService;
 import com.excilys.computerdatabase.wrapper.ListWrapper;
 
 @WebService(endpointInterface="com.excilys.computerdatabase.webservice.CompanyWebService")
+@Service
 public class CompanyWebServiceImpl implements CompanyWebService {
 
+	@Autowired
 	private CompanyDBService companyDBService;
 	
-	
-	public CompanyWebServiceImpl(CompanyDBService companyDBService) {
-		this.companyDBService = companyDBService;
-	}
 	
 	@Override
 	@WebMethod

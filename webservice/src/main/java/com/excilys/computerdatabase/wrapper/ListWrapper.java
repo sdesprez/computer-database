@@ -26,6 +26,4 @@ public class ListWrapper<E> implements Serializable{
 		builder.append("ListWrapper [items=").append(items).append("]");
 		return builder.toString();
 	}
-
-	
 }
