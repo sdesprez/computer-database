@@ -8,31 +8,14 @@
 		<artifactId>computer-database</artifactId>
 		<version>0.6.1</version>
 	</parent>
-	<artifactId>rest</artifactId>
-	<packaging>war</packaging>
-
+	<artifactId>webservice-jdk</artifactId>
+	<packaging>jar</packaging>
+	
 	<dependencies>
-		<!-- Sisters depencies -->
+		<!-- Sisters dependencies -->
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>binding</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>service</artifactId>
-		</dependency>
-
-		<!-- Spring dependency -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-
-		<!-- Jackson marshaller for json -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
 	</dependencies>
-
 </project>

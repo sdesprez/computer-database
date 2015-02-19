@@ -30,13 +30,7 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	@Autowired
 	private CompanyDBService companyDBService;
 	
-	private ComputerDTOValidator computerDTOValidator;
-	
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
-	
-	public ComputerWebServiceImpl() {
-		this.computerDTOValidator = new ComputerDTOValidator();
-	}
 
 	@Override
 	@WebMethod
@@ -59,17 +53,21 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	@Override
 	@WebMethod
 	public ListWrapper<String> create(ComputerDTO computerDTO) {
-		List<String> errors = computerDTOValidator.validate(computerDTO);
+		//Check if the ComputerDTO is valid
+		List<String> errors = ComputerDTOValidator.validate(computerDTO);
 		
+		//Check if the specified Company exist
 		if (computerDTO.getCompany() != 0 && companyDBService.getById(computerDTO.getCompany()) == null) {
 			errors.add("The company " + computerDTO.getCompany() + " doesn't exist");
 		}
 		
+		//Create the computer in the database if there was no error
 		if (errors.isEmpty()) {
-			Computer computer = ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT);
+			Computer computer = ComputerDTOConverter.fromDTO(computerDTO, DATE_FORMAT);
 			computerDBService.create(computer);
 		}
 		
+		//Send the list of errors
 		ListWrapper<String> wrapper = new ListWrapper<String>();
 		wrapper.setItems(errors);
 		return wrapper;
@@ -78,17 +76,21 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	@Override
 	@WebMethod
 	public ListWrapper<String> update(ComputerDTO computerDTO) {
-		List<String> errors = computerDTOValidator.validate(computerDTO);
+		//Check if the ComputerDTO is valid
+		List<String> errors = ComputerDTOValidator.validate(computerDTO);
 		
+		//Check if the specified Company exist
 		if (computerDTO.getCompany() != 0 && companyDBService.getById(computerDTO.getCompany()) == null) {
 			errors.add("The company " + computerDTO.getCompany() + " doesn't exist");
 		}
 		
+		//Update the computer in the database if there was no error
 		if (errors.isEmpty()) {
-			Computer computer = ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT);
+			Computer computer = ComputerDTOConverter.fromDTO(computerDTO, DATE_FORMAT);
 			computerDBService.update(computer);
 		}
 		
+		//Send the list of errors
 		ListWrapper<String> wrapper = new ListWrapper<String>();
 		wrapper.setItems(errors);
 		return wrapper;
@@ -97,9 +99,12 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	@Override
 	@WebMethod
 	public PageWrapper<ComputerDTO> getPagedList(int page, int size) {
+		//Create a pageable with the parameters
 		Pageable pageable = new PageRequest(page, size);
+		//Retrieve a Page of Computers from the database
 		Page<Computer> p = computerDBService.getPagedList("", pageable);
 		
+		//Wrap the Page in a PageWrapper and convert the Computer List to a ComputerDTO List
 		PageWrapper<ComputerDTO> pageWrapper = new PageWrapper<ComputerDTO>();
 		pageWrapper.setContent(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT));
 		pageWrapper.setPage(p.getNumber());

@@ -1,7 +1,10 @@
-package com.excilys.computerdatabase.domain;
+package com.excilys.computerdatabase.util;
 
 import org.springframework.data.domain.Sort;
 
+/**
+ * Enum containing a link between a Sort and its column name and direction 
+ */
 public enum OrderBy {
 
 	COMPUTER_NAME_ASC(new Sort(Sort.Direction.ASC, "name"), "name", "ASC"), 
@@ -36,7 +39,11 @@ public enum OrderBy {
 		return dir;
 	}
 
-	
+	/**
+	 * Get the instance of OrderBy corresponding the sort parameter
+	 * @param sort Sort from which we want the OrderBy instance
+	 * @return The OrderBy corresponding the sort parameter or null if there is none
+	 */
 	public static OrderBy getOrderByFromSort(final Sort sort) {
 		if (sort == null) {
 			return null;

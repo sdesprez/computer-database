@@ -26,11 +26,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computerdatabase.domain.Computer;
-import com.excilys.computerdatabase.domain.OrderBy;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.dto.ComputerDTOConverter;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
+import com.excilys.computerdatabase.util.OrderBy;
 
 
 @Controller
@@ -47,6 +47,8 @@ public class ComputerController {
 	
 	/**
 	 * Array for the sort order of the dashboard
+	 * COLUMN[X][0] : Id of the column
+	 * COLUMN[X][1] : code for i18n name of the column
 	 */
 	private static final String[][] COLUMNS = {{"name", "column.name"}, {"introduced", "column.introduced"}, 
 												{"discontinued", "column.discontinued"}, {"company.name", "column.company"}}; 
@@ -62,6 +64,11 @@ public class ComputerController {
 	@Autowired
 	private MessageSourceAccessor messageSourceAccessor;
 	
+	
+	/**
+	 * Set the ComputerDTO validator to use an instance of ComputerDTOValidator
+	 * @param binder
+	 */
 	@InitBinder("computerDTO")
 	protected void initComputerDTOBinder(final WebDataBinder binder) {
 		binder.setValidator(computerDTOValidator);
@@ -105,7 +112,7 @@ public class ComputerController {
 	protected String addComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {	
 		//If there was no errors, convert the computerDTO to a Computer and add it to the database, then redirect the user to the dashboard
 		if (!result.hasErrors()) {
-			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, messageSourceAccessor.getMessage("dateFormat")));
+			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, messageSourceAccessor.getMessage("dateFormat")));
 			LOGGER.info("Add of the Computer {}", computerDTO);
 			return "redirect:/dashboard";
 		} else {
@@ -128,7 +135,7 @@ public class ComputerController {
 	protected String updateComputer(final Model model, @Valid final ComputerDTO computerDTO, final BindingResult result) {
 		//If there was no errors, convert the computerDTO to a Computer and update the database with it, then redirect the user to the dashboard
 		if (!result.hasErrors()) {
-			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, messageSourceAccessor.getMessage("dateFormat")));
+			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, messageSourceAccessor.getMessage("dateFormat")));
 			LOGGER.info("Update of Computer {}", computerDTO);
 			return "redirect:/dashboard";
 		} else {

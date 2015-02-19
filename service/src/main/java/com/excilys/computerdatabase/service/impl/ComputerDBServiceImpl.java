@@ -15,7 +15,6 @@ import com.excilys.computerdatabase.service.ComputerDBService;
 
 /**
  * Database Service for the Computer
- * Singleton
  */
 @Service
 public class ComputerDBServiceImpl implements ComputerDBService {

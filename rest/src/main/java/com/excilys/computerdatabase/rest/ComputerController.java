@@ -36,6 +36,10 @@ public class ComputerController {
 	@Autowired
 	private ComputerDTOValidator computerDTOValidator;
 	
+	/**
+	 * Set the ComputerDTO validator to use an instance of ComputerDTOValidator
+	 * @param binder
+	 */
 	@InitBinder("computerDTO")
 	protected void initComputerDTOBinder(final WebDataBinder binder) {
 		binder.setValidator(computerDTOValidator);
@@ -44,46 +48,83 @@ public class ComputerController {
 	
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	
+	/**
+	 * Get a Page of ComputerDTO
+	 * @param pageNumber the page number (0 based)
+	 * @param size the max number of elements of a page
+	 * @return A Page of ComputerDTO
+	 */
 	@RequestMapping(value = "/page/{page}/size/{size}", method = RequestMethod.GET)
-	public Page<ComputerDTO> getComputers(@PathVariable final int page, 
+	public Page<ComputerDTO> getComputers(@PathVariable final int pageNumber, 
 											@PathVariable final int size) {
-		Pageable pageable = new PageRequest(page, size);
-		Page<Computer> p = computerDBService.getPagedList("", pageable);
-		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT), pageable, p.getTotalElements());
+		return searchComputers(pageNumber, size, "");
 	}
 	
+	/**
+	 * Get a Page of ComputerDTO with a search parameter
+	 * @param pageNumber the page number (0 based)
+	 * @param size the max number of elements of a page
+	 * @param search the search parameter
+	 * @return A Page of ComputerDTO
+	 */
 	@RequestMapping(value = "/page/{page}/size/{size}/search/{search}", method = RequestMethod.GET)
-	public Page<ComputerDTO> searchComputers(@PathVariable final int page, 
+	public Page<ComputerDTO> searchComputers(@PathVariable final int pageNumber, 
 											@PathVariable final int size, 
 											@PathVariable final String search ) {
-		Pageable pageable = new PageRequest(page, size);
-		Page<Computer> p = computerDBService.getPagedList(search, pageable);
-		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(p.getContent(), DATE_FORMAT), pageable, p.getTotalElements());
+		//Create a Pageable from the request
+		Pageable pageable = new PageRequest(pageNumber, size);
+		//Get a result Page of Computers from the service
+		Page<Computer> page = computerDBService.getPagedList(search, pageable);
+		//Convert the Page<Computer> to a Page<ComputerDTO> before returning it
+		return new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(page.getContent(), DATE_FORMAT), pageable, page.getTotalElements());
 	}
 	
+	/**
+	 * Get a Computer from its id
+	 * @param id Id of the computer
+	 * @return the Computer or null if none was found
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ComputerDTO getComputerById(@PathVariable final int id) {
+		//Get the computer from the service, convert it to a Dto then return it
 		return ComputerDTOConverter.toDTO(computerDBService.getById(id), DATE_FORMAT);
 	}
 	
+	/**
+	 * Add the computerDTO to the database after having check if its a valid ComputerDTO
+	 * @param computerDTO ComputerDTO to add to the database
+	 * @param results Contains the error codes of the validation
+	 * @return A state message
+	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	public String createComputer(@RequestBody @Valid final ComputerDTO computerDTO, final BindingResult results) {
 		if (!results.hasErrors()) {
-			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT));
+			computerDBService.create(ComputerDTOConverter.fromDTO(computerDTO, DATE_FORMAT));
 			return "Computer added";
 		}
 		return "Error in the computer";
 	}
 	
+	/**
+	 * Update the computerDTO to the database after having check if its a valid ComputerDTO
+	 * @param computerDTO ComputerDTO to update to the database
+	 * @param results Contains the error codes of the validation
+	 * @return A state message
+	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public String updateComputer(@RequestBody @Valid final ComputerDTO computerDTO, final BindingResult results) {
 		if (!results.hasErrors()) {
-			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, companyDBService, DATE_FORMAT));
+			computerDBService.update(ComputerDTOConverter.fromDTO(computerDTO, DATE_FORMAT));
 			return "Computer updated";
 		}
 		return "Error in the computer";
 	}
 	
+	/**
+	 * Get a Computer from its id
+	 * @param id Id of the computer to delete
+	 * @return 
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteComputer(@PathVariable final long id) {
 		computerDBService.delete(id);

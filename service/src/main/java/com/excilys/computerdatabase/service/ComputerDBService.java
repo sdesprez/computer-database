@@ -48,8 +48,9 @@ public interface ComputerDBService {
 	
 	/**
 	 * Get a Page of computers in the database.
-	 * @param Page : A page containing the pageNumber and the max number of results
-	 * @return A Page containing the list of computers 
+	 * @param search : String for the search
+	 * @param pageable : A pageable containing the request
+	 * @return A Page of Computer
 	 */
 	Page<Computer> getPagedList(String search, Pageable pageable);
 }

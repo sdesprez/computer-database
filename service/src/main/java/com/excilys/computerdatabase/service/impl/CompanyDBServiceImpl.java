@@ -13,7 +13,6 @@ import com.excilys.computerdatabase.service.CompanyDBService;
 
 /**
  * Database Service for the Company
- * Singleton
  */
 @Service
 public class CompanyDBServiceImpl implements CompanyDBService {

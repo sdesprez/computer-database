@@ -29,8 +29,12 @@ public class CompanyWebServiceImpl implements CompanyWebService {
 	
 	@Override
 	@WebMethod
-	public Company getById(long l) {
-		return companyDBService.getById(l);
+	public Company getById(long id) {
+		Company company = companyDBService.getById(id);
+		if (company == null ) {
+			company = new Company();
+		}
+		return company;
 	}
 	
 	@Override

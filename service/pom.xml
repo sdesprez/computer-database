@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.6.0</version>
+		<version>0.6.1</version>
 	</parent>
 	<artifactId>service</artifactId>
 	<packaging>jar</packaging>
@@ -23,6 +23,7 @@
 			<artifactId>commons-validator</artifactId>
 		</dependency>
 
+		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -33,6 +34,7 @@
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
 
+		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

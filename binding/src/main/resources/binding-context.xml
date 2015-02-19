@@ -11,12 +11,14 @@
 
 	<context:component-scan base-package="com.excilys.computerdatabase.dto" />
 
+	<!-- Helper class for an easy access to message from the MessageSource -->
 	<bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
 		<constructor-arg>
 			<ref bean="formatMessageSource"/>
 		</constructor-arg>
 	</bean>
 	
+	<!-- MessageSource bean to files containing dates format -->
 	<bean id="formatMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:FormatMessages"/>
 		<property name="defaultEncoding" value="UTF-8"/>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.6.0</version>
+	<version>0.6.1</version>
 	<name>computer-database</name>
 
 	<modules>
@@ -14,11 +13,12 @@
 		<module>persistence</module>
 		<module>service</module>
 		<module>binding</module>
-		<module>console</module>
 		<module>webapp</module>
+		<module>webservice-jdk</module>
 		<module>webservice</module>
+		<module>console</module>
 		<module>rest</module>
-	</modules>
+  </modules>
 
 	<properties>
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
@@ -86,6 +86,11 @@
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>webservice</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.excilys.computerdatabase</groupId>
+				<artifactId>webservice-jdk</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
