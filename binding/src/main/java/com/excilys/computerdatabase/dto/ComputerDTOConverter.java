@@ -10,14 +10,15 @@ import org.apache.commons.validator.GenericValidator;
 import com.excilys.computerdatabase.domain.Company;
 import com.excilys.computerdatabase.domain.Computer;
 
-
+/**
+ * Static class to convert a Computer to and from a ComputerDTO
+ */
 public class ComputerDTOConverter {
 	
 	
 	/**
 	 * Create a Computer from a ComputerDTO
 	 * @param dto The ComputerDTO to be converted
-	 * @param companyDBService CompanyDBService used to get the correct Company from the Database
 	 * @param dateFormat Format of the LocalDate to parse
 	 * @return A Computer corresponding to the ComputerDTO
 	 */
@@ -41,7 +42,6 @@ public class ComputerDTOConverter {
 	/**
 	 * Create a List of Computer from a List of ComputerDTO
 	 * @param dtos The List of ComputerDTO to be converted
-	 * @param companyDBService CompanyDBService used to get the correct companies from the Database
 	 * @param dateFormat Format of the LocalDate to parse
 	 * @return The List of Computer corresponding to the List of ComputerDTO
 	 */
@@ -89,7 +89,7 @@ public class ComputerDTOConverter {
 	
 	/**
 	 * Create a List of ComputerDTO from a List of Computer
-	 * @param List of Computer to be converted
+	 * @param computers : List of Computer to be converted
 	 * @param dateFormat the format we want the LocalDates to be
 	 * @return The List ComputerDTO corresponding to the List Computer of computers who are valid or an empty List if none were valid
 	 */

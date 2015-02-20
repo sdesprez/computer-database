@@ -12,7 +12,7 @@ import com.excilys.computerdatabase.repositories.ComputerRepository;
 import com.excilys.computerdatabase.service.CompanyDBService;
 
 /**
- * Database Service for the Company
+ * Spring Data JPA implementation for the CompanyDBService
  */
 @Service
 public class CompanyDBServiceImpl implements CompanyDBService {

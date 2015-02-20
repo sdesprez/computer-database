@@ -1,14 +1,13 @@
 package com.excilys.computerdatabase.wrapper;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class PageWrapper<E> implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+/**
+ * Class to wrap a page for a jax-ws
+ *
+ * @param <E> : type of objects contained inside the page
+ */
+public class PageWrapper<E> {
 
 	private int page;
 	

@@ -14,7 +14,7 @@ import com.excilys.computerdatabase.repositories.ComputerRepository;
 import com.excilys.computerdatabase.service.ComputerDBService;
 
 /**
- * Database Service for the Computer
+ * Spring Data JPA implementation for the ComputerDBService
  */
 @Service
 public class ComputerDBServiceImpl implements ComputerDBService {

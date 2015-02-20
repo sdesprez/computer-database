@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.HtmlUtils;
 
 import com.excilys.computerdatabase.domain.Computer;
 import com.excilys.computerdatabase.dto.ComputerDTO;
@@ -32,7 +33,9 @@ import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
 import com.excilys.computerdatabase.util.OrderBy;
 
-
+/**
+ * Controller for the Computer
+ */
 @Controller
 public class ComputerController {
 
@@ -67,7 +70,7 @@ public class ComputerController {
 	
 	/**
 	 * Set the ComputerDTO validator to use an instance of ComputerDTOValidator
-	 * @param binder
+	 * @param binder : 
 	 */
 	@InitBinder("computerDTO")
 	protected void initComputerDTOBinder(final WebDataBinder binder) {
@@ -87,7 +90,8 @@ public class ComputerController {
 		final Page<ComputerDTO> pageDTO = new PageImpl<ComputerDTO>(ComputerDTOConverter.toDTO(page.getContent(), messageSourceAccessor.getMessage("dateFormat")), pageable, page.getTotalElements());
 		
 		//Add attributes to the model
-		model.addAttribute(SEARCH, search);
+		//Escape the search attribute before adding it to the model
+		model.addAttribute(SEARCH, HtmlUtils.htmlEscape(search, "UTF-8"));
 		model.addAttribute(PAGE, pageDTO);
 		model.addAttribute("columns", COLUMNS);
 		if (page.getSort() != null && OrderBy.getOrderByFromSort(page.getSort()) != null) {

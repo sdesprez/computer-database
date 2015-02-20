@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 import com.excilys.computerdatabase.domain.Computer;
 
+/**
+ * Interface to describe a Computer Database Service
+ */
 public interface ComputerDBService {
 
 	/**
@@ -42,7 +45,7 @@ public interface ComputerDBService {
 	
 	/**
 	 * Delete a List of Computer in the database
-	 * @param id : List if the IDs of the Computers to delete
+	 * @param list : List if the IDs of the Computers to delete
 	 */
 	void delete(List<Long> list);
 	

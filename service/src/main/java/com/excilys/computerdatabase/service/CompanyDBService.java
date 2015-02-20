@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.excilys.computerdatabase.domain.Company;
 
+/**
+ * Interface to describe a Company Database Service
+ */
 public interface CompanyDBService {
 
 	/**

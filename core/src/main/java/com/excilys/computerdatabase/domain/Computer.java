@@ -122,6 +122,10 @@ public class Computer {
 		return buffer.toString();
 	}
 
+	
+	/**
+	 * Builder class for a Computer
+	 */
 	public static final class Builder {
 		private Computer computer;
 		
@@ -159,6 +163,9 @@ public class Computer {
 		}
 	}
 	
+	/** 
+	 * @return An instance of a Computer Builder
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Util class to validate if a ComputerDTO is valid
+ */
 @Component
 public class ComputerDTOValidator implements Validator {
 

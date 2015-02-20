@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.domain.Company;
 
+/**
+ * Repository for Company
+ */
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 

@@ -14,6 +14,9 @@ import com.excilys.computerdatabase.domain.User;
 import com.excilys.computerdatabase.repositories.UserRepository;
 import com.excilys.computerdatabase.service.UserDBService;
 
+/**
+ * Spring Data JPA implementation for the UserDBService
+ */
 @Service
 public class UserDBServiceImpl implements UserDBService {
 

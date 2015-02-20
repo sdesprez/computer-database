@@ -9,6 +9,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.excilys.computerdatabase.webservice.CompanyWebService;
 import com.excilys.computerdatabase.webservice.ComputerWebService;
 
+/**
+ * Entry point to public the EndPoints of the webServices
+ */
 public class DeployWebService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeployWebService.class);

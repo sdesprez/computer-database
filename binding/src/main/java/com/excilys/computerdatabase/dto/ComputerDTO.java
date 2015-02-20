@@ -1,5 +1,8 @@
 package com.excilys.computerdatabase.dto;
 
+/**
+ * Dto of a Computer
+ */
 public class ComputerDTO {
 
 	private long id;
@@ -112,12 +115,17 @@ public class ComputerDTO {
 		return true;
 	}
 
-	
+	/** 
+	 * @return An instance of a ComputerDTO Builder
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}
 
 	
+	/**
+	 * Builder class for a ComputerDTO
+	 */
 	public static final class Builder {
 		private ComputerDTO computerDTO;
 

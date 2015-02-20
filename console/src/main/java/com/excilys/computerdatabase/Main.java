@@ -10,6 +10,9 @@ import com.excilys.computerdatabase.cli.CLI;
 import com.excilys.computerdatabase.webservice.CompanyWebService;
 import com.excilys.computerdatabase.webservice.ComputerWebService;
 
+/**
+ * Entry point to get the WebServices and launch the CLI
+ */
 public class Main {
 	
 	private static final String COMPUTER_WSDL_URL = "http://localhost:8888/computer-database/webservice/computer?wsdl";

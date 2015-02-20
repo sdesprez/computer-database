@@ -11,6 +11,9 @@ import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.webservice.CompanyWebService;
 import com.excilys.computerdatabase.wrapper.ListWrapper;
 
+/**
+ * Implementation of the CompanyWebService
+ */
 @WebService(endpointInterface="com.excilys.computerdatabase.webservice.CompanyWebService")
 @Service
 public class CompanyWebServiceImpl implements CompanyWebService {

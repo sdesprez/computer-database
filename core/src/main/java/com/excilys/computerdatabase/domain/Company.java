@@ -1,7 +1,5 @@
 package com.excilys.computerdatabase.domain;
 
-
-
 /**
  * Class representing a company.
  */
@@ -86,6 +84,9 @@ public class Company {
 	}
 
 	
+	/**
+	 * Builder class for a Company
+	 */
 	public static final class Builder {
 		private Company company;
 		
@@ -108,6 +109,9 @@ public class Company {
 		}
 	}
 	
+	/** 
+	 * @return An instance of a Company Builder
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}

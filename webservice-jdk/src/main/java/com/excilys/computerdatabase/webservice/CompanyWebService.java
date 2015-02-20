@@ -23,11 +23,11 @@ public interface CompanyWebService {
 	 * @param id : id of the company in the database
 	 * @return the company that was found or a Company with id = 0 if none was found
 	 */
-	@WebMethod Company getById(long l);
+	@WebMethod Company getById(long id);
 	
 	/**
 	 * Delete a Company from the database and all associated Computers
 	 * @param id : Id of the Company to delete
 	 */
-	@WebMethod void delete(long l);
+	@WebMethod void delete(long id);
 }

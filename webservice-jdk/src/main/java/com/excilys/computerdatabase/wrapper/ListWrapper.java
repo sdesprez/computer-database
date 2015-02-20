@@ -1,14 +1,13 @@
 package com.excilys.computerdatabase.wrapper;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class ListWrapper<E> implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+/**
+ * Class to wrap a List for a jax-ws
+ *
+ * @param <E> : type of objects contained inside the list 
+ */
+public class ListWrapper<E> {
 	
 	private List<E> items;
 

@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.excilys.computerdatabase.domain.Computer;
 
+/**
+ * Repository for Computer
+ */
 public interface ComputerRepository extends JpaRepository<Computer, Long> {
 	
 	

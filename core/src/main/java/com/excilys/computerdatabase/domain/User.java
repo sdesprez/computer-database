@@ -1,6 +1,8 @@
 package com.excilys.computerdatabase.domain;
 
-
+/**
+ * Class representing a user
+ */
 public class User {
 
 	private long id;

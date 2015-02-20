@@ -21,6 +21,9 @@ import com.excilys.computerdatabase.webservice.ComputerWebService;
 import com.excilys.computerdatabase.wrapper.ListWrapper;
 import com.excilys.computerdatabase.wrapper.PageWrapper;
 
+/**
+ * Implementation of the ComputerWebService
+ */
 @WebService(endpointInterface="com.excilys.computerdatabase.webservice.ComputerWebService")
 @Service
 public class ComputerWebServiceImpl implements ComputerWebService {

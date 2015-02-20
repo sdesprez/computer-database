@@ -23,6 +23,9 @@ import com.excilys.computerdatabase.dto.ComputerDTOValidator;
 import com.excilys.computerdatabase.service.CompanyDBService;
 import com.excilys.computerdatabase.service.ComputerDBService;
 
+/**
+ * Rest controller for the Computer functions
+ */
 @RestController
 @RequestMapping("/computer")
 public class ComputerController {
@@ -38,7 +41,7 @@ public class ComputerController {
 	
 	/**
 	 * Set the ComputerDTO validator to use an instance of ComputerDTOValidator
-	 * @param binder
+	 * @param binder : 
 	 */
 	@InitBinder("computerDTO")
 	protected void initComputerDTOBinder(final WebDataBinder binder) {
@@ -123,7 +126,7 @@ public class ComputerController {
 	/**
 	 * Get a Computer from its id
 	 * @param id Id of the computer to delete
-	 * @return 
+	 * @return Notification of deletion
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String deleteComputer(@PathVariable final long id) {
