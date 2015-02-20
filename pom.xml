@@ -5,7 +5,7 @@
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
 	<packaging>pom</packaging>
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 	<name>computer-database</name>
 
 	<modules>
@@ -14,7 +14,7 @@
 		<module>service</module>
 		<module>binding</module>
 		<module>webapp</module>
-		<module>webservice-jdk</module>
+		<module>webservice-sdk</module>
 		<module>webservice</module>
 		<module>console</module>
 		<module>rest</module>
@@ -90,7 +90,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
-				<artifactId>webservice-jdk</artifactId>
+				<artifactId>webservice-sdk</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

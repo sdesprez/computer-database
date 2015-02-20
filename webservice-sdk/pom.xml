@@ -6,9 +6,9 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.6.1</version>
+		<version>0.6.2</version>
 	</parent>
-	<artifactId>webservice-jdk</artifactId>
+	<artifactId>webservice-sdk</artifactId>
 	<packaging>jar</packaging>
 	
 	<dependencies>
