@@ -30,5 +30,3 @@
 </c:if>
 
 <a class="${classes}" href="${pageScope.target}?page=${pageScope.page}&size=${pageScope.size}${pageScope.search}${pageScope.sort}">${body}</a>
-
-<!-- sort,direction -->

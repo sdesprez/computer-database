@@ -39,12 +39,12 @@ pageEncoding="UTF-8"%>
                             <div class="form-group">
                             	<spring:message code="placeholder.date" var="placeholderDate"/>
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
-                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="${placeholderDate}" value="${computerDTO.introduced}"/>
+                                <form:input path="introduced" class="form-control" id="introduced" placeholder="${placeholderDate}" value="${computerDTO.introduced}"/>
                             	<form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="label.discontinued"/></label>
-                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="${placeholderDate}" value="${computerDTO.discontinued}"/>
+                                <form:input path="discontinued" class="form-control" id="discontinued" placeholder="${placeholderDate}" value="${computerDTO.discontinued}"/>
                             	<form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
@@ -77,6 +77,14 @@ pageEncoding="UTF-8"%>
     </section>
     <script type="text/javascript">
     $("#form").validate({
+		rules: {
+			introduced: {
+				date: true
+			},
+			discontinued: {
+				date: true
+			}
+		},
 		messages: {
             name: "<spring:message code='error.name' javaScriptEscape='true'/>",
             introduced: "<spring:message code='error.date' javaScriptEscape='true'/>",
